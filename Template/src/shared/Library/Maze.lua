@@ -2,8 +2,11 @@
 --Explain	: 迷路
 local maze = {}
 
+-- マップのサイズ
 local MapSize = 70
+-- 壁の幅
 local WallSize = 2
+-- 道の幅
 local RoadSize = 5
 
 local function goal_touched(object)
