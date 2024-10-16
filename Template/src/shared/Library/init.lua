@@ -1,0 +1,12 @@
+local Library = {}
+
+Library.calc = require(script.Calculation)
+Library.class = require(script.Class)
+Library.combat = require(script.CombatSystem)
+Library.heal = require(script.HealSystem)
+Library.weld = require(script.Model_Weld)
+Library.maze = require(script.Maze)
+Library.ray = require(script.Raycast)
+Library.sp = require(script.SearchPlayer)
+
+return Library
