@@ -9,11 +9,19 @@ local function Check_args(mob, dropItem)
 		print("Error: (Mobdrop) invalid arguments <mob>")
 		return false
 	end
-	if dropItem == nil or dropItem.Position == nil  then
+	if dropItem == nil then
 		print("Error: (Mobdrop) invalid arguments <dropItem>")
 		return false
 	elseif dropItem.Parent ~= game:GetService("ReplicatedStorage") then
 		print("Error: (Mobdrop) invalid arguments <dropItem> | dropItem Parent is not ReplicatedStorage")
+		return false
+	end
+	local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+	local pos = lib.pos
+	if dropItem:IsA("Tool") and pos.get_tool(dropItem)  then
+	elseif dropItem:IsA("Tool") == false and dropItem.Position then
+	else
+		print("Error: (Mobdrop) invalid arguments <dropItem>")
 		return false
 	end
 	return true
@@ -22,13 +30,24 @@ end
 local function Item_drop(mob, dropItem)
 	local Position = mob:FindFirstChild("HumanoidRootPart").Position
 
-	local itemFolder = Instance.new("Folder")
-	itemFolder.Parent = workspace
-	itemFolder.Name = "DropItem"
+	local itemFolder = workspace:FindFirstChild("DropItem")
+	if itemFolder == nil then
+		itemFolder = Instance.new("Folder")
+		itemFolder.Parent = workspace
+		itemFolder.Name = "DropItem"
+	end
 
 	local newitem = dropItem:Clone()
+	print(newitem)
 	newitem.Parent = itemFolder
-	newitem.Position = Position
+	print(newitem.Parent)
+	local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+	local pos = lib.pos
+	if dropItem:IsA("Tool") and pos.get_tool(dropItem) then
+		pos.set_tool(dropItem, Position)
+	elseif dropItem:IsA("Tool") == false and dropItem.Position then
+		dropItem.Position = Position
+	end
 end
 
 --Function Name	: Mobdrop
@@ -48,7 +67,6 @@ function drop.Mobdrop(mob, dropItem)
 		end
 		task.wait(1)
 	end
-	mob:Destroy()
 end
 
 return drop
