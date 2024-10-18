@@ -10,5 +10,6 @@ Library.maze = require(script.Maze)
 Library.drop = require(script.Mobdrop)
 Library.ray = require(script.Raycast)
 Library.sp = require(script.SearchPlayer)
+Library.spawn = require(script.Spawn)
 
 return Library

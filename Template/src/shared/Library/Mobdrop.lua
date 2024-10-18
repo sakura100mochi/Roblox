@@ -48,6 +48,7 @@ function drop.Mobdrop(mob, dropItem)
 		end
 		task.wait(1)
 	end
+	mob:Destroy()
 end
 
 return drop
