@@ -38,9 +38,7 @@ local function Item_drop(mob, dropItem)
 	end
 
 	local newitem = dropItem:Clone()
-	print(newitem)
 	newitem.Parent = itemFolder
-	print(newitem.Parent)
 	local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 	local pos = lib.pos
 	if dropItem:IsA("Tool") and pos.get_tool(dropItem) then

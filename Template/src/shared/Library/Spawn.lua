@@ -45,12 +45,12 @@ local function SpawnMobNumber(mob, folder)
 
 	for i, child in children do
 		if child.Name == mob.Name then
-			-- if child:FindFirstChild("Humanoid") and
-			-- 	child:FindFirstChild("Humanoid").Health == 0 then
-			-- 	child:Destroy()
-			-- else
+			if child:FindFirstChild("Humanoid") and
+				child:FindFirstChild("Humanoid").Health == 0 then
+				child:Destroy()
+			else
 				num = num + 1
-			-- end
+			end
 		end
 	end
 
