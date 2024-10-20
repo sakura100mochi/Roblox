@@ -2,6 +2,7 @@ local Library = {}
 
 Library.calc = require(script.Calculation)
 Library.class = require(script.Class)
+Library.sound = require(script.Change_PlayerSound)
 Library.combat = require(script.CombatSystem)
 Library.heal = require(script.HealSystem)
 Library.weld = require(script.Model_Weld)
