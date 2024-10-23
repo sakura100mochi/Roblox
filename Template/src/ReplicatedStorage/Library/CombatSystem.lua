@@ -42,6 +42,7 @@ local function Hit(object, damage)
 	HitSound.RollOffMode = Enum.RollOffMode.InverseTapered
 	HitSound.RollOffMaxDistance = 100
 	HitSound.Ended:Connect(function() HitSound:Destroy() end)
+	HitSound.Volume = 0.3
 	HitSound:Play()
 	
 	TargetHumanoid:TakeDamage(damage)

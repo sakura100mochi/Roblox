@@ -35,7 +35,9 @@ local function Heal(healer, amount)
 	HealingEffect(healer)
 	local humanoid = healer.Character:FindFirstChild("Humanoid")
 	for i = 1, HEAL_TIME do
-		humanoid.Health = math.min(humanoid.MaxHealth, humanoid.Health + amount)
+		if humanoid.Health + amount <= humanoid.MaxHealth then
+			humanoid.Health = humanoid.Health + amount
+		end
 		task.wait(1)
 	end
 	finish_Heal(healer)
