@@ -102,7 +102,7 @@ return combat
 
 --*****Please put this Script at ServerScriptService*****--
 
---local lib = require(game:GetService("ReplicatedStorage").Library)
+--local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 --local combat = lib.combat
 
 --local event = combat.Make_RemoteEvent()
@@ -118,7 +118,7 @@ return combat
 
 --*****Please put this LocalScript at StarterPlayerScript*****--
 
---local lib = require(game:GetService("ReplicatedStorage").Library)
+--local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 --local combat = lib.combat
 --local player = game.Players.LocalPlayer
 

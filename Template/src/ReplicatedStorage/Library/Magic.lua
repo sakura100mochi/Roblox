@@ -72,9 +72,10 @@ local function Make_HitBox(effect, range)
 	return HitBox
 end
 
-local function Hit(object, effect, damage, range)
+local function Hit(object, wizard, effect, damage, range)
 	local debounce = {}
 	if object == nil or object.Parent == nil then return end
+	if object.Parent.Name and object.Parent.Name == wizard.Name then return end
 	local TargetHumanoid = object.Parent:FindFirstChild("Humanoid")
 	local TargetRootPart = object.Parent:FindFirstChild("HumanoidRootPart")
 	if TargetHumanoid == nil or TargetRootPart == nil then return end	
@@ -107,7 +108,7 @@ local function Attack(wizard, effect, sound, damage, range)
 	sound:Play()
 
 	local HitBox = Make_HitBox(effect, range)
-	HitBox.Touched:Connect(function(object)Hit(object, effect, damage, range)end)
+	HitBox.Touched:Connect(function(object)Hit(object, wizard, effect, damage, range)end)
 	game.Debris:AddItem(HitBox, 0.5)
 	task.wait(3)
 
