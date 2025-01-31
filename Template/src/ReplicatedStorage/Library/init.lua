@@ -1,6 +1,7 @@
 local Library = {}
 
 Library.calc = require(script.Calculation)
+Library.camera = require(script.Camera)
 Library.class = require(script.Class)
 Library.sound = require(script.Change_PlayerSound)
 Library.combat = require(script.CombatSystem)
@@ -11,6 +12,7 @@ Library.maze = require(script.Maze)
 Library.drop = require(script.Mobdrop)
 Library.pos = require(script.Position)
 Library.ray = require(script.Raycast)
+Library.save = require(script.SaveData)
 Library.sp = require(script.SearchPlayer)
 Library.spawn = require(script.Spawn)
 

@@ -3,7 +3,7 @@
 local heal = {}
 
 --回復する時間。
-local HEAL_TIME = 7
+heal.HEAL_TIME = 7
 
 local function HealingEffect(healer)
 	local effect = game:GetService("ReplicatedStorage").Skill_Cleric.Heal_effect
@@ -34,7 +34,7 @@ local function Heal(healer, amount)
 	print(healer.Name, " is Healing")
 	HealingEffect(healer)
 	local humanoid = healer.Character:FindFirstChild("Humanoid")
-	for i = 1, HEAL_TIME do
+	for i = 1, heal.HEAL_TIME do
 		if humanoid.Health + amount <= humanoid.MaxHealth then
 			humanoid.Health = humanoid.Health + amount
 		end
