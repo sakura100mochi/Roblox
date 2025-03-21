@@ -57,29 +57,29 @@ local function clone_wall(vector, wall, folder)
 	clonedPart.Parent = folder
 end
 
-local function make_wall(x, y, dir, wall)
+local function make_wall(x, y, dir, wall, folder)
 	local i = 0
 	while i < RoadSize + WallSize do
 		if dir == 0 then
-			clone_wall(Vector3.new(x + i, 0, y), wall)
+			clone_wall(Vector3.new(x + i, 0, y), wall, folder)
 		elseif dir == 1 then
-			clone_wall(Vector3.new(x, 0, y + i), wall)
+			clone_wall(Vector3.new(x, 0, y + i), wall, folder)
 		elseif dir == 2 then
-			clone_wall(Vector3.new(x - i, 0, y), wall)
+			clone_wall(Vector3.new(x - i, 0, y), wall, folder)
 		elseif dir == 3 then
-			clone_wall(Vector3.new(x, 0, y - i), wall)
+			clone_wall(Vector3.new(x, 0, y - i), wall, folder)
 		end
 		i += WallSize
 	end
 end
 
-local function init_wall(wall)
+local function init_wall(wall, folder)
 	local x = 0
 	while x <= MapSize do
 		local y = 0
 		while y <= MapSize do
 			if x == 0 or x == MapSize or y == 0 or y == MapSize then
-				clone_wall(Vector3.new(x, 0, y), wall)
+				clone_wall(Vector3.new(x, 0, y), wall, folder)
 			end
 			y += WallSize
 		end
@@ -87,14 +87,14 @@ local function init_wall(wall)
 	end
 end
 
-local function make_maze (wall)
+local function make_maze (wall, folder)
 	local x = WallSize + RoadSize
 	while x < MapSize do
 		local y = WallSize + RoadSize
 		while y < MapSize do
-			clone_wall(Vector3.new(x, 0, y), wall)
+			clone_wall(Vector3.new(x, 0, y), wall, folder)
 			local rand = math.random(0,3)
-			make_wall(x, y, rand, wall)
+			make_wall(x, y, rand, wall, folder)
 			y += WallSize + RoadSize
 		end
 		x += WallSize + RoadSize
@@ -131,9 +131,9 @@ function maze.Maze(mapsize)
 	local start = init_startpart()
 	local goal = init_goalpart(folder)
 	local wall = init_wallpart(folder)
-	init_wall(wall)
-	make_maze(wall)
-	make_start_goal(start, goal)
+	init_wall(wall, folder)
+	make_maze(wall, folder)
+	make_start_goal(start, goal, folder)
 end
 
 return maze
