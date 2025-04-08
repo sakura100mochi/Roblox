@@ -4,50 +4,65 @@ local SoundService = game:GetService("SoundService")
 local firework = {}
 
 firework.Colors = {
-	ColorSequence.new{
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(226, 207, 96)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(192, 192, 192)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-		},
-	ColorSequence.new{
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(226, 207, 96)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(248, 240, 93)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(247, 225, 103))
-		},
-	ColorSequence.new{
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(226, 79, 79)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(223, 73, 73)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(229, 125, 125))
-		},
-	ColorSequence.new{
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(59, 161, 90)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(104, 228, 135)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(182, 249, 149))
-		},
-	ColorSequence.new{
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(249, 83, 255)),
-		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(217, 122, 225)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(205, 138, 229))
-		},
-	ColorSequence.new(Color3.fromRGB(72, 110, 198), Color3.fromRGB(125, 167, 211))
+	["Li"] = ColorSequence.new(Color3.fromHex("#ff2167")),
+	["Na"] = ColorSequence.new(Color3.fromHex("#ff5601")),
+	["K"] = ColorSequence.new(Color3.fromHex("#ff4ed6")),
+	["Rb"] = ColorSequence.new(Color3.fromHex("#6011b9")),
+	["Cs"] = ColorSequence.new(Color3.fromHex("#8952ff")),
+	["Ca"] = ColorSequence.new(Color3.fromHex("#ff8000")),
+	["Sr"] = ColorSequence.new(Color3.fromHex("#ff2600")),
+	["Ba"] = ColorSequence.new(Color3.fromHex("#a4fdff")),
+	["Cu"] = ColorSequence.new(Color3.fromHex("#4bbc58"))
 }
 
-local function makeParticle(particleParent, Color, Lifetime, Speed)
+local function makeBotanParticle(particleParent, Color, Lifetime, Speed)
 	local new = Instance.new("ParticleEmitter")
 	new.Parent = particleParent
-	new.Texture = "rbxassetid://7216979807"
+	new.Texture = "rbxassetid://272050333"
 	new.Brightness = 10
 	new.Rate = 0
-	new.Size = NumberSequence.new(5.13, 0)
+	new.Size = NumberSequence.new(2, 0)
 	new.SpreadAngle = Vector2.new(-360, 360)
 	new.LightEmission = 1
-	new.Orientation = Enum.ParticleOrientation.VelocityParallel
 	new.Drag = 20
 	new.Color = Color
 	new.Lifetime = Lifetime
 	new.Speed = Speed
 
 	return new
+end
+
+local function makeKikusakiParticle(particleParent, Color, Lifetime, Speed)
+	for i = 1, math.random(40, 50), 1 do
+		local new = Instance.new("Part")
+		new.Parent = particleParent
+		new.CFrame = particleParent.CFrame
+		new.Anchored = false
+		new.Size = Vector3.new(0.3, 0.3, 0.3)
+		new.Color = Color3.fromHex("#ff2600")
+		new.Material = Enum.Material.Neon
+		local direction = Vector3.new(
+			math.random() - 0.5,
+			math.random() - 0.5,
+			math.random() - 0.5
+		).Unit * math.random(30, 50)
+		new.Velocity = direction
+
+		local Attachment0 = Instance.new("Attachment", new)
+		Attachment0.CFrame = CFrame.new(Vector3.new(new.CFrame.X, new.CFrame.Y + 0.15, new.CFrame.Z))
+		local Attachment1 = Instance.new("Attachment", new)
+		Attachment1.CFrame = CFrame.new(Vector3.new(new.CFrame.X, new.CFrame.Y - 0.15, new.CFrame.Z))
+	
+		local trail = Instance.new("Trail")
+		trail.Attachment0 = Attachment0
+		trail.Attachment1 = Attachment1
+		trail.Color = firework.Colors.Sr
+		trail.Lifetime = 10
+		trail.WidthScale = NumberSequence.new(0.2)
+		trail.Parent = new
+
+		-- game:GetService("Debris"):AddItem(new, 3)
+	end
 end
 
 local function makeFire(fireParent)
@@ -121,28 +136,24 @@ local function makeSound(str)
 	return new
 end
 
---Function Name	:classic
---Explain		:classicタイプの花火を打ち上げる
+--Function Name	:Botan
+--Explain		:牡丹タイプの花火を打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Arguments| Color			: (ColorSequence or nil) 花火の色
---										defaultは、ゴールド、シルバー、白のフィナーレの花火の色
+--										defaultは、Ca
 --Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
---										defaultは、0.75
+--										defaultは、3
 --Arguments| ExplodeSpeed	: (NumberRange or nil) 花火の爆発するスピード
---										defaultは、NumberRange.new(150,200)
+--										defaultは、NumberRange.new(350,370)
 --Return Value	: none
-function firework.classic(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
+function firework.Botan(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 	if Start_CFrame == nil then
 		warn("ERROR: no argument")
 	end
 	if Color == nil or ExplodeTime == nil or ExplodeSpeed == nil then
-		Color = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(226, 207, 96)),
-			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(192, 192, 192)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-		}
-		ExplodeTime = 0.75
-		ExplodeSpeed = NumberRange.new(150,200)
+		Color = firework.Colors.Ca
+		ExplodeTime = 3
+		ExplodeSpeed = NumberRange.new(350,370)
 	end
 
 	local Part = makePart(Start_CFrame)
@@ -160,8 +171,8 @@ function firework.classic(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 
 	fire:Destroy()
 	for i = 1, 5, 1 do
-		local particle = makeParticle(Part, Color, NumberRange.new(ExplodeTime), ExplodeSpeed)
-		particle:Emit(math.random(30,50))
+		local particle = makeBotanParticle(Part, Color, NumberRange.new(ExplodeTime), ExplodeSpeed)
+		particle:Emit(math.random(70,100))
 	end
 
 	local AfterSound = makeSound("After")
@@ -177,53 +188,43 @@ function firework.classic(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 	AfterSound:Destroy()
 end
 
---Function Name	:AutoSystem_clasic
---Explain		:classicタイプの花火を自動でたくさん打ち上げる
+--Function Name	:AutoSystem_Botan
+--Explain		:牡丹タイプの花火を自動でたくさん打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Return Value	: none
-function firework.AutoSystem_clasic(Start_CFrame)
+function firework.AutoSystem_Botan(Start_CFrame)
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu"}
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local Color = firework.Colors[math.random(1, #firework.Colors)]
-			local ExplodeTime = math.random(75, 200) / 100
-			local tmp = math.random(150, 250)
-			local ExplodeSpeed = NumberRange.new(tmp, tmp + 50)
-			task.spawn(function()firework.classic(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)end)
+			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(200, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+			task.spawn(function()firework.Botan(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)end)
 		end
 		task.wait(2)
 	end
 end
 
 
-
---Function Name	:double
---Explain		:classicタイプの花火の中心に、もうひとつ小さなclassicタイプの花火を打ち上げる
---Arguments| Start_CFrame		: (CFrame) 花火を打ち上げる場所のCFrame
---Arguments| ColorBIG			: (ColorSequence or nil) 大きな花火の色
---										defaultは、ゴールド、シルバー、白のフィナーレの花火の色
---Arguments| ColorSMALL			: (ColorSequence or nil) 大きな花火の中心に打ちあがる、小さな花火の色
---										defaultは、ゴールド、シルバー、白のフィナーレの花火の色
---Arguments| ExplodeTime		: (Number or nil) 花火の爆発する時間
---										defaultは、0.75
---Arguments| ExplodeSpeedBIG	: (NumberRange or nil) 大きな花火の爆発するスピード
---										defaultは、NumberRange.new(150,200)
---Arguments| ExplodeSpeedSMALL	: (NumberRange or nil) 大きな花火の中心に打ちあがる、小さな花火の爆発するスピード
---										defaultは、NumberRange.new(50,150)
+--Function Name	:Kikusaki
+--Explain		:菊先タイプの花火を打ち上げる
+--Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Arguments| Color			: (ColorSequence or nil) 花火の色
+--										defaultは、Ca
+--Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
+--										defaultは、3
+--Arguments| ExplodeSpeed	: (NumberRange or nil) 花火の爆発するスピード
+--										defaultは、NumberRange.new(350,370)
 --Return Value	: none
-function firework.double(Start_CFrame, ColorBIG, ColorSMALL, ExplodeTime, ExplodeSpeedBIG, ExplodeSpeedSMALL)
+function firework.Kikusaki(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 	if Start_CFrame == nil then
 		warn("ERROR: no argument")
 	end
-	if ColorBIG == nil or ColorSMALL == nil or ExplodeTime == nil or ExplodeSpeedBIG == nil or ExplodeSpeedSMALL == nil then
-		ColorBIG = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(226, 207, 96)),
-			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(192, 192, 192)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-		}
-		ColorSMALL = ColorBIG
-		ExplodeTime = 0.75
-		ExplodeSpeedBIG = NumberRange.new(150,200)
-		ExplodeSpeedSMALL = NumberRange.new(50, 150)
+	if Color == nil or ExplodeTime == nil or ExplodeSpeed == nil then
+		Color = firework.Colors.Ca
+		ExplodeTime = 3
+		ExplodeSpeed = NumberRange.new(350,370)
 	end
 
 	local Part = makePart(Start_CFrame)
@@ -240,12 +241,7 @@ function firework.double(Start_CFrame, ColorBIG, ColorSMALL, ExplodeTime, Explod
 	ExplodeSound:Play()
 
 	fire:Destroy()
-	for i = 1, 5, 1 do
-		local particleBig = makeParticle(Part, ColorBIG, NumberRange.new(ExplodeTime), ExplodeSpeedBIG)
-		particleBig:Emit(math.random(30,50))
-		local particleSmall = makeParticle(Part, ColorSMALL, NumberRange.new(ExplodeTime), ExplodeSpeedSMALL)
-		particleSmall:Emit(math.random(30,50))
-	end
+	makeKikusakiParticle(Part, Color, NumberRange.new(ExplodeTime), ExplodeSpeed)
 
 	local AfterSound = makeSound("After")
 	AfterSound:Play()
@@ -260,20 +256,19 @@ function firework.double(Start_CFrame, ColorBIG, ColorSMALL, ExplodeTime, Explod
 	AfterSound:Destroy()
 end
 
---Function Name	:AutoSystem_double
---Explain		:doubleタイプの花火を自動でたくさん打ち上げる
+--Function Name	:AutoSystem_Botan
+--Explain		:牡丹タイプの花火を自動でたくさん打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Return Value	: none
-function firework.AutoSystem_double(Start_CFrame)
+function firework.AutoSystem_Kikusaki(Start_CFrame)
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu"}
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local ColorBIG = firework.Colors[math.random(1, #firework.Colors)]
-			local ColorSMALL = firework.Colors[math.random(1, #firework.Colors)]
-			local ExplodeTime = math.random(75, 200) / 100
-			local tmp = math.random(150, 250)
-			local ExplodeSpeedBIG = NumberRange.new(tmp, tmp + 50)
-			local ExplodeSpeedSMALL = NumberRange.new(tmp - 100, tmp)
-			task.spawn(function()firework.double(Start_CFrame, ColorBIG, ColorSMALL, ExplodeTime, ExplodeSpeedBIG, ExplodeSpeedSMALL)end)
+			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(200, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+			task.spawn(function()firework.Kikusaki(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)end)
 		end
 		task.wait(2)
 	end
@@ -380,9 +375,9 @@ end
 function firework.AutoSystem_All(Start_CFrame)
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local ColorBIG = firework.Colors[math.random(1, #firework.Colors)]
-			local ColorMiddle = firework.Colors[math.random(1, #firework.Colors)]
-			local ColorSMALL = firework.Colors[math.random(1, #firework.Colors)]
+			local ColorBIG = firework.Colors.Cu
+			local ColorMiddle = firework.Colors.Cu
+			local ColorSMALL = firework.Colors.Cu
 			local ExplodeTime = math.random(75, 200) / 100
 			local tmp = math.random(150, 250)
 			local ExplodeSpeedBIG = NumberRange.new(tmp, tmp + 50)
