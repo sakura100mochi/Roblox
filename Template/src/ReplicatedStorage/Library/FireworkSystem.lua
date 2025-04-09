@@ -66,13 +66,13 @@ local function makeFlarePart(particleParent)
 end
 
 local function makeFlarePartikles(particleParent, Color)
-	local particles = {}
+	local partikles = {}
 
 	for i = 1, 4, 1 do
 		local newSparkles = Instance.new("Sparkles")
 		newSparkles.SparkleColor = Color
 		newSparkles.Parent = particleParent
-		table.insert(particles, newSparkles)
+		table.insert(partikles, newSparkles)
 	end
 
 	local newFire = Instance.new("Fire")
@@ -80,15 +80,15 @@ local function makeFlarePartikles(particleParent, Color)
 	newFire.SecondaryColor = Color
 	newFire.Heat = 25
 	newFire.Parent = particleParent
-	table.insert(particles, newFire)
+	table.insert(partikles, newFire)
 
-	return particles
+	return partikles
 end
 
 local function makeFlare(particleParent, Color, Lifetime)
 	for i= 1, 70, 1 do
 		local newPart = makeFlarePart(particleParent)
-		local particles = makeFlarePartikles(newPart, Color)
+		local partikles = makeFlarePartikles(newPart, Color)
 
 		-- 浮力の追加
 		local newBodyForce = Instance.new("BodyForce")
@@ -98,7 +98,7 @@ local function makeFlare(particleParent, Color, Lifetime)
 		game:GetService("Debris"):AddItem(newPart, Lifetime)
 
 		task.delay(Lifetime - 1, function()
-			for _, child in pairs(particles) do
+			for _, child in pairs(partikles) do
 				if child and child.Parent and child.Enabled then
 					child.Enabled = false
 				end
@@ -131,6 +131,67 @@ local function makeFire(fireParent)
 	new.SpreadAngle = Vector2.new(15, 15)
 	new.LockedToPart = true
 	new.Parent = fireParent
+
+	return new
+end
+
+local function makeTrail(trailParent, Color)
+	local Att0 = Instance.new("Attachment")
+	Att0.Parent = trailParent
+	Att0.CFrame = CFrame.new(Att0.CFrame.X + 0.5, Att0.CFrame.Y + 0.5, Att0.CFrame.Z + 0.5)
+	local Att1 = Instance.new("Attachment")
+	Att1.Parent = trailParent
+	Att1.CFrame = CFrame.new(Att1.CFrame.X - 0.5, Att1.CFrame.Y - 0.5, Att1.CFrame.Z - 0.5)
+	local newTrail = Instance.new("Trail")
+	newTrail.Parent = trailParent
+	newTrail.Attachment0 = Att0
+	newTrail.Attachment1 = Att1
+	newTrail.Color = ColorSequence.new(Color)
+	newTrail.LightEmission = 1
+	newTrail.Lifetime = 0.25
+	newTrail.WidthScale = NumberSequence.new(1, 0)
+
+	return newTrail
+end
+
+local function makeToranooParticle(particleParent, Color)
+	local new = Instance.new("ParticleEmitter")
+	new.Parent = particleParent
+	new.Texture = "rbxassetid://272050333"
+	new.Brightness = 10
+	new.Rate = 100
+	new.Size = NumberSequence.new(0.5, 0)
+	new.SpreadAngle = Vector2.new(0, 0)
+	new.LightEmission = 1
+	new.Drag = 1
+	new.Color = ColorSequence.new(Color)
+	new.Lifetime = NumberRange.new(1, 5)
+	new.VelocityInheritance = 1
+	new.Speed = NumberRange.new(1)
+	new.EmissionDirection = Enum.NormalId.Bottom
+
+	return new
+end
+
+local function makeNeonPart(Start_CFrame, Color)
+	local new = Instance.new("Part")
+	new.Parent = workspace
+	new.Anchored = false
+	new.Transparency = 0
+	new.CanCollide = false
+	new.CFrame = Start_CFrame * CFrame.Angles(math.pi, 0, 0)
+	new.Color = Color
+	new.Material = Enum.Material.Neon
+	new.Shape = Enum.PartType.Ball
+	new.Anchored = false
+	new.Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1)) * 20
+	new.Size = Vector3.new(0.5, 0.5, 0.5)
+	new.Transparency = 0.75
+
+	local light = Instance.new("PointLight")
+	light.Color = Color
+	light.Brightness = 15
+	light.Range = 10
 
 	return new
 end
@@ -458,6 +519,69 @@ function firework.AutoSystem_Kamuro(Start_CFrame)
 	end
 end
 
+--Function Name	:Tranoo
+--Explain		:虎の尾タイプの花火を打ち上げる
+--Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Arguments| Color			: (Color3 or nil) 花火の色
+--										defaultは、Ca
+--Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
+--										defaultは、2
+--Return Value	: none
+function firework.Toranoo(Start_CFrame, Color, ExplodeTime)
+	if Start_CFrame == nil then
+		warn("ERROR: no argument")
+	end
+	if Color == nil or ExplodeTime == nil then
+		Color = firework.Colors.Ca
+		ExplodeTime = 2
+	end
+
+	local Part = makeNeonPart(Start_CFrame, Color)
+	-- makeTrail(Part, Color)
+	-- makeTrail(Part, Color)
+	-- makeTrail(Part, Color)
+	local particle = makeToranooParticle(Part, Color)
+	particle:Emit(100)
+	-- local partikes = makeFlarePartikles(Part, Color)
+	-- task.delay(ExplodeTime, function()
+	-- 	for _, child in pairs(partikes) do
+	-- 		if child and child.Parent and child.Enabled then
+	-- 			child.Enabled = false
+	-- 		end
+	-- 	end
+	-- end)
+
+	-- 浮力の追加
+	local newBodyForce = Instance.new("BodyForce")
+	newBodyForce.force = Vector3.new(0, Part:GetMass() * 196.2 * 0.95, 0)
+	newBodyForce.Parent = Part
+
+	-- local LaunchSound = makeSound("Explode")
+	-- LaunchSound:Play()
+
+	task.wait(ExplodeTime)
+	Part:Destroy()
+
+	-- task.wait(1)
+	-- LaunchSound:Destroy()
+end
+
+--Function Name	:AutoSystem_Toranoo
+--Explain		:虎の尾タイプの花火を自動でたくさん打ち上げる
+--Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Return Value	: none
+function firework.AutoSystem_Toranoo(Start_CFrame)
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu"}
+	while true do
+		for i = 1, math.random(3, 5), 1 do
+			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(150, 300) / 100
+			task.spawn(function()firework.Toranoo(Start_CFrame, Color, ExplodeTime)end)
+		end
+		task.wait(2)
+	end
+end
+
 --Function Name	:AutoSystem_All
 --Explain		:全種類のタイプの花火を自動でたくさん打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
@@ -478,6 +602,50 @@ function firework.AutoSystem_All(Start_CFrame)
 				function()firework.Kamuro(Start_CFrame, Color1, ExplodeTime)end
 			}
 			task.spawn(function()ft_table[math.random(1, #ft_table)]()end)
+		end
+		task.wait(2)
+	end
+end
+
+--Function Name	:AutoSystem_1
+--Explain		:全種類のタイプの花火を自動でたくさん打ち上げる
+--Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Return Value	: none
+function firework.AutoSystem_1(Start_CFrame)
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu"}
+	while true do
+		for i = 1, math.random(1, 3), 1 do
+			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(150, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+			task.spawn(function()firework.Botan(Start_CFrame, Color1, ExplodeTime, ExplodeSpeed)end)
+		end
+		task.wait(2)
+		for i = 1, math.random(1, 3), 1 do
+			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(150, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+			task.spawn(function()firework.Ring(Start_CFrame, Color1, ExplodeTime, ExplodeSpeed)end)
+		end
+		task.wait(2)
+		for i = 1, math.random(1, 3), 1 do
+			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local Color2 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(150, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+			task.spawn(function()firework.UFO(Start_CFrame, Color1, Color2, ExplodeTime, ExplodeSpeed)end)
+		end
+		task.wait(2)
+		for i = 1, math.random(1, 3), 1 do
+			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(150, 300) / 100
+			local tmp = math.random(250, 350)
+			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
+
+			task.spawn(function()firework.Kamuro(Start_CFrame, Color1, ExplodeTime)end)
 		end
 		task.wait(2)
 	end
