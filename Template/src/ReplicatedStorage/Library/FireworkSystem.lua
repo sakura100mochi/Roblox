@@ -484,3 +484,16 @@ function firework.AutoSystem_All(Start_CFrame)
 end
 
 return firework
+
+--*****Please put part and clickdetector at workspace and put this*****--
+
+-- local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+-- local firework = lib.firework
+
+-- local function onMouseClicked()
+-- 	firework.AutoSystem_All(script.Parent.CFrame)
+-- end
+
+-- script.Parent.ClickDetector.MouseClick:Connect(onMouseClicked)
+
+--***********************************************************--
