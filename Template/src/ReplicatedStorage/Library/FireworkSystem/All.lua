@@ -22,8 +22,9 @@ function All.AutoSystem_type1(Start_CFrame)
 				function()firework.Botan.launch(Start_CFrame, Color1, ExplodeTime, ExplodeSpeed)end,
 				function()firework.Ring.launch(Start_CFrame, Color1, ExplodeTime, ExplodeSpeed)end,
 				function()firework.UFO.launch(Start_CFrame, Color1, Color2, ExplodeTime, ExplodeSpeed)end,
-				function()firework.Kamuro.launch(Start_CFrame, Color1, ExplodeTime)end,
-				function()firework.Toranoo.launch(Start_CFrame, Color1, ExplodeTime, Velocity)end
+				function()firework.Kamuro.launch(Start_CFrame, Color1, ExplodeTime + 1.5)end,
+				function()firework.Toranoo.launch(Start_CFrame, Color1, ExplodeTime, Velocity)end,
+				function()firework.Kiku.launch(Start_CFrame, Color1, ExplodeTime, NumberRange.new(tmp))end
 			}
 			task.spawn(function()ft_table[math.random(1, #ft_table)]()end)
 		end
@@ -67,7 +68,7 @@ function All.AutoSystem_type2(Start_CFrame)
 		task.wait(2)
 		for i = 1, math.random(1, 3), 1 do
 			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
-			local ExplodeTime = math.random(150, 300) / 100
+			local ExplodeTime = math.random(300, 450) / 100
 
 			task.spawn(function()firework.Kamuro.launch(Start_CFrame, Color1, ExplodeTime)end)
 		end
@@ -81,6 +82,13 @@ function All.AutoSystem_type2(Start_CFrame)
 		end
 		task.wait(2)
 		task.spawn(function()firework.Toranoo.fan(Start_CFrame)end)
+		task.wait(2)
+		for i = 1, math.random(1, 2), 1 do
+			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+			local ExplodeTime = math.random(200, 300) / 100
+			local ExplodeSpeed = NumberRange.new(math.random(250, 300))
+			task.spawn(function()firework.Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)end)
+		end
 		task.wait(2)
 	end
 end

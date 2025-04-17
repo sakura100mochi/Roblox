@@ -75,7 +75,7 @@ function Kamuro.launch(Start_CFrame, Color, ExplodeTime)
 	end
 	if Color == nil or ExplodeTime == nil then
 		Color = firework.Colors.Ca
-		ExplodeTime = 2
+		ExplodeTime = 4
 	end
 
 	local Nobori = firework.Nobori.makeNobori(Start_CFrame)
@@ -105,12 +105,12 @@ function Kamuro.AutoSystem(Start_CFrame)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
 	while true do
-		for i = 1, math.random(3, 5), 1 do
+		for i = 1, math.random(2, 3), 1 do
 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
-			local ExplodeTime = math.random(150, 300) / 100
+			local ExplodeTime = math.random(300, 450) / 100
 			task.spawn(function()Kamuro.launch(Start_CFrame, Color, ExplodeTime)end)
 		end
-		task.wait(2)
+		task.wait(5)
 	end
 end
 

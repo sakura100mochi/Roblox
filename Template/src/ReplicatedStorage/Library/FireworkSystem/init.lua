@@ -19,6 +19,7 @@ firework.Colors = {
 firework.Sound = require(script.Sound)
 firework.Nobori = require(script.Nobori)
 firework.All = require(script.All)
+firework.Kiku = require(script.Kiku)
 firework.Botan = require(script.Botan)
 firework.Ring = require(script.Ring)
 firework.UFO = require(script.UFO)
