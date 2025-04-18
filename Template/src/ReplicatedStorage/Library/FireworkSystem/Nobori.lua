@@ -62,6 +62,7 @@ function Nobori.makeNobori(Start_CFrame)
 
 	if Start_CFrame == nil then
 		warn("ERROR: no argument [FireworkSystem.Nobori]")
+		return
 	end
 
 	local Part = makeFireStarter(Start_CFrame)

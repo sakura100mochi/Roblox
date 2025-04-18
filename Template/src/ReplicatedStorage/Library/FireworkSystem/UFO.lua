@@ -53,7 +53,8 @@ function UFO.launch(Start_CFrame, ColorBotan, ColorRing, ExplodeTime, ExplodeSpe
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	if Start_CFrame == nil then
-		warn("ERROR: no argument")
+		warn("ERROR: no argument [FireworkSystem.UFO]")
+		return
 	end
 	if ColorBotan == nil or ColorRing == nil or ExplodeTime == nil or ExplodeSpeed == nil then
 		ColorBotan = firework.Colors.Ca

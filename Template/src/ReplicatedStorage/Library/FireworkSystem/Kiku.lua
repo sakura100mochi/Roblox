@@ -88,6 +88,7 @@ function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 
 	if Start_CFrame == nil then
 		warn("ERROR: no argument [FireworkSystem.Kiku]")
+		return
 	end
 	if Color == nil or ExplodeTime == nil or ExplodeSpeed == nil then
 		Color = firework.Colors.Ba

@@ -71,7 +71,8 @@ function Kamuro.launch(Start_CFrame, Color, ExplodeTime)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	if Start_CFrame == nil then
-		warn("ERROR: no argument")
+		warn("ERROR: no argument [fireworkSystem.Kamuro]")
+		return
 	end
 	if Color == nil or ExplodeTime == nil then
 		Color = firework.Colors.Ca

@@ -18,6 +18,7 @@ firework.Colors = {
 
 firework.Sound = require(script.Sound)
 firework.Nobori = require(script.Nobori)
+firework.Smoke = require(script.Smoke)
 firework.All = require(script.All)
 firework.Kiku = require(script.Kiku)
 firework.Botan = require(script.Botan)
@@ -25,6 +26,7 @@ firework.Ring = require(script.Ring)
 firework.UFO = require(script.UFO)
 firework.Kamuro = require(script.Kamuro)
 firework.Toranoo = require(script.Toranoo)
+firework.Gerb = require(script.Gerb)
 firework.Festival = require(script.Festival)
 
 return firework

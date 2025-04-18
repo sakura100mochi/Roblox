@@ -2,7 +2,7 @@
 --Explain	: 虎の尾
 local Toranoo = {}
 
-local function makeFlareparticles(particleParent, Color)
+local function makeFlareparticles(particleParent, Color, ExplodeTime)
 	local particles = {}
 
 	for i = 1, 10, 1 do
@@ -23,10 +23,16 @@ local function makeFlareparticles(particleParent, Color)
 		task.wait(0.001)
 	end
 
-	return particles
+	task.delay(ExplodeTime, function()
+		for _, child in pairs(particles) do
+			if child and child.Parent and child.Enabled then
+				child.Enabled = false
+			end
+		end
+	end)
 end
 
-local function makeNeonPart(Start_CFrame, Color, Velocity)
+local function makeNeonPart(Start_CFrame, Color, Velocity, ExplodeTime)
 	local new = Instance.new("Part")
 	new.Parent = workspace
 	new.Anchored = false
@@ -46,6 +52,14 @@ local function makeNeonPart(Start_CFrame, Color, Velocity)
 	light.Brightness = 15
 	light.Range = 10
 
+	task.delay(ExplodeTime, function()
+		new.Transparency = 1
+	end)
+	-- 浮力の追加
+	local newBodyForce = Instance.new("BodyForce")
+	newBodyForce.force = Vector3.new(0, new:GetMass() * 196.2 * 0.95, 0)
+	newBodyForce.Parent = new
+
 	return new
 end
 
@@ -61,7 +75,8 @@ function Toranoo.launch(Start_CFrame, Color, ExplodeTime, Velocity)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	if Start_CFrame == nil then
-		warn("ERROR: no argument")
+		warn("ERROR: no argument [fireworkSystem.Toranoo]")
+		return
 	end
 	if Color == nil or ExplodeTime == nil or Velocity == nil then
 		Color = firework.Colors.Ca
@@ -71,35 +86,17 @@ function Toranoo.launch(Start_CFrame, Color, ExplodeTime, Velocity)
 
 	local LaunchSound = firework.Sound.makeSound("SmallExplode")
 	LaunchSound:Play()
+	game:GetService("Debris"):AddItem(LaunchSound, 3)
 
-	local Part = makeNeonPart(Start_CFrame, Color, Velocity)
-	task.delay(ExplodeTime, function()
-		Part.Transparency = 1
-	end)
-	-- 浮力の追加
-	local newBodyForce = Instance.new("BodyForce")
-	newBodyForce.force = Vector3.new(0, Part:GetMass() * 196.2 * 0.95, 0)
-	newBodyForce.Parent = Part
-
-	local particles = makeFlareparticles(Part, Color)
-	task.delay(ExplodeTime, function()
-		for _, child in pairs(particles) do
-			if child and child.Parent and child.Enabled then
-				child.Enabled = false
-			end
-		end
-	end)
+	local Part = makeNeonPart(Start_CFrame, Color, Velocity, ExplodeTime)
+	game:GetService("Debris"):AddItem(Part, 3)
+	makeFlareparticles(Part, Color, ExplodeTime)
 
 	task.wait(ExplodeTime - 0.8)
 
 	local FizzleSound = firework.Sound.makeSound("Fizzle")
 	FizzleSound:Play()
-
-	task.wait(2)
-
-	Part:Destroy()
-	LaunchSound:Destroy()
-	FizzleSound:Destroy()
+	game:GetService("Debris"):AddItem(FizzleSound, 2)
 end
 
 --Function Name	:AutoSystem
