@@ -95,7 +95,7 @@ end
 --Return Value	: none
 function UFO.AutoSystem(Start_CFrame)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 2), 1 do
 			local ColorBotan = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]

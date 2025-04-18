@@ -296,7 +296,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_Botan(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(3, 5), 1 do
 -- 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -366,7 +366,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_Ring(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(3, 5), 1 do
 -- 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -443,7 +443,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_UFO(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(1, 2), 1 do
 -- 			local ColorBotan = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -508,7 +508,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_Kamuro(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(3, 5), 1 do
 -- 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -571,7 +571,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_Toranoo(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(3, 5), 1 do
 -- 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -587,7 +587,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_All(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(1, 3), 1 do
 -- 			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
@@ -612,7 +612,7 @@
 -- --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 -- --Return Value	: none
 -- function firework.AutoSystem_1(Start_CFrame)
--- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+-- 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 -- 	while true do
 -- 		for i = 1, math.random(1, 3), 1 do
 -- 			local Color1 = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]

@@ -65,8 +65,10 @@ local function makeFlare(particleParent, Color, Lifetime)
 
 		task.delay(Lifetime - 1, function()
 			newFire.Enabled = false
-			local particle = makeKikuParticle(newPart, ColorSequence.new(Color))
-			particle:Emit(1)
+			if Color then
+				local particle = makeKikuParticle(newPart, ColorSequence.new(Color))
+				particle:Emit(1)
+			end
 		end)
 		game:GetService("Debris"):AddItem(newPart, Lifetime + 1)
 	end
@@ -76,8 +78,7 @@ end
 --Function Name	:Kiku
 --Explain		:菊タイプの花火を打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
---Arguments| Color			: (Color3 or nil) 花火の色
---										defaultは、Ba
+--Arguments| Color			: (Color3 or nil) 指定すると、変化菊になる。
 --Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
 --										defaultは、2
 --Arguments| ExplodeSpeed	: (NumberRange or nil) 花火の爆発するスピード
@@ -90,12 +91,10 @@ function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 		warn("ERROR: no argument [FireworkSystem.Kiku]")
 		return
 	end
-	if Color == nil or ExplodeTime == nil or ExplodeSpeed == nil then
-		Color = firework.Colors.Ba
+	if ExplodeTime == nil or ExplodeSpeed == nil then
 		ExplodeTime = 2
 		ExplodeSpeed = NumberRange.new(300)
 	end
-	makeKikuParticle(workspace, ColorSequence.new(Color))
 
 	local Nobori = firework.Nobori.makeNobori(Start_CFrame);
 
@@ -123,7 +122,7 @@ end
 function Kiku.AutoSystem(Start_CFrame)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al"}
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 2), 1 do
 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]

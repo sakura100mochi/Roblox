@@ -25,27 +25,38 @@ local function makeLauncher(folder)
 	return Launchers
 end
 
+-- Launchers 1 2 3 4 5 6 | 7 8 9 10 11 12 ||| 13 14 15 16 17 18 | 19 20 21 22 23 24
+
 function Festival.Akagawa_31st_2024_Opening()
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	local folder = makeFolder()
 	local Launchers = makeLauncher(folder)
 	for i = 1, 12, 1 do
-		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], firework.Colors.Al)end)
-		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], firework.Colors.Al)end)
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Mg))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Mg))end)
 		task.wait(1 / 12)
 	end
 	for i = 1, 12, 1 do
-		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], firework.Colors.Sr)end)
-		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], firework.Colors.Sr)end)
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Sr))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Sr))end)
 		task.wait(1 / 12)
 	end
 	for i = 1, 12, 1 do
-		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], firework.Colors.Cu)end)
-		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], firework.Colors.Cu)end)
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Cu))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Cu))end)
 		task.wait(1 / 12)
 	end
 
+	for i = 1, 24, 2 do
+		task.spawn(function()firework.Kiku.launch(Launchers[i].CFrame)end)
+	end
+
+	task.spawn(function()firework.Toranoo.fan(Launchers[7].CFrame, 80)end)
+	task.spawn(function()firework.Toranoo.fan(Launchers[18].CFrame, 80)end)
+
+	task.spawn(function()firework.Gerb.fan(Launchers[7], ColorSequence.new(firework.Colors.Al))end)
+	task.spawn(function()firework.Gerb.fan(Launchers[18], ColorSequence.new(firework.Colors.Al))end)
 end
 
 return Festival

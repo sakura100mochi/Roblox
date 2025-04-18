@@ -13,7 +13,8 @@ firework.Colors = {
 	["Ba"] = Color3.fromHex("#a4fdff"),
 	["Cu"] = Color3.fromHex("#4bbc58"),
 	["C"] = Color3.fromHex("#ec8b46"),
-	["Al"] = Color3.fromHex("#b2c4d1")
+	["Al"] = Color3.fromHex("#b2c4d1"),
+	["Mg"] = Color3.fromHex("f5f5f4")
 }
 
 firework.Sound = require(script.Sound)

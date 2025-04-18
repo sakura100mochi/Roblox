@@ -120,17 +120,24 @@ end
 --Explain		:虎の尾タイプの花火を扇型に打ち上げる
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Return Value	: none
-function Toranoo.fan(Start_CFrame)
+function Toranoo.fan(Start_CFrame, Speed)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 	local NUM = 13
+	if Start_CFrame == nil then
+		warn("ERROR: no argument [fireworkSystem.Toranoo]")
+		return
+	end
+	if Speed == nil then
+		Speed = 40
+	end
 	for i = 0, NUM, 1 do
 		local Color = firework.Colors.Al
 		local ExplodeTime = 1.5
 		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
 		local angle = t * math.rad(60)
 
-		local minSpeed = 35
-		local maxSpeed = 40
+		local minSpeed = Speed - 5
+		local maxSpeed = Speed
 		local factor = 1 - math.abs(t) ^ 1.5 -- 中心：1、端：0.18くらい
 		local speed = minSpeed + (maxSpeed - minSpeed) * factor
 		local x = math.sin(angle) * speed
