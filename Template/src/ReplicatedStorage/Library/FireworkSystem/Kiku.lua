@@ -37,6 +37,11 @@ local function makeFlarePart(particleParent)
 	local z = math.cos(phi)
 	newPart.Velocity = Vector3.new(x, y, z) * 20
 
+	-- 浮力の追加
+	local newBodyForce = Instance.new("BodyForce")
+	newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * 0.99, 0)
+	newBodyForce.Parent = newPart
+
 	return newPart
 end
 
@@ -53,15 +58,40 @@ local function makeFire(particleParent)
 	return newFire
 end
 
-local function makeFlare(particleParent, Color, Lifetime)
-	for i= 1, 300, 1 do
-		local newPart = makeFlarePart(particleParent)
-		local newFire = makeFire(newPart)
+local function makeFireParticles(particleParent)
+	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
-		-- 浮力の追加
-		local newBodyForce = Instance.new("BodyForce")
-		newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * 0.99, 0)
-		newBodyForce.Parent = newPart
+	local fire = Instance.new("ParticleEmitter")
+	fire.Brightness = 10
+	fire.Color = ColorSequence.new(firework.Colors.C)
+	fire.LightEmission = 1
+	fire.Size = NumberSequence.new(1.5, 0)
+	fire.Texture = "http://www.roblox.com/asset/?id=11534281007"
+	fire.Transparency = NumberSequence.new{
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.5, 0.5),
+		NumberSequenceKeypoint.new(1, 1)
+	}
+	fire.Parent = particleParent
+	fire.Drag = 0
+	fire.FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4
+	fire.FlipbookMode = Enum.ParticleFlipbookMode.OneShot
+	-- fire.Acceleration = Vector3.new(0, 8, 0)
+	fire.Lifetime = NumberRange.new(0.5, 1)
+	fire.Rate = 50
+	-- fire.Rotation = NumberRange.new(-360, 360)
+	-- fire.RotSpeed = NumberRange.new(-15, 15)
+	fire.Speed = NumberRange.new(1.25, 2.5)
+	fire.SpreadAngle = Vector2.new(5, 5)
+
+	return fire
+end
+
+Kiku.FLARE_NUM = 300
+local function makeFlare(particleParent, Color, Lifetime)
+	for i= 1, Kiku.FLARE_NUM, 1 do
+		local newPart = makeFlarePart(particleParent)
+		local newFire = makeFireParticles(newPart)
 
 		task.delay(Lifetime - 1, function()
 			newFire.Enabled = false
@@ -84,7 +114,7 @@ end
 --Arguments| ExplodeSpeed	: (NumberRange or nil) 花火の爆発するスピード
 --										defaultは、NumberRange.new(300)
 --Return Value	: none
-function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
+function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed, NoboriTime)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	if Start_CFrame == nil then
@@ -96,7 +126,7 @@ function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)
 		ExplodeSpeed = NumberRange.new(300)
 	end
 
-	local Nobori = firework.Nobori.makeNobori(Start_CFrame);
+	local Nobori = firework.Nobori.makeNobori(Start_CFrame, NoboriTime);
 
 	local ExplodeSound = firework.Sound.makeSound("Explode")
 	ExplodeSound:Play()
@@ -128,7 +158,7 @@ function Kiku.AutoSystem(Start_CFrame)
 			local Color = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
 			local ExplodeTime = math.random(200, 300) / 100
 			local ExplodeSpeed = NumberRange.new(math.random(250, 300))
-			task.spawn(function()Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed)end)
+			task.spawn(function()Kiku.launch(Start_CFrame, nil, ExplodeTime, ExplodeSpeed)end)
 		end
 		task.wait(4)
 	end

@@ -57,12 +57,15 @@ local function makeBodyVelocity(BodyVelocityParent)
 	return new
 end
 
-function Nobori.makeNobori(Start_CFrame)
+function Nobori.makeNobori(Start_CFrame, Time)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	if Start_CFrame == nil then
 		warn("ERROR: no argument [FireworkSystem.Nobori]")
 		return
+	end
+	if Time == nil then
+		Time = math.random(15, 30) / 10
 	end
 
 	local Part = makeFireStarter(Start_CFrame)
@@ -73,7 +76,7 @@ function Nobori.makeNobori(Start_CFrame)
 	local LaunchSound = firework.Sound.makeSound("Launch")
 	LaunchSound:Play()
 
-	task.wait(math.random(15, 30) / 10)
+	task.wait(Time)
 
 	LaunchSound:Destroy()
 	fire:Destroy()
