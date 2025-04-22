@@ -32,29 +32,29 @@ function Festival.Akagawa_31st_2024_Opening()
 
 	local folder = makeFolder()
 	local Launchers = makeLauncher(folder)
-	-- for i = 1, 12, 1 do
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Mg))end)
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Mg))end)
-	-- 	task.wait(1 / 12)
-	-- end
-	-- for i = 1, 12, 1 do
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Sr))end)
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Sr))end)
-	-- 	task.wait(1 / 12)
-	-- end
-	-- for i = 1, 12, 1 do
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Cu))end)
-	-- 	task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Cu))end)
-	-- 	task.wait(1 / 12)
-	-- end
+	for i = 1, 12, 1 do
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Mg))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Mg))end)
+		task.wait(1 / 12)
+	end
+	for i = 1, 12, 1 do
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Sr))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Sr))end)
+		task.wait(1 / 12)
+	end
+	for i = 1, 12, 1 do
+		task.spawn(function()firework.Gerb.launch(Launchers[12 + i], ColorSequence.new(firework.Colors.Cu))end)
+		task.spawn(function()firework.Gerb.launch(Launchers[13 - i], ColorSequence.new(firework.Colors.Cu))end)
+		task.wait(1 / 12)
+	end
 
 	firework.Kiku.FLARE_NUM = 90
 	for i = 1, 24, 2 do
-		task.spawn(function()firework.Kiku.launch(Launchers[i].CFrame, nil, math.random(28, 32) / 10, NumberRange.new(500), 2)end)
+		task.spawn(function()firework.Kiku.launch(Launchers[i].CFrame, nil, 1.5, 40, math.random(18, 23) / 10)end)
 	end
 
-	-- task.spawn(function()firework.Toranoo.fan(Launchers[7].CFrame, 80)end)
-	-- task.spawn(function()firework.Toranoo.fan(Launchers[18].CFrame, 80)end)
+	task.spawn(function()firework.Toranoo.fan(Launchers[7].CFrame, 80)end)
+	task.spawn(function()firework.Toranoo.fan(Launchers[18].CFrame, 80)end)
 
 	task.spawn(function()firework.Gerb.fan(Launchers[7], ColorSequence.new(firework.Colors.Al))end)
 	task.spawn(function()firework.Gerb.fan(Launchers[18], ColorSequence.new(firework.Colors.Al))end)

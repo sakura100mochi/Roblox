@@ -43,3 +43,17 @@ function class.create(Table)
 end
 
 return class
+
+--*****sample script*****--
+-- local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+-- local class = lib.class
+
+-- local Table = class.new({
+-- 	Name = "class",
+-- 	Color = BrickColor.random(),
+-- 	Size = Vector3.new(4, 4, 4),
+-- 	Position = Vector3.new(0, 0, 0),
+-- 	Description = "Default"
+-- })
+-- local Part = class.create(Table)
+--***********************--

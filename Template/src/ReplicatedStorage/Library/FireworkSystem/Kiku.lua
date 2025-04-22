@@ -20,7 +20,7 @@ local function makeKikuParticle(particleParent, Color)
 	return new
 end
 
-local function makeFlarePart(particleParent)
+local function makeFlarePart(particleParent, Speed)
 	local newPart = Instance.new("Part")
 	newPart.Parent = particleParent
 	newPart.Transparency = 1
@@ -35,7 +35,7 @@ local function makeFlarePart(particleParent)
 	local x = math.sin(phi) * math.cos(theta)
 	local y = math.sin(phi) * math.sin(theta)
 	local z = math.cos(phi)
-	newPart.Velocity = Vector3.new(x, y, z) * 20
+	newPart.Velocity = Vector3.new(x, y, z) * Speed
 
 	-- 浮力の追加
 	local newBodyForce = Instance.new("BodyForce")
@@ -62,8 +62,8 @@ local function makeFireParticles(particleParent)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 
 	local fire = Instance.new("ParticleEmitter")
-	fire.Brightness = 10
 	fire.Color = ColorSequence.new(firework.Colors.C)
+	fire.Brightness = 10
 	fire.LightEmission = 1
 	fire.Size = NumberSequence.new(1.5, 0)
 	fire.Texture = "http://www.roblox.com/asset/?id=11534281007"
@@ -77,7 +77,7 @@ local function makeFireParticles(particleParent)
 	fire.FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4
 	fire.FlipbookMode = Enum.ParticleFlipbookMode.OneShot
 	-- fire.Acceleration = Vector3.new(0, 8, 0)
-	fire.Lifetime = NumberRange.new(0.5, 1)
+	fire.Lifetime = NumberRange.new(1, 1.5)
 	fire.Rate = 50
 	-- fire.Rotation = NumberRange.new(-360, 360)
 	-- fire.RotSpeed = NumberRange.new(-15, 15)
@@ -88,12 +88,12 @@ local function makeFireParticles(particleParent)
 end
 
 Kiku.FLARE_NUM = 300
-local function makeFlare(particleParent, Color, Lifetime)
+local function makeFlare(particleParent, Color, Lifetime, Speed)
 	for i= 1, Kiku.FLARE_NUM, 1 do
-		local newPart = makeFlarePart(particleParent)
+		local newPart = makeFlarePart(particleParent, Speed)
 		local newFire = makeFireParticles(newPart)
 
-		task.delay(Lifetime - 1, function()
+		task.delay(Lifetime - (Lifetime / 5), function()
 			newFire.Enabled = false
 			if Color then
 				local particle = makeKikuParticle(newPart, ColorSequence.new(Color))
@@ -123,7 +123,7 @@ function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed, NoboriTime)
 	end
 	if ExplodeTime == nil or ExplodeSpeed == nil then
 		ExplodeTime = 2
-		ExplodeSpeed = NumberRange.new(300)
+		ExplodeSpeed = 20
 	end
 
 	local Nobori = firework.Nobori.makeNobori(Start_CFrame, NoboriTime);
@@ -131,7 +131,7 @@ function Kiku.launch(Start_CFrame, Color, ExplodeTime, ExplodeSpeed, NoboriTime)
 	local ExplodeSound = firework.Sound.makeSound("Explode")
 	ExplodeSound:Play()
 
-	makeFlare(Nobori, Color, ExplodeTime)
+	makeFlare(Nobori, Color, ExplodeTime, ExplodeSpeed)
 
 	local AfterSound = firework.Sound.makeSound("After")
 	AfterSound:Play()
