@@ -1,6 +1,6 @@
 --Name		: Botan
 --Explain	: 牡丹
--- 			AFireworkの子クラス
+--			AFireworkの子クラス
 local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
 local Botan = setmetatable({}, {__index = AFirework})
 Botan.__index = Botan

@@ -33,6 +33,7 @@ end
 local function makeFireStarter(StarterParent, Start_CFrame)
 	local new = Instance.new("Part")
 	new.Parent = StarterParent
+	new.Name = "Nobori"
 	new.Anchored = false
 	new.Transparency = 1
 	new.CanCollide = false
