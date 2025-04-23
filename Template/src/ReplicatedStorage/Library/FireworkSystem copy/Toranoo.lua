@@ -1,6 +1,17 @@
 --Name		: Toranoo
 --Explain	: 虎の尾
-local Toranoo = {}
+--			AFireworkの子クラス
+local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local Toranoo = setmetatable({}, {__index = AFirework})
+Toranoo.__index = Toranoo
+
+local ToranooPrototype = {
+	Type = "Toranoo",
+	Color1 = AFirework.Colors.Al,
+	ExplodeTime = 2,
+	ExplodeSpeed = 20,
+	Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1))
+}
 
 local function makeFlareparticles(particleParent, Color, ExplodeTime)
 	local particles = {}
@@ -32,27 +43,27 @@ local function makeFlareparticles(particleParent, Color, ExplodeTime)
 	end)
 end
 
-local function makeNeonPart(Start_CFrame, Color, Velocity, ExplodeTime)
+local function makeNeonPart(Table)
 	local new = Instance.new("Part")
 	new.Parent = workspace
 	new.Anchored = false
 	new.Transparency = 0
 	new.CanCollide = false
-	new.CFrame = Start_CFrame * CFrame.Angles(math.pi, 0, 0)
-	new.Color = Color
+	new.CFrame = Table.Start_CFrame * CFrame.Angles(math.pi, 0, 0)
+	new.Color = Table.Color1
 	new.Material = Enum.Material.Neon
 	new.Shape = Enum.PartType.Ball
 	new.Anchored = false
-	new.Velocity = Velocity
+	new.Velocity = Table.Velocity * Table.ExplodeSpeed
 	new.Size = Vector3.new(0.5, 0.5, 0.5)
 	new.Transparency = 0.75
 
 	local light = Instance.new("PointLight")
-	light.Color = Color
+	light.Color = Table.Color1
 	light.Brightness = 15
 	light.Range = 10
 
-	task.delay(ExplodeTime, function()
+	task.delay(Table.ExplodeTime, function()
 		new.Transparency = 1
 	end)
 	-- 浮力の追加
@@ -63,87 +74,78 @@ local function makeNeonPart(Start_CFrame, Color, Velocity, ExplodeTime)
 	return new
 end
 
---Function Name	:launch
---Explain		:虎の尾タイプの花火を打ち上げる
---Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
---Arguments| Color			: (Color3 or nil) 花火の色
---										defaultは、Ca
---Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
---										defaultは、2
---Return Value	: none
-function Toranoo.launch(Start_CFrame, Color, ExplodeTime, Velocity)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
-
-	if Start_CFrame == nil then
-		warn("ERROR: no argument [fireworkSystem.Toranoo]")
-		return
+--Function Name	: new
+--Explain		: 虎の尾の花火をインスタンス化する
+--Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
+--Return Value	: (table) 設定した後のtable
+function Toranoo.new(Table, Origin)
+	if Origin == nil then
+		Origin = ToranooPrototype
 	end
-	if Color == nil or ExplodeTime == nil or Velocity == nil then
-		Color = firework.Colors.Ca
-		ExplodeTime = 2
-		Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1)) * 20
-	end
+	local self = AFirework.new(Origin, Table)
+	setmetatable(self, Toranoo)
 
-	local LaunchSound = firework.Sound.makeSound("SmallExplode")
-	LaunchSound:Play()
-	game:GetService("Debris"):AddItem(LaunchSound, 3)
+	Table = Table or {}
+	self.Velocity = Table.Velocity or Origin.Velocity
 
-	local Part = makeNeonPart(Start_CFrame, Color, Velocity, ExplodeTime)
-	game:GetService("Debris"):AddItem(Part, 3)
-	makeFlareparticles(Part, Color, ExplodeTime)
-
-	task.wait(ExplodeTime - 0.8)
-
-	local FizzleSound = firework.Sound.makeSound("Fizzle")
-	FizzleSound:Play()
-	game:GetService("Debris"):AddItem(FizzleSound, 2)
+	return self
 end
 
---Function Name	:AutoSystem
---Explain		:虎の尾タイプの花火を自動でたくさん打ち上げる
---Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Method Name	: launch
+--Explain		: 虎の尾タイプの花火を打ち上げる
 --Return Value	: none
-function Toranoo.AutoSystem(Start_CFrame)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+function Toranoo:launch()
+	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+
+	firework.Sound.PlaySound("SmallExplode")
+
+	local Part = makeNeonPart(self)
+	game:GetService("Debris"):AddItem(Part, self.ExplodeTime + 1)
+	makeFlareparticles(Part, self.Color1, self.ExplodeTime)
+
+	task.wait(self.ExplodeTime - 0.8)
+
+	firework.Sound.PlaySound("Fizzle")
+end
+
+--Method Name	: AutoSystem
+--Explain		: 虎の尾タイプの花火を自動でたくさん打ち上げる
+--Return Value	: none
+function Toranoo:AutoSystem()
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local Color = firework.Colors.Al
-			local ExplodeTime = math.random(150, 300) / 100
-			local Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1)) * 20
-			task.spawn(function()Toranoo.launch(Start_CFrame, Color, ExplodeTime, Velocity)end)
+			local Table = {
+				ExplodeTime = math.random(150, 300) / 100
+			}
+			local newToranoo = Toranoo.new(Table)
+			task.spawn(function()newToranoo:launch()end)
 		end
 		task.wait(2)
 	end
 end
 
---Function Name	:fan
---Explain		:虎の尾タイプの花火を扇型に打ち上げる
---Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Method Name	: fan
+--Explain		: 虎の尾タイプの花火を扇型に打ち上げる
 --Return Value	: none
-function Toranoo.fan(Start_CFrame, Speed)
+function Toranoo:fan()
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
 	local NUM = 13
-	if Start_CFrame == nil then
-		warn("ERROR: no argument [fireworkSystem.Toranoo]")
-		return
-	end
-	if Speed == nil then
-		Speed = 40
-	end
+
 	for i = 0, NUM, 1 do
-		local Color = firework.Colors.Al
-		local ExplodeTime = 1.5
 		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
 		local angle = t * math.rad(60)
-
+		local Speed = 40
 		local minSpeed = Speed - 5
 		local maxSpeed = Speed
 		local factor = 1 - math.abs(t) ^ 1.5 -- 中心：1、端：0.18くらい
 		local speed = minSpeed + (maxSpeed - minSpeed) * factor
-		local x = math.sin(angle) * speed
-		local y = math.cos(angle) * speed
-		local Velocity = Vector3.new(x, y, 0)
-		task.spawn(function()Toranoo.launch(Start_CFrame, Color, ExplodeTime, Velocity)end)
+		local Table = {
+			ExplodeTime = 1.5,
+			ExplodeSpeed = speed,
+			Velocity = Vector3.new(math.sin(angle), math.cos(angle), 0)
+		}
+		local newToranoo = Toranoo.new(Table, self)
+		task.spawn(function()newToranoo:launch()end)
 	end
 end
 

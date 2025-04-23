@@ -46,11 +46,9 @@ function Botan:launch()
 	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 
 	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime)
+	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
-	local ExplodeSound = firework.Sound.makeSound("Explode")
-	game:GetService("Debris"):AddItem(ExplodeSound, self.ExplodeTime + 1)
-	ExplodeSound:Play()
+	firework.Sound.PlaySound("Explode")
 
 	local BotanColor = ColorSequence.new(self.Color1)
 	if self.Color2 ~= nil then
@@ -66,15 +64,11 @@ function Botan:launch()
 		particle:Emit(math.random(70,100))
 	end
 
-	local AfterSound = firework.Sound.makeSound("After")
-	game:GetService("Debris"):AddItem(AfterSound, self.ExplodeTime + 1)
-	AfterSound:Play()
-
-	task.wait(self.ExplodeTime)
+	firework.Sound.PlaySound("After")
 end
 
---Method Name	:AutoSystem
---Explain		:牡丹タイプの花火を自動でたくさん打ち上げる
+--Method Name	: AutoSystem
+--Explain		: 牡丹タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Botan:AutoSystem()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}

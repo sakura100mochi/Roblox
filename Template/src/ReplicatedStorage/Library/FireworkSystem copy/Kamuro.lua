@@ -64,8 +64,6 @@ end
 local function makeFlare(particleParent, Table)
 	for i= 1, 70, 1 do
 		local newPart = makeFlarePart(particleParent, Table)
-		game:GetService("Debris"):AddItem(newPart, Table.ExplodeTime)
-
 		makeFlareparticles(newPart, Table)
 	end
 end
@@ -90,17 +88,13 @@ function Kamuro:launch()
 	local Nobori = firework.Nobori.makeNobori(self)
 	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime)
 
-	local ExplodeSound = firework.Sound.makeSound("Explode")
-	game:GetService("Debris"):AddItem(ExplodeSound, self.ExplodeTime + 1)
-	ExplodeSound:Play()
+	firework.Sound.PlaySound("Explode")
 
 	makeFlare(Nobori, self)
 
 	task.wait(self.ExplodeTime)
 
-	local FizzleSound = firework.Sound.makeSound("Fizzle")
-	game:GetService("Debris"):AddItem(FizzleSound, self.ExplodeTime + 1)
-	FizzleSound:Play()
+	firework.Sound.PlaySound("Fizzle")
 end
 
 --Method Name	:AutoSystem

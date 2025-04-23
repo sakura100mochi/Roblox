@@ -74,12 +74,10 @@ function Nobori.makeNobori(Table)
 	makeBodyGyro(Part)
 	makeBodyVelocity(Part)
 
-	local LaunchSound = firework.Sound.makeSound("Launch")
-	LaunchSound:Play()
+	firework.Sound.PlaySound("Launch")
 
 	task.wait(Table.NoboriTime)
 
-	LaunchSound:Destroy()
 	fire:Destroy()
 
 	return Part

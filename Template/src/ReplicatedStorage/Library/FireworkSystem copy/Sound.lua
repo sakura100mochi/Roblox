@@ -2,22 +2,32 @@
 --Explain	: 花火のサウンド
 local Sound = {}
 
-function Sound.makeSound(str)
+Sound.List = {
+	["Lauch"] = "rbxassetid://551051176",
+	["SmallExplode"] = "rbxassetid://4583102108",
+	["Explode"] = "rbxassetid://4583102108",
+	["After"] = "rbxassetid://100817659362842",
+	["Fizzle"] = "rbxassetid://160247625"
+}
+
+function Sound.PlaySound(str)
 	local new = Instance.new("Sound")
 	new.Parent = game:GetService("SoundService")
 
-	if str == "Launch" then
-		new.SoundId = "rbxassetid://551051176"
-	elseif str == "SmallExplode" then
-		new.SoundId = "rbxassetid://4583102108"
-	elseif str == "Explode" then
-		new.SoundId = "rbxassetid://4583102108"
-		new.Volume = 5
-	elseif str == "After" then
-		new.SoundId = "rbxassetid://100817659362842"
-	elseif str == "Fizzle" then
-		new.SoundId = "rbxassetid://160247625"
+	local SoundId = Sound.List[str]
+	if SoundId then
+		new.SoundId = SoundId
+	else
+		new:Destroy()
+		error("ERROR: Invalid Argument")
 	end
+
+	if str == "Explode" then
+		new.Volume = 5
+	end
+
+	game:GetService("Debris"):AddItem(new, new.TimeLength() + 1)
+	new:Play()
 
 	return new
 end

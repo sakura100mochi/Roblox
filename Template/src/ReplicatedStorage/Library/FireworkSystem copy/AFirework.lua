@@ -46,11 +46,11 @@ function AFirework.new(Origin, Table)
 end
 
 function AFirework:launch()
-	error("Abstract method — must be implemented in subclass")
+	error("ERROR: Abstract method — must be implemented in subclass")
 end
 
 function AFirework:AutoSystem()
-	error("Abstract method — must be implemented in subclass")
+	error("ERROR: Abstract method — must be implemented in subclass")
 end
 
 return AFirework

@@ -1,6 +1,16 @@
 --Name		: UFO
 --Explain	: 型物　UFO・土星
-local UFO = {}
+--			AFireworkの子クラス
+local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local UFO = setmetatable({}, {__index = AFirework})
+UFO.__index = UFO
+
+local UFOPrototype = {
+	Type = "UFO",
+	Color2 = AFirework.Colors.C,
+	ExplodeTime = 3,
+	ExplodeSpeed = NumberRange.new(350, 370)
+}
 
 local function makeBotanParticle(particleParent, Color, Lifetime, Speed)
 	local new = Instance.new("ParticleEmitter")
@@ -37,73 +47,56 @@ local function makeRingParticle(particleParent, Color, Lifetime, Speed)
 	return new
 end
 
---Function Name	:UFO
---Explain		:型物　土星・UFOタイプの花火を打ち上げる
---Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
---Arguments| ColorBotan			: (Color3 or nil) 牡丹の花火の色
---										defaultは、Ca
---Arguments| ColorRing			: (Color3 or nil) リングの花火の色
---										defaultは、Ca
---Arguments| ExplodeTime	: (Number or nil) 花火の爆発する時間
---										defaultは、3
---Arguments| ExplodeSpeed	: (NumberRange or nil) 花火の爆発するスピード
---										defaultは、NumberRange.new(350,370)
+--Function Name	: new
+--Explain		: 型物　土星・UFOタイプの花火をインスタンス化する
+--Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
+--Return Value	: (table) 設定した後のtable
+function UFO.new(Table)
+	local self = AFirework.new(UFOPrototype, Table)
+	setmetatable(self, UFO)
+
+	return self
+end
+
+--Method Name	: launch
+--Explain		: 型物　土星・UFOタイプの花火を打ち上げる
 --Return Value	: none
-function UFO.launch(Start_CFrame, ColorBotan, ColorRing, ExplodeTime, ExplodeSpeed)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+function UFO:launch()
+	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 
-	if Start_CFrame == nil then
-		warn("ERROR: no argument [FireworkSystem.UFO]")
-		return
-	end
-	if ColorBotan == nil or ColorRing == nil or ExplodeTime == nil or ExplodeSpeed == nil then
-		ColorBotan = firework.Colors.Ca
-		ColorRing = firework.Colors.Ca
-		ExplodeTime = 3
-		ExplodeSpeed = NumberRange.new(350,370)
-	end
+	local Nobori = firework.Nobori.makeNobori(self);
+	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
-	local Nobori = firework.Nobori.makeNobori(Start_CFrame);
-
-	local ExplodeSound = firework.Sound.makeSound("Explode")
-	ExplodeSound:Play()
+	firework.Sound.PlaySound("Explode")
 
 	for i = 1, 3, 1 do
-		local particle = makeRingParticle(Nobori, ColorSequence.new(ColorRing), NumberRange.new(ExplodeTime), NumberRange.new(ExplodeSpeed.Min + 20, ExplodeSpeed.Max + 20))
+		local particle = makeRingParticle(Nobori, ColorSequence.new(self.Color1), NumberRange.new(self.ExplodeTime), NumberRange.new(self.ExplodeSpeed.Min + 20, self.ExplodeSpeed.Max + 20))
 		particle:Emit(math.random(30, 50))
 	end
 	for i = 1, 5, 1 do
-		local particle = makeBotanParticle(Nobori, ColorSequence.new(ColorBotan), NumberRange.new(ExplodeTime), ExplodeSpeed)
+		local particle = makeBotanParticle(Nobori, ColorSequence.new(self.Color2), NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
 		particle:Emit(math.random(70,100))
 	end
 
-	local AfterSound = firework.Sound.makeSound("After")
-	AfterSound:Play()
-
-	task.wait(ExplodeTime)
-
-	Nobori:Destroy()
-
-	task.wait(1)
-	ExplodeSound:Destroy()
-	AfterSound:Destroy()
+	firework.Sound.PlaySound("After")
 end
 
---Function Name	:AutoSystem
---Explain		:型物　土星・UFOタイプの花火を自動でたくさん打ち上げる
---Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
+--Method Name	: AutoSystem
+--Explain		: 型物　土星・UFOタイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
-function UFO.AutoSystem(Start_CFrame)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+function UFO:AutoSystem()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 2), 1 do
-			local ColorBotan = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
-			local ColorRing = firework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
-			local ExplodeTime = math.random(200, 300) / 100
 			local tmp = math.random(250, 350)
-			local ExplodeSpeed = NumberRange.new(tmp, tmp + 20)
-			task.spawn(function()UFO.launch(Start_CFrame, ColorBotan, ColorRing, ExplodeTime, ExplodeSpeed)end)
+			local Table = {
+				Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+				Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+				ExplodeTime = math.random(200, 300) / 100,
+				ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
+			}
+			local newUFO = UFO.new(Table)
+			task.spawn(function()newUFO:launch()end)
 		end
 		task.wait(2)
 	end
