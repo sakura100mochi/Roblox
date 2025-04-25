@@ -58,4 +58,4 @@ local Festival = firework.Festival
 -- All.AutoSystem_type1(workspace.SpawnLocation)
 -- All.AutoSystem_type2(workspace.SpawnLocation)
 
--- Festival.Akagawa_31st_2024_Opening()
+Festival.Akagawa_31st_2024_Opening()

@@ -2,6 +2,9 @@
 --Explain	: 花火大会用にプログラムされた花火
 local Festival = {}
 
+local LAUNCHER_NUM = 24
+local LAUNCHER_HALF = 12
+
 local function makeFolder()
 	local folder = Instance.new("Folder")
 	folder.Parent = workspace
@@ -12,7 +15,7 @@ end
 
 local function makeLauncher(folder)
 	local Launchers = {}
-	for i = -12, 12, 1 do
+	for i = -LAUNCHER_HALF, LAUNCHER_HALF, 1 do
 		local launcher = Instance.new("Part")
 		launcher.Parent = folder
 		launcher.Name = "Launcher"
@@ -29,7 +32,7 @@ local function newFireworks(Launchers)
 	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 	local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 	local fireworks = {}
-	for i = 1, 24, 1 do
+	for i = 1, LAUNCHER_NUM, 1 do
 		fireworks["Gerb_Mg_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Mg})
 		fireworks["Gerb_Sr_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Sr})
 		fireworks["Gerb_Cu_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Cu})
@@ -51,24 +54,23 @@ function Festival.Akagawa_31st_2024_Opening()
 	local folder = makeFolder()
 	local Launchers = makeLauncher(folder)
 	local fireworks = newFireworks(Launchers)
-	for i = 1, 12, 1 do
-		task.spawn(function()fireworks["Gerb_Mg_" .. 12 + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Mg_" .. 13 - i]:launch()end)
-		task.wait(1 / 12)
+	for i = 1, LAUNCHER_HALF, 1 do
+		task.spawn(function()fireworks["Gerb_Mg_" .. LAUNCHER_HALF + i]:launch()end)
+		task.spawn(function()fireworks["Gerb_Mg_" .. LAUNCHER_HALF + 1 - i]:launch()end)
+		task.wait(1 / LAUNCHER_HALF)
 	end
-	for i = 1, 12, 1 do
-		task.spawn(function()fireworks["Gerb_Sr_" .. 12 + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Sr_" .. 13 - i]:launch()end)
-		task.wait(1 / 12)
+	for i = 1, LAUNCHER_HALF, 1 do
+		task.spawn(function()fireworks["Gerb_Sr_" .. LAUNCHER_HALF + i]:launch()end)
+		task.spawn(function()fireworks["Gerb_Sr_" .. LAUNCHER_HALF + 1 - i]:launch()end)
+		task.wait(1 / LAUNCHER_HALF)
 	end
-	for i = 1, 12, 1 do
-		task.spawn(function()fireworks["Gerb_Cu_" .. 12 + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Cu_" .. 13 - i]:launch()end)
-		task.wait(1 / 12)
+	for i = 1, LAUNCHER_HALF, 1 do
+		task.spawn(function()fireworks["Gerb_Cu_" .. LAUNCHER_HALF + i]:launch()end)
+		task.spawn(function()fireworks["Gerb_Cu_" .. LAUNCHER_HALF + 1 - i]:launch()end)
+		task.wait(1 / LAUNCHER_HALF)
 	end
 
-	firework.Kiku.FLARE_NUM = 90
-	for i = 1, 24, 2 do
+	for i = 1, LAUNCHER_NUM, 3 do
 		task.spawn(function()fireworks["Kiku_Normal_" .. i]:launch()end)
 	end
 
