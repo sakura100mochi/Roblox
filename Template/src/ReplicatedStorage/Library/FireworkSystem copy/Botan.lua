@@ -32,8 +32,11 @@ end
 --Explain		: 牡丹の花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function Botan.new(Table)
-	local self = AFirework.new(BotanPrototype, Table)
+function Botan.new(Table, Origin)
+	if Origin == nil then
+		Origin = BotanPrototype
+	end
+	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Botan)
 
 	return self
@@ -67,21 +70,29 @@ function Botan:launch()
 	firework.Sound.PlaySound("After")
 end
 
+--Method Name	: launchRandom
+--Explain		: 牡丹タイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Botan:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local tmp = math.random(250, 350)
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
+		ExplodeTime = math.random(200, 300) / 100,
+		ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
+	}
+	local newBotan = Botan.new(Table, self)
+	newBotan:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: 牡丹タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Botan:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local tmp = math.random(250, 350)
-			local Table = {
-				Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(200, 300) / 100,
-				ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
-			}
-			local newBotan = Botan.new(Table)
-			task.spawn(function()newBotan:launch()end)
+			task.spawn(function()self:launchRandom()end)
 		end
 		task.wait(2)
 	end
