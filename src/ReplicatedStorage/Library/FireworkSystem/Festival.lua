@@ -42,6 +42,8 @@ local function newFireworks(Launchers)
 	fireworks["Toranoo_fan_18"] = firework.Toranoo.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeSpeed = 40})
 	fireworks["Gerb_Al_7"] = firework.Gerb.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, Color1 = AFirework.Colors.Al})
 	fireworks["Gerb_Al_18"] = firework.Gerb.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, Color1 = AFirework.Colors.Al})
+	fireworks["Kiku_double_12"] = firework.Kiku.new({Parent = Launchers[12], Start_CFrame = Launchers[12].CFrame, 
+				Color2 = AFirework.Colors.Sr, Color3 = AFirework.Colors.C, Color4 = Color3.new(0.180392, 0.290196, 1), NoboriTime = 5.3})
 
 	return fireworks
 end
@@ -79,6 +81,9 @@ function Festival.Akagawa_31st_2024_Opening()
 
 	task.spawn(function()fireworks["Gerb_Al_7"]:fan()end)
 	task.spawn(function()fireworks["Gerb_Al_18"]:fan()end)
+
+	task.wait(0.3)
+	task.spawn(function()fireworks["Kiku_double_12"]:launchDouble()end)
 end
 
 return Festival

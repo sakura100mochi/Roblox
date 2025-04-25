@@ -13,7 +13,7 @@ local KikuPrototype = {
 	Flare_num = 300
 }
 
-local function makeKikuParticle(particleParent, Color, Table)
+local function makeKikuParticle(particleParent, Color, ExplodeTime)
 	local new = Instance.new("ParticleEmitter")
 	new.Parent = particleParent
 	new.Texture = "rbxassetid://272050333"
@@ -24,14 +24,14 @@ local function makeKikuParticle(particleParent, Color, Table)
 	new.LightEmission = 1
 	new.Drag = 5
 	new.Color = Color
-	new.Lifetime = NumberRange.new(Table.ExplodeTime / 2 + 1)
+	new.Lifetime = NumberRange.new(ExplodeTime / 2 + 1)
 	new.Speed = NumberRange.new(0)
 	new.VelocityInheritance = 0.5
 
 	return new
 end
 
-local function makeFlarePart(particleParent, Table)
+local function makeFlarePart(particleParent, ExplodeSpeed)
 	local newPart = Instance.new("Part")
 	newPart.Parent = particleParent
 	newPart.Transparency = 1
@@ -46,7 +46,7 @@ local function makeFlarePart(particleParent, Table)
 	local x = math.sin(phi) * math.cos(theta)
 	local y = math.sin(phi) * math.sin(theta)
 	local z = math.cos(phi)
-	newPart.Velocity = Vector3.new(x, y, z) * Table.ExplodeSpeed
+	newPart.Velocity = Vector3.new(x, y, z) * ExplodeSpeed
 
 	-- 浮力の追加
 	local newBodyForce = Instance.new("BodyForce")
@@ -74,23 +74,23 @@ local function makeFireParticles(particleParent)
 	return fire
 end
 
-local function makeFlare(particleParent, Table)
-	for i= 1, Table.Flare_num, 1 do
-		local newPart = makeFlarePart(particleParent, Table)
+local function makeFlare(particleParent, Flare_num, ExplodeTime, ExplodeSpeed, firstColor, secondColor)
+	for i= 1, Flare_num, 1 do
+		local newPart = makeFlarePart(particleParent, ExplodeSpeed)
 		local newFire = makeFireParticles(newPart)
 
-		task.delay(Table.ExplodeTime - (Table.ExplodeTime / 2), function()
+		task.delay(ExplodeTime - (ExplodeTime / 2), function()
 			newFire.Enabled = false
-			if Table.Color2 ~= nil then
-				local KikuColor = ColorSequence.new(Table.Color2)
-				if Table.Color3 ~= nil then
+			if firstColor ~= nil then
+				local KikuColor = ColorSequence.new(firstColor)
+				if secondColor ~= nil then
 					KikuColor = ColorSequence.new{
-						ColorSequenceKeypoint.new(0, Table.Color2),
-						ColorSequenceKeypoint.new(0.4, Table.Color3),
-						ColorSequenceKeypoint.new(1, Table.Color3)
+						ColorSequenceKeypoint.new(0, firstColor),
+						ColorSequenceKeypoint.new(0.4, secondColor),
+						ColorSequenceKeypoint.new(1, secondColor)
 					}
 				end
-				local particle = makeKikuParticle(newPart, KikuColor, Table)
+				local particle = makeKikuParticle(newPart, KikuColor, ExplodeTime)
 				particle:Emit(1)
 			end
 		end)
@@ -114,7 +114,6 @@ function Kiku.new(Table, Origin)
 	return self
 end
 
-
 --Method Name	: launch
 --Explain		: 菊タイプの花火を打ち上げる
 --Return Value	: none
@@ -126,7 +125,7 @@ function Kiku:launch()
 
 	firework.Sound.PlaySound("Explode")
 
-	makeFlare(Nobori, self)
+	makeFlare(Nobori, self.Flare_num, self.ExplodeTime, self.ExplodeSpeed, self.Color2, self.Color3)
 
 	firework.Sound.PlaySound("After")
 end
@@ -154,6 +153,23 @@ function Kiku:AutoSystem()
 		task.spawn(function()self:launchRandom()end)
 		task.wait(4)
 	end
+end
+
+--Method Name	: launchDouble
+--Explain		: 菊タイプの花火を同時に2個打ち上げる
+--Return Value	: none
+function Kiku:launchDouble()
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+
+	local Nobori = firework.Nobori.makeNobori(self);
+	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 2)
+
+	firework.Sound.PlaySound("Explode")
+
+	makeFlare(Nobori, self.Flare_num, self.ExplodeTime, self.ExplodeSpeed, self.Color2, self.Color3)
+	makeFlare(Nobori, self.Flare_num, self.ExplodeTime / 2, self.ExplodeSpeed, self.Color4, self.Color5)
+
+	firework.Sound.PlaySound("After")
 end
 
 return Kiku
