@@ -56,42 +56,20 @@ local function makeFlarePart(particleParent, Table)
 	return newPart
 end
 
-local function makeFire(particleParent)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
-
-	local newFire = Instance.new("Fire")
-	newFire.Color = firework.Colors.C
-	newFire.SecondaryColor = firework.Colors.C
-	newFire.Heat = 1
-	newFire.Parent = particleParent
-	newFire.Size = 3
-
-	return newFire
-end
-
 local function makeFireParticles(particleParent)
 	local fire = Instance.new("ParticleEmitter")
 	fire.Color = ColorSequence.new(AFirework.Colors.C)
 	fire.Brightness = 10
 	fire.LightEmission = 1
 	fire.Size = NumberSequence.new(2, 0)
-	fire.Texture = "http://www.roblox.com/asset/?id=11534281007"
+	fire.Texture = "rbxassetid://272050333"
 	fire.Parent = particleParent
 	fire.Drag = 0
-	fire.FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4
-	fire.FlipbookMode = Enum.ParticleFlipbookMode.OneShot
 	fire.Lifetime = NumberRange.new(1, 1.5)
 	fire.Speed = NumberRange.new(1.25, 2.5)
 	fire.SpreadAngle = Vector2.new(5, 5)
-	fire.Rate = 50
-	-- fire.Transparency = NumberSequence.new{
-	-- 	NumberSequenceKeypoint.new(0, 1),
-	-- 	NumberSequenceKeypoint.new(0.5, 0.5),
-	-- 	NumberSequenceKeypoint.new(1, 1)
-	-- }
-	-- fire.Acceleration = Vector3.new(0, 8, 0)
-	-- fire.Rotation = NumberRange.new(-360, 360)
-	-- fire.RotSpeed = NumberRange.new(-15, 15)
+	fire.Rate = 200
+	fire.VelocityInheritance = 0.1
 
 	return fire
 end
