@@ -8,7 +8,7 @@ local All = {}
 --Arguments| Launcher	: (Part) 花火を打ち上げる発射台のパーツ
 --Return Value	: none
 function All.AutoSystem_type1(Launcher)
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 	while true do
 		for i = 1, math.random(1, 3), 1 do
 			local ft_table = {
@@ -32,7 +32,7 @@ end
 --Arguments| Launcher	: (Part) 花火を打ち上げる発射台のパーツ
 --Return Value	: none
 function All.AutoSystem_type2(Launcher)
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 	local Botan = firework.Botan.new({Parent = Launcher, Start_CFrame = Launcher.CFrame})
 	local Ring = firework.Ring.new({Parent = Launcher, Start_CFrame = Launcher.CFrame})
 	local UFO = firework.UFO.new({Parent = Launcher, Start_CFrame = Launcher.CFrame})

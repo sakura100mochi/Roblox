@@ -1,7 +1,7 @@
 --Name		: Toranoo
 --Explain	: 虎の尾
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local Toranoo = setmetatable({}, {__index = AFirework})
 Toranoo.__index = Toranoo
 
@@ -95,7 +95,7 @@ end
 --Explain		: 虎の尾タイプの花火を打ち上げる
 --Return Value	: none
 function Toranoo:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	firework.Sound.PlaySound("SmallExplode")
 
@@ -144,8 +144,8 @@ function Toranoo:fan()
 	for i = 0, NUM, 1 do
 		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
 		local angle = t * math.rad(60)
-		local minSpeed = self.ExplodeSpeed - 5
-		local maxSpeed = self.ExplodeSpeed
+		local minSpeed = self.ExplodeSpeed * 2 - 5
+		local maxSpeed = self.ExplodeSpeed * 2
 		local factor = 1 - math.abs(t) ^ 1.5 -- 中心：1、端：0.18くらい
 		local speed = minSpeed + (maxSpeed - minSpeed) * factor
 		local Table = {

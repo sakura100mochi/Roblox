@@ -1,6 +1,6 @@
 local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
-local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local Botan = firework.Botan
 local Gerb = firework.Gerb
 local Kamuro = firework.Kamuro

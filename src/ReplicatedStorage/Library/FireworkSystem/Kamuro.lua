@@ -1,7 +1,7 @@
 --Name		: Kamuro
 --Explain	: 冠
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local Kamuro = setmetatable({}, {__index = AFirework})
 Kamuro.__index = Kamuro
 
@@ -86,7 +86,7 @@ end
 --Explain		:冠タイプの花火を打ち上げる　defaultは、錦冠
 --Return Value	: none
 function Kamuro:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self)
 	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime)

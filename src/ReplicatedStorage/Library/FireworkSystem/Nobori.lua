@@ -30,13 +30,14 @@ local function makeFire(fireParent)
 	return new
 end
 
-local function makeFireStarter(Start_CFrame)
+local function makeFireStarter(StarterParent, Start_CFrame)
 	local new = Instance.new("Part")
-	new.Parent = workspace
+	new.Parent = StarterParent
+	new.Name = "Nobori"
 	new.Anchored = false
 	new.Transparency = 1
 	new.CanCollide = false
-	new.Size = Vector3.new(1,1,1)
+	new.Size = Vector3.new(1, 1, 1)
 	new.CFrame = Start_CFrame
 
 	return new
@@ -57,28 +58,26 @@ local function makeBodyVelocity(BodyVelocityParent)
 	return new
 end
 
-function Nobori.makeNobori(Start_CFrame, Time)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+--Function Name	: makeNobori
+--Explain		: 昇りを作成して打ち上げる
+--Arguments| Table	: (table) AFireworkの子クラスのTable
+--Return Value	: (table) 昇りのパーツ
+function Nobori.makeNobori(Table)
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	if Start_CFrame == nil then
-		warn("ERROR: no argument [FireworkSystem.Nobori]")
-		return
-	end
-	if Time == nil then
-		Time = math.random(15, 30) / 10
+	if Table == nil or Table.Parent == nil or Table.Start_CFrame == nil or Table.NoboriTime == nil then
+		error("ERROR: Invalid Argument")
 	end
 
-	local Part = makeFireStarter(Start_CFrame)
+	local Part = makeFireStarter(Table.Parent, Table.Start_CFrame)
 	local fire = makeFire(Part)
 	makeBodyGyro(Part)
 	makeBodyVelocity(Part)
 
-	local LaunchSound = firework.Sound.makeSound("Launch")
-	LaunchSound:Play()
+	firework.Sound.PlaySound("Launch")
 
-	task.wait(Time)
+	task.wait(Table.NoboriTime)
 
-	LaunchSound:Destroy()
 	fire:Destroy()
 
 	return Part

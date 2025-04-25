@@ -1,7 +1,7 @@
 --Name		: UFO
 --Explain	: 型物　UFO・土星
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local UFO = setmetatable({}, {__index = AFirework})
 UFO.__index = UFO
 
@@ -65,7 +65,7 @@ end
 --Explain		: 型物　土星・UFOタイプの花火を打ち上げる
 --Return Value	: none
 function UFO:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self);
 	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)

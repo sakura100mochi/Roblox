@@ -1,7 +1,7 @@
 --Name		: Kiku
 --Explain	: 菊
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local Kiku = setmetatable({}, {__index = AFirework})
 Kiku.__index = Kiku
 
@@ -141,7 +141,7 @@ end
 --Explain		: 菊タイプの花火を打ち上げる
 --Return Value	: none
 function Kiku:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self);
 	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 2)

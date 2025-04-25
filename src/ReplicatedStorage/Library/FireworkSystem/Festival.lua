@@ -26,8 +26,8 @@ local function makeLauncher(folder)
 end
 
 local function newFireworks(Launchers)
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
-	local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 	local fireworks = {}
 	for i = 1, 24, 1 do
 		fireworks["Gerb_Mg_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Mg})
@@ -35,8 +35,8 @@ local function newFireworks(Launchers)
 		fireworks["Gerb_Cu_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Cu})
 		fireworks["Kiku_Normal_" .. i] = firework.Kiku.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Flare_num = 90})
 	end
-	fireworks["Toranoo_fan_7"] = firework.Toranoo.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeSpeed = 80})
-	fireworks["Toranoo_fan_18"] = firework.Toranoo.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeSpeed = 80})
+	fireworks["Toranoo_fan_7"] = firework.Toranoo.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeSpeed = 40})
+	fireworks["Toranoo_fan_18"] = firework.Toranoo.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeSpeed = 40})
 	fireworks["Gerb_Al_7"] = firework.Gerb.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, Color1 = AFirework.Colors.Al})
 	fireworks["Gerb_Al_18"] = firework.Gerb.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, Color1 = AFirework.Colors.Al})
 
@@ -46,7 +46,7 @@ end
 -- Launchers 1 2 3 4 5 6 | 7 8 9 10 11 12 ||| 13 14 15 16 17 18 | 19 20 21 22 23 24
 
 function Festival.Akagawa_31st_2024_Opening()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local folder = makeFolder()
 	local Launchers = makeLauncher(folder)

@@ -1,7 +1,7 @@
 --Name		: Gerb
 --Explain	: ジャーブ　噴水のように火の粉を噴き上げる花火
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
 local Gerb = setmetatable({}, {__index = AFirework})
 Gerb.__index = Gerb
 
@@ -58,7 +58,7 @@ end
 --Explain		: ジャーブタイプの花火を打ち上げる
 --Return Value	: none
 function Gerb:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	firework.Sound.PlaySound("SmallExplode")
 

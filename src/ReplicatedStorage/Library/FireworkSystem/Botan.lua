@@ -1,80 +1,79 @@
---Name		: Ring
---Explain	: リング
+--Name		: Botan
+--Explain	: 牡丹
 --			AFireworkの子クラス
-local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
-local Ring = setmetatable({}, {__index = AFirework})
-Ring.__index = Ring
+local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
+local Botan = setmetatable({}, {__index = AFirework})
+Botan.__index = Botan
 
-local RingPrototype = {
-	Type = "Ring",
+local BotanPrototype = {
+	Type = "Botan",
 	ExplodeTime = 3,
 	ExplodeSpeed = NumberRange.new(350, 370)
 }
 
-local function makeRingParticle(particleParent, Color, Lifetime, Speed)
+local function makeBotanParticle(particleParent, Color, Lifetime, Speed)
 	local new = Instance.new("ParticleEmitter")
 	new.Parent = particleParent
 	new.Texture = "rbxassetid://272050333"
 	new.Brightness = 10
 	new.Rate = 0
-	new.Size = NumberSequence.new(4, 0)
-	new.SpreadAngle = Vector2.new(0, 360)
+	new.Size = NumberSequence.new(2, 0)
+	new.SpreadAngle = Vector2.new(-360, 360)
 	new.LightEmission = 1
-	new.Drag = 13
+	new.Drag = 20
 	new.Color = Color
 	new.Lifetime = Lifetime
 	new.Speed = Speed
-	new.EmissionDirection = Enum.NormalId.Right
 
 	return new
 end
 
 --Function Name	: new
---Explain		: リングの花火をインスタンス化する
+--Explain		: 牡丹の花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function Ring.new(Table, Origin)
+function Botan.new(Table, Origin)
 	if Origin == nil then
-		Origin = RingPrototype
+		Origin = BotanPrototype
 	end
 	local self = AFirework.new(Origin, Table)
-	setmetatable(self, Ring)
+	setmetatable(self, Botan)
 
 	return self
 end
 
---Method Name	: launch
---Explain		:リングタイプの花火を打ち上げる
+--Method Name	:launch
+--Explain		:牡丹タイプの花火を打ち上げる
 --Return Value	: none
-function Ring:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
+function Botan:launch()
+	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self);
 	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
 	firework.Sound.PlaySound("Explode")
 
-	local RingColor = ColorSequence.new(self.Color1)
+	local BotanColor = ColorSequence.new(self.Color1)
 	if self.Color2 ~= nil then
-		RingColor = ColorSequence.new{
+		BotanColor = ColorSequence.new{
 			ColorSequenceKeypoint.new(0, self.Color1),
 			ColorSequenceKeypoint.new(0.4, self.Color2),
 			ColorSequenceKeypoint.new(1, self.Color2)
 		}
 	end
 
-	for i = 1, 3, 1 do
-		local particle = makeRingParticle(Nobori, RingColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
-		particle:Emit(math.random(30, 50))
+	for i = 1, 5, 1 do
+		local particle = makeBotanParticle(Nobori, BotanColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
+		particle:Emit(math.random(70,100))
 	end
 
 	firework.Sound.PlaySound("After")
 end
 
 --Method Name	: launchRandom
---Explain		: リングタタイプの花火をランダムな色、大きさで打ち上げる
+--Explain		: 牡丹タイプの花火をランダムな色、大きさで打ち上げる
 --Return Value	: none
-function Ring:launchRandom()
+function Botan:launchRandom()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	local tmp = math.random(250, 350)
 	local Table = {
@@ -83,15 +82,14 @@ function Ring:launchRandom()
 		ExplodeTime = math.random(200, 300) / 100,
 		ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
 	}
-	local newRing = Ring.new(Table, self)
-	newRing:launch()
+	local newBotan = Botan.new(Table, self)
+	newBotan:launch()
 end
 
 --Method Name	: AutoSystem
---Explain		: リングタイプの花火を自動でたくさん打ち上げる
+--Explain		: 牡丹タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
-function Ring:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+function Botan:AutoSystem()
 	while true do
 		for i = 1, math.random(3, 5), 1 do
 			task.spawn(function()self:launchRandom()end)
@@ -100,4 +98,4 @@ function Ring:AutoSystem()
 	end
 end
 
-return Ring
+return Botan
