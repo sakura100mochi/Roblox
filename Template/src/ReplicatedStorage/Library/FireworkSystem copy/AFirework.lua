@@ -49,6 +49,10 @@ function AFirework:launch()
 	error("ERROR: Abstract method — must be implemented in subclass")
 end
 
+function AFirework:launchRandom()
+	error("ERROR: Abstract method — must be implemented in subclass")
+end
+
 function AFirework:AutoSystem()
 	error("ERROR: Abstract method — must be implemented in subclass")
 end
