@@ -3,7 +3,7 @@
 local Sound = {}
 
 Sound.List = {
-	["Lauch"] = "rbxassetid://551051176",
+	["Launch"] = "rbxassetid://551051176",
 	["SmallExplode"] = "rbxassetid://4583102108",
 	["Explode"] = "rbxassetid://4583102108",
 	["After"] = "rbxassetid://100817659362842",
@@ -26,7 +26,7 @@ function Sound.PlaySound(str)
 		new.Volume = 5
 	end
 
-	game:GetService("Debris"):AddItem(new, new.TimeLength() + 1)
+	game:GetService("Debris"):AddItem(new, new.TimeLength + 1)
 	new:Play()
 
 	return new
