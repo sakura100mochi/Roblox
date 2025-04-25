@@ -51,8 +51,11 @@ end
 --Explain		: 型物　土星・UFOタイプの花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function UFO.new(Table)
-	local self = AFirework.new(UFOPrototype, Table)
+function UFO.new(Table, Origin)
+	if Origin == nil then
+		Origin = UFOPrototype
+	end
+	local self = AFirework.new(Origin, Table)
 	setmetatable(self, UFO)
 
 	return self
@@ -81,22 +84,29 @@ function UFO:launch()
 	firework.Sound.PlaySound("After")
 end
 
+--Method Name	: launchRandom
+--Explain		: 型物　土星・UFOタイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function UFO:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local tmp = math.random(250, 350)
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		ExplodeTime = math.random(200, 300) / 100,
+		ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
+	}
+	local newUFO = UFO.new(Table, self)
+	newUFO:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: 型物　土星・UFOタイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function UFO:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 2), 1 do
-			local tmp = math.random(250, 350)
-			local Table = {
-				Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(200, 300) / 100,
-				ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
-			}
-			local newUFO = UFO.new(Table)
-			task.spawn(function()newUFO:launch()end)
+			task.spawn(function()self:launchRandom()end)
 		end
 		task.wait(2)
 	end

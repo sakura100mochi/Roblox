@@ -108,17 +108,27 @@ function Toranoo:launch()
 	firework.Sound.PlaySound("Fizzle")
 end
 
+--Method Name	: launchRandom
+--Explain		: 虎の尾タイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Toranoo:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		ExplodeTime = math.random(150, 300) / 100,
+		ExplodeSpeed = math.random(15, 25)
+	}
+	local newToranoo = Toranoo.new(Table, self)
+	newToranoo:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: 虎の尾タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Toranoo:AutoSystem()
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local Table = {
-				ExplodeTime = math.random(150, 300) / 100
-			}
-			local newToranoo = Toranoo.new(Table)
-			task.spawn(function()newToranoo:launch()end)
+			task.spawn(function()self:launchRandom()end)
 		end
 		task.wait(2)
 	end

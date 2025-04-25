@@ -17,7 +17,7 @@ local GerbPrototype = {
 local function makeGerbParticle(GerbParent, Color, Speed, SpreadAngle)
 	local newGerb = Instance.new("ParticleEmitter")
 	newGerb.Parent = GerbParent
-	newGerb.Color = Color
+	newGerb.Color = ColorSequence.new(Color)
 	newGerb.LightEmission = 1
 	newGerb.LightInfluence = 1
 	newGerb.Orientation = Enum.ParticleOrientation.FacingCamera
@@ -82,21 +82,39 @@ function Gerb:launch()
 	particle5:Emit(40)
 end
 
+--Method Name	: launchRandom
+--Explain		: ジャーブタイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Gerb:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local Table
+	if math.random(0, 1) == 0 then
+		Table = {
+			Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+			Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+			Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+			Color4 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+			Color5 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+		}
+	else
+		Table = {
+			Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		}
+		Table.Color2 = Table.Color1
+		Table.Color3 = Table.Color1
+		Table.Color4 = Table.Color1
+		Table.Color5 = Table.Color1
+	end
+	local newGerb = Gerb.new(Table, self)
+	newGerb:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: ジャーブタイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Gerb:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
-		local Table = {
-			Color1 = ColorSequence.new(AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]),
-			Color2 = ColorSequence.new(AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]),
-			Color3 = ColorSequence.new(AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]),
-			Color4 = ColorSequence.new(AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]),
-			Color5 = ColorSequence.new(AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]])
-		}
-		local newGerb = Gerb.new(Table)
-		task.spawn(function()newGerb:launch()end)
+		task.spawn(function()self:launchRandom()end)
 		task.wait(3)
 	end
 end
@@ -105,24 +123,26 @@ end
 --Explain		: ジャーブタイプの花火を扇型に打ち上げる
 --Return Value	: none
 function Gerb:fan()
-	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 	local NUM = 13
+
+	if not self.Parent:IsA("BasePart") and not self.Parent:IsA("Attachment") then
+		error("ERROR: Parent must be BasePart or Attachment [FireworkSystem/Gerb/fan]")
+	end
 
 	for i = 0, NUM, 1 do
 		task.spawn(function()
+			local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
+			local angle = t * 60
+			local attachment = Instance.new("Attachment")
+			attachment.Parent = self.Parent
+			attachment.Rotation = Vector3.new(0, 0, angle)
+			game:GetService("Debris"):AddItem(attachment, self.ExplodeTime + 3)
 
-		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
-		local angle = t * 60
-		local attachment = Instance.new("Attachment")
-		attachment.Parent = self.Parent
-		attachment.Rotation = Vector3.new(0, 0, angle)
-		game:GetService("Debris"):AddItem(attachment, self.ExplodeTime + 3)
-
-		local Table = {
-			Parent = attachment
-		}
-		local newGerb = Gerb.new(Table, self)
-		newGerb:launch()
+			local Table = {
+				Parent = attachment
+			}
+			local newGerb = Gerb.new(Table, self)
+			newGerb:launch()
 		end)
 	end
 end

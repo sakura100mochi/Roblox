@@ -72,8 +72,11 @@ end
 --Explain		: 冠の花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function Kamuro.new(Table)
-	local self = AFirework.new(KamuroPrototype, Table)
+function Kamuro.new(Table, Origin)
+	if Origin == nil then
+		Origin = KamuroPrototype
+	end
+	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Kamuro)
 
 	return self
@@ -97,19 +100,27 @@ function Kamuro:launch()
 	firework.Sound.PlaySound("Fizzle")
 end
 
+--Method Name	: launchRandom
+--Explain		: 冠タイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Kamuro:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
+		ExplodeTime = math.random(300, 450) / 100
+	}
+	local newKamuro = Kamuro.new(Table, self)
+	newKamuro:launch()
+end
+
 --Method Name	:AutoSystem
 --Explain		:冠タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Kamuro:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(2, 3), 1 do
-			local Table = {
-				Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(300, 450) / 100
-			}
-			local newKamuro = Kamuro.new(Table)
-			task.spawn(function()newKamuro:launch()end)
+			task.spawn(function()self:launchRandom()end)
 		end
 		task.wait(5)
 	end

@@ -8,7 +8,7 @@ local All = {}
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Return Value	: none
 function All.AutoSystem_type1(Start_CFrame)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 3), 1 do
@@ -38,7 +38,7 @@ end
 --Arguments| Start_CFrame	: (CFrame) 花火を打ち上げる場所のCFrame
 --Return Value	: none
 function All.AutoSystem_type2(Start_CFrame)
-	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
+	local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(1, 3), 1 do

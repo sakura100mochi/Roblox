@@ -123,8 +123,11 @@ end
 --Explain		: 菊の花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function Kiku.new(Table)
-	local self = AFirework.new(KikuPrototype, Table)
+function Kiku.new(Table, Origin)
+	if Origin == nil then
+		Origin = KikuPrototype
+	end
+	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Kiku)
 
 	Table = Table or {}
@@ -150,31 +153,27 @@ function Kiku:launch()
 	firework.Sound.PlaySound("After")
 end
 
+--Method Name	: launchRandom
+--Explain		: 菊タイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Kiku:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local Table = {
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table / 2)]],
+		Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
+		ExplodeTime = math.random(200, 300) / 100,
+		ExplodeSpeed = math.random(1200, 1400) / 10,
+	}
+	local newKiku = Kiku.new(Table, self)
+	newKiku:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: 菊タイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
 function Kiku:AutoSystem()
-	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
-		local random = math.random(1, 3)
-		local Table = {}
-		if random == 1 then
-			Table = {
-				Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(200, 300) / 100,
-				ExplodeSpeed = math.random(1200, 1400) / 10,
-			}
-		else if random == 2 then
-			Table = {
-				Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(200, 300) / 100,
-				ExplodeSpeed = math.random(1200, 1400) / 10,
-			}
-		end
-		end
-		local newKiku = Kiku.new(Table)
-		task.spawn(function()newKiku:launch()end)
+		task.spawn(function()self:launchRandom()end)
 		task.wait(4)
 	end
 end

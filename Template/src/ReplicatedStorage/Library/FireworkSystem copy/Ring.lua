@@ -33,8 +33,11 @@ end
 --Explain		: リングの花火をインスタンス化する
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はPrototypeで指定されているデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function Ring.new(Table)
-	local self = AFirework.new(RingPrototype, Table)
+function Ring.new(Table, Origin)
+	if Origin == nil then
+		Origin = RingPrototype
+	end
+	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Ring)
 
 	return self
@@ -68,6 +71,22 @@ function Ring:launch()
 	firework.Sound.PlaySound("After")
 end
 
+--Method Name	: launchRandom
+--Explain		: リングタタイプの花火をランダムな色、大きさで打ち上げる
+--Return Value	: none
+function Ring:launchRandom()
+	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
+	local tmp = math.random(250, 350)
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
+		ExplodeTime = math.random(200, 300) / 100,
+		ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
+	}
+	local newRing = Ring.new(Table, self)
+	newRing:launch()
+end
+
 --Method Name	: AutoSystem
 --Explain		: リングタイプの花火を自動でたくさん打ち上げる
 --Return Value	: none
@@ -75,14 +94,7 @@ function Ring:AutoSystem()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			local tmp = math.random(250, 350)
-			local Table = {
-				Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-				ExplodeTime = math.random(200, 300) / 100,
-				ExplodeSpeed = NumberRange.new(tmp, tmp + 20),
-			}
-			local newRing = Ring.new(Table)
-			task.spawn(function()newRing:launch()end)
+			task.spawn(function()self:launchRandom()end)
 		end
 		task.wait(2)
 	end
