@@ -1,12 +1,15 @@
 local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+local firework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"])
 local AFirework = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].AFirework)
-local Botan = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Botan)
-local Gerb = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Gerb)
-local Kamuro = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Kamuro)
-local Kiku = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Kiku)
-local Ring = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Ring)
-local Toranoo = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].Toranoo)
-local UFO = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"].UFO)
+local Botan = firework.Botan
+local Gerb = firework.Gerb
+local Kamuro = firework.Kamuro
+local Kiku = firework.Kiku
+local Ring = firework.Ring
+local Toranoo = firework.Toranoo
+local UFO = firework.UFO
+local All = firework.All
+local Festival = firework.Festival
 
 -- local botan = Botan.new({Color1 = AFirework.Colors.K, Color2 = AFirework.Colors.Rb})
 -- botan:launch()
@@ -51,3 +54,8 @@ local UFO = require(game.ReplicatedStorage.Shared.Library["FireworkSystem copy"]
 -- new:launch()
 -- new:launchRandom()
 -- new:AutoSystem()
+
+-- All.AutoSystem_type1(workspace.SpawnLocation)
+-- All.AutoSystem_type2(workspace.SpawnLocation)
+
+-- Festival.Akagawa_31st_2024_Opening()

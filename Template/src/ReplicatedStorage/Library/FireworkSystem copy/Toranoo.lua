@@ -144,9 +144,8 @@ function Toranoo:fan()
 	for i = 0, NUM, 1 do
 		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
 		local angle = t * math.rad(60)
-		local Speed = 40
-		local minSpeed = Speed - 5
-		local maxSpeed = Speed
+		local minSpeed = self.ExplodeSpeed - 5
+		local maxSpeed = self.ExplodeSpeed
 		local factor = 1 - math.abs(t) ^ 1.5 -- 中心：1、端：0.18くらい
 		local speed = minSpeed + (maxSpeed - minSpeed) * factor
 		local Table = {

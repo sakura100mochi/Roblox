@@ -7,11 +7,7 @@ Gerb.__index = Gerb
 
 local GerbPrototype = {
 	Type = "Gerb",
-	Color1 = AFirework.Colors.C,
-	Color2 = AFirework.Colors.C,
-	Color3 = AFirework.Colors.C,
-	Color4 = AFirework.Colors.C,
-	Color5 = AFirework.Colors.C
+	Color1 = AFirework.Colors.C
 }
 
 local function makeGerbParticle(GerbParent, Color, Speed, SpreadAngle)
@@ -66,6 +62,13 @@ function Gerb:launch()
 
 	firework.Sound.PlaySound("SmallExplode")
 
+	if self.Color2 == nil or self.Color3 == nil or self.Color4 == nil or self.Color5 == nil then
+		self.Color2 = self.Color1
+		self.Color3 = self.Color1
+		self.Color4 = self.Color1
+		self.Color5 = self.Color1
+	end
+
 	local particle1 = makeGerbParticle(self.Parent, self.Color1, NumberRange.new(5, 60), Vector2.new(5, 5))
 	particle1:Emit(30)
 	task.wait(0.01)
@@ -87,24 +90,13 @@ end
 --Return Value	: none
 function Gerb:launchRandom()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
-	local Table
-	if math.random(0, 1) == 0 then
-		Table = {
-			Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-			Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-			Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-			Color4 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-			Color5 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
-		}
-	else
-		Table = {
-			Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-		}
-		Table.Color2 = Table.Color1
-		Table.Color3 = Table.Color1
-		Table.Color4 = Table.Color1
-		Table.Color5 = Table.Color1
-	end
+	local Table = {
+		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
+		Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color4 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
+		Color5 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
+	}
 	local newGerb = Gerb.new(Table, self)
 	newGerb:launch()
 end
