@@ -10,7 +10,8 @@ local ToranooPrototype = {
 	Color1 = AFirework.Colors.Al,
 	ExplodeTime = 2,
 	ExplodeSpeed = 20,
-	Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1))
+	Velocity = Vector3.new(math.random(-1, 1), 2, math.random(-1, 1)),
+	Direction = 'x'
 }
 
 local function makeFlareparticles(particleParent, Color, ExplodeTime)
@@ -87,6 +88,7 @@ function Toranoo.new(Table, Origin)
 
 	Table = Table or {}
 	self.Velocity = Table.Velocity or Origin.Velocity
+	self.Direction = Table.Direction or Origin.Direction
 
 	return self
 end
@@ -153,6 +155,9 @@ function Toranoo:fan()
 			ExplodeSpeed = speed,
 			Velocity = Vector3.new(math.sin(angle), math.cos(angle), 0)
 		}
+		if self.Direction == 'z' then
+			Table.Velocity = Vector3.new(0, math.cos(angle), math.sin(angle))
+		end
 		local newToranoo = Toranoo.new(Table, self)
 		task.spawn(function()newToranoo:launch()end)
 	end

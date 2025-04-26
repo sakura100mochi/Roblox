@@ -121,7 +121,7 @@ function Kiku:launch()
 	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 2)
+	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
 
 	firework.Sound.PlaySound("Explode")
 
@@ -162,7 +162,7 @@ function Kiku:launchDouble()
 	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
 	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 2)
+	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
 
 	firework.Sound.PlaySound("Explode")
 

@@ -79,6 +79,7 @@ function Nobori.makeNobori(Table)
 	task.wait(Table.NoboriTime)
 
 	fire:Destroy()
+	Part.Anchored = true
 
 	return Part
 end
