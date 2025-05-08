@@ -18,11 +18,22 @@ AFirework.Colors = {
 	["Mg"] = Color3.fromHex("f5f5f4")
 }
 
+local function makeStorage() : Folder
+	local StorageFolder = game.ReplicatedStorage:FindFirstChild("FireworkSystemStorage")
+	if StorageFolder == nil then
+		StorageFolder = Instance.new("Folder")
+		StorageFolder.Parent = game.ReplicatedStorage
+		StorageFolder.Name = "FireworkSystemStorage"
+	end
+
+	return StorageFolder
+end
+
 --Function Name	: new
 --Explain		: コンストラクタ　子クラスからのみ呼び出し可能
 --Arguments| Table	: (table)Tableの値を設定する。値がない場合はデフォルト値にする
 --Return Value	: (table) 設定した後のtable
-function AFirework.new(Origin, Table)
+function AFirework.new(Origin : table, Table : table) : table
 	if Origin == nil then
 		error("ERROR: Abstract class 'AFirework' cannot be instantiated")
 	end
@@ -41,6 +52,7 @@ function AFirework.new(Origin, Table)
 	self.NoboriTime = Table.NoboriTime or Origin.NoboriTime or math.random(15, 30) / 10
 	self.ExplodeTime = Table.ExplodeTime or Origin.ExplodeTime or 1
 	self.ExplodeSpeed = Table.ExplodeSpeed or Origin.ExplodeSpeed or NumberRange.new(300, 320)
+	self.Storage = Table.Storage or Origin.Storage or makeStorage()
 
 	return self
 end
