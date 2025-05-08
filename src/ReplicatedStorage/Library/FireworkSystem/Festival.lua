@@ -40,17 +40,22 @@ local function newFireworks(Launchers : table) : table
 		fireworks["Gerb_Mg_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Mg})
 		fireworks["Gerb_Sr_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Sr})
 		fireworks["Gerb_Cu_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Cu})
-		fireworks["Kiku_Normal_" .. i] = firework.Kiku.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
 	end
 	fireworks["Toranoo_fan_7"] = firework.Toranoo.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeSpeed = 40, Direction = 'z'})
 	fireworks["Toranoo_fan_18"] = firework.Toranoo.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeSpeed = 40, Direction = 'z'})
 	fireworks["Gerb_Al_7"] = firework.Gerb.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, Color1 = AFirework.Colors.Al})
 	fireworks["Gerb_Al_18"] = firework.Gerb.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, Color1 = AFirework.Colors.Al})
+
+	fireworks["Kiku_Normal_1"] = firework.Kiku.new({Parent = Launchers[1], Start_CFrame = Launchers[1].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
+	fireworks["Kiku_Normal_7"] = firework.Kiku.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
+	fireworks["Kiku_Normal_18"] = firework.Kiku.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
+	fireworks["Kiku_Normal_24"] = firework.Kiku.new({Parent = Launchers[24], Start_CFrame = Launchers[24].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
+
 	fireworks["Kiku_double_12"] = firework.Kiku.new({Parent = Launchers[12], Start_CFrame = Launchers[12].CFrame, 
 	Color2 = AFirework.Colors.Sr, Color3 = AFirework.Colors.C, Color4 = AFirework.Colors.C, Color5 = Color3.new(0.180392, 0.290196, 1), 
-	Flare_num = 300, NoboriTime = 5})
+	Flare_num = 300, NoboriTime = 4})
 	fireworks.isSetUp = true
-	
+
 	return fireworks
 end
 
@@ -91,9 +96,9 @@ function Festival.Akagawa_31st_2024_Opening.launch(fireworks : table)
 	end
 
 	task.spawn(function()fireworks["Kiku_Normal_1"]:launch()end)
-	task.spawn(function()fireworks["Kiku_Normal_24"]:launch()end)
 	task.spawn(function()fireworks["Kiku_Normal_7"]:launch()end)
 	task.spawn(function()fireworks["Kiku_Normal_18"]:launch()end)
+	task.spawn(function()fireworks["Kiku_Normal_24"]:launch()end)
 
 	task.spawn(function()fireworks["Toranoo_fan_7"]:fan()end)
 	task.spawn(function()fireworks["Toranoo_fan_18"]:fan()end)
@@ -101,7 +106,6 @@ function Festival.Akagawa_31st_2024_Opening.launch(fireworks : table)
 	task.spawn(function()fireworks["Gerb_Al_7"]:fan()end)
 	task.spawn(function()fireworks["Gerb_Al_18"]:fan()end)
 
-	task.wait(1)
 	task.spawn(function()fireworks["Kiku_double_12"]:launchDouble()end)
 end
 
