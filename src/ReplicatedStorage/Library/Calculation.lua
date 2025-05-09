@@ -6,8 +6,8 @@ local calc = {}
 --Explain		: 地点A、Bの距離を返す
 --Arguments| A	: (Vector3)地点Aの座標
 --Arguments| B	: (Vector3)地点Bの座標
---Return Value	: (Vector3) 距離
-function calc.distance(A, B)
+--Return Value	: (number) 距離
+function calc.distance(A : Vector3, B : Vector3) : number
 	local distance = 0
 
 	if A == nil or B == nil then
