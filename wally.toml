@@ -1,0 +1,10 @@
+[package]
+name = "hiraiyuina/roblox"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Promise = "evaera/promise@^4"
+Component = "sleitnick/component@2.4.8"
+Knit = "sleitnick/knit@1.7.0"
