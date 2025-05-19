@@ -7,9 +7,9 @@ local ray = {}
 --Arguments| rayOrigin		: (Vector3)Rayを発射する元
 --Arguments| rayDestination	: (Vector3)Rayを発射する目的地
 --Arguments| rayDirection	: (Vector3)Rayを発射する方向
---Arguments| ignoreList		: (Array of objects)Rayがあたる物体に含めないもの
+--Arguments| ignoreList		: (Table of objects)Rayがあたる物体に含めないもの
 --Return Value	: (RaycastResult)raycastResult
-function ray.Raycasting(rayOrigin, rayDestination, rayDirection, ignoreList)
+function ray.Raycasting(rayOrigin : Vector3, rayDestination : Vector3, rayDirection : Vector3, ignoreList : table | Object) : RaycastResult
 	local raycastResult = nil
 
 	if rayOrigin == nil or (rayDestination == nil and rayDirection == nil) then
@@ -20,7 +20,7 @@ function ray.Raycasting(rayOrigin, rayDestination, rayDirection, ignoreList)
 	if rayDirection == nil then
 		rayDirection = rayDestination - rayOrigin
 	end
-	
+
 	if rayDestination == nil then
 		rayDestination = rayOrigin + rayDirection
 	end
@@ -39,9 +39,11 @@ end
 
 --Function Name	: GroundPosition
 --Explain		: 地面の位置を返す
---Arguments| position	: (Vector3)地面の位置を調べたい座標
---Return Value	: (Vector3)positionの地面の位置の座標。positionの高さ-50~50に地面がなかったらnilを返す。
-function ray.GroundPosition(position, ignoreList)
+--Arguments| position		: (Vector3)地面の位置を調べたい座標
+--Arguments| ignoreList		: (Table of objects)Rayがあたる物体に含めないもの
+--Arguments| groundPart		: (Instance or nil)地面　nilだったらTerrainが地面になる
+--Return Value	: (Vector3 or nil)positionの地面の位置の座標。positionの高さ-50~50に地面がなかったらnilを返す。
+function ray.GroundPosition(position : Vector3, ignoreList : table | Object, groundPart : Instance | nil) : Vector3 | nil
 	local rayOrigin = position + Vector3.new(0, 50, 0)
 	local rayDirection = Vector3.new(0, -100, 0)
 	local raycastResult = ray.Raycasting(rayOrigin, nil, rayDirection, ignoreList)
@@ -49,6 +51,8 @@ function ray.GroundPosition(position, ignoreList)
 	for i = 0, 10 do
 		if raycastResult == nil then
 			return nil
+		elseif groundPart and raycastResult.Instance == groundPart then
+				return raycastResult.Position
 		elseif raycastResult.Instance:IsA("Terrain") == false then
 			raycastResult = ray.Raycasting(raycastResult.Position, nil, rayDirection, ignoreList)
 		else
@@ -61,8 +65,11 @@ end
 --Function Name	: CheckObstacles
 --Explain		: rayOriginからrayDestiationにRayを発射して、ぶつかった地点の座標を返す。
 --					ぶつからなかったら、rayDestiationを返す。
+--Arguments| rayOrigin		: (Vector3)Rayを発射する元
+--Arguments| rayDestination	: (Vector3)Rayを発射する目的地
+--Arguments| ignoreList		: (Table of objects)Rayがあたる物体に含めないもの
 --Return Value	: (Vector3) ぶつかった地点の座標またはrayDestiationの座標
-function ray.CheckObstacles(rayOrigin, rayDestiation, ignoreList)
+function ray.CheckObstacles(rayOrigin : Vector3, rayDestiation : Vector3, ignoreList : table | Object) : Vector3
 	local raycastResult = ray.Raycasting(rayOrigin, rayDestiation, nil, ignoreList)
 
 	if raycastResult == nil then
