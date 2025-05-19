@@ -10,7 +10,7 @@ dependencies = []
 [[package]]
 name = "hiraiyuina/roblox"
 version = "0.1.0"
-dependencies = [["Component", "sleitnick/component@2.4.8"], ["Knit", "sleitnick/knit@1.7.0"], ["Promise", "evaera/promise@4.0.0"]]
+dependencies = [["Component", "sleitnick/component@2.4.8"], ["Knit", "sleitnick/knit@1.7.0"]]
 
 [[package]]
 name = "sleitnick/comm"
