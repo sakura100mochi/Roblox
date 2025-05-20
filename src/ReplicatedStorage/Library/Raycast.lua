@@ -41,9 +41,8 @@ end
 --Explain		: 地面の位置を返す
 --Arguments| position		: (Vector3)地面の位置を調べたい座標
 --Arguments| ignoreList		: (Table of objects)Rayがあたる物体に含めないもの
---Arguments| groundPart		: (Instance or nil)地面　nilだったらTerrainが地面になる
 --Return Value	: (Vector3 or nil)positionの地面の位置の座標。positionの高さ-50~50に地面がなかったらnilを返す。
-function ray.GroundPosition(position : Vector3, ignoreList : table | Object, groundPart : Instance | nil) : Vector3 | nil
+function ray.GroundPosition(position : Vector3, ignoreList : table | Object) : Vector3 | nil
 	local rayOrigin = position + Vector3.new(0, 50, 0)
 	local rayDirection = Vector3.new(0, -100, 0)
 	local raycastResult = ray.Raycasting(rayOrigin, nil, rayDirection, ignoreList)
@@ -51,9 +50,7 @@ function ray.GroundPosition(position : Vector3, ignoreList : table | Object, gro
 	for i = 0, 10 do
 		if raycastResult == nil then
 			return nil
-		elseif groundPart and raycastResult.Instance == groundPart then
-				return raycastResult.Position
-		elseif raycastResult.Instance:IsA("Terrain") == false then
+		elseif raycastResult.Instance:IsA("Terrain") == false and raycastResult.Instance.Name ~= "Baseplate" then
 			raycastResult = ray.Raycasting(raycastResult.Position, nil, rayDirection, ignoreList)
 		else
 			return raycastResult.Position

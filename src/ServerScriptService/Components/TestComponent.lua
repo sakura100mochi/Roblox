@@ -1,5 +1,7 @@
+-- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)
 
+-- Create Component --
 local TestComponent = Component.new({
 	Tag = "TestComponent",
 	Ancestor = {},
