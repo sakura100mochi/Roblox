@@ -56,7 +56,7 @@ function MovementController.new(Mob : Instance)
 	self.HumanoidRootPart = Mob:FindFirstChild("HumanoidRootPart")
 	self.WalkSpeed = WALKSPEED
 	self:_SetWalkSpeed()
-	self.SearchRange = FLEE_RANGE
+	self.SearchRange = CHASE_RANGE
 	self.ChaseRange =  CHASE_RANGE
 	self.AttackRange = ATTACK_RANGE
 	self.FleeRange = FLEE_RANGE
@@ -85,16 +85,14 @@ function MovementController:Start()
 		self.WalkTrack:Play()
 	end
 	while true do
-		-- local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
-		-- if TargetPlayer then
-		-- 	self.Chase:Update(TargetPlayer)
-		-- 	local AttackPlayer = sp.SearchPlayer(self.Position.Current, self.AttackRange)
-		-- 	if AttackPlayer then
-		-- 		self.Attack:Update(AttackPlayer)
-		-- 	end
 		local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
 		if TargetPlayer then
-			self.Flee:Update(TargetPlayer)
+			-- self.Flee:Update(TargetPlayer)
+			self.Chase:Update(TargetPlayer)
+			local AttackPlayer = sp.SearchPlayer(self.Position.Current, self.AttackRange)
+			if AttackPlayer then
+				self.Attack:Update(AttackPlayer)
+			end
 		else
 			self.Idle:Update()
 			self.Wander:Update()
