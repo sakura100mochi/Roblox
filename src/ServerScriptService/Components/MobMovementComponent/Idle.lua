@@ -7,6 +7,7 @@ Idle.__index = Idle
 
 function Idle:_Model()
 	return function ()
+		self.Humanoid:MoveTo(self.HumanoidRootPart.Position)
 		self.WalkTrack:Stop()
 		self.IdleTrack:Play()
 		self:_WaitUntilPlayer(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max), false)

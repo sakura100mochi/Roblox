@@ -1,16 +1,18 @@
---Name		: Chase
---Explain	: モブが、近くのプレイヤーを追いかける AMovementの子クラス
+--Name		: Flee
+--Explain	: モブが、近くのプレイヤーから逃げる　AMovementの子クラス
 local AMovement = require(script.Parent.AMovement)
 
-local Chase = setmetatable({}, {__index = AMovement})
-Chase.__index = Chase
+local Flee = setmetatable({}, {__index = AMovement})
+Flee.__index = Flee
 
-function Chase:_Model()
+function Flee:_Model()
 	return function (TargetPlayer : Player)
 		if TargetPlayer == nil then return end
 		local TargetCharacter = TargetPlayer.Character
 		local TargetHumanoidRootPart = TargetCharacter:WaitForChild("HumanoidRootPart")
-		local goal = TargetHumanoidRootPart.Position
+		local PlayerPos = TargetHumanoidRootPart.Position
+		local FleeDir = (self.Position.Current - PlayerPos).Unit
+		local goal = self.Position.Current + FleeDir * self.FleeRange
 
 		self.Humanoid:MoveTo(goal)
 
@@ -18,27 +20,27 @@ function Chase:_Model()
 	end
 end
 
-function Chase:_Part()
+function Flee:_Part()
 	return function (TargetPlayer : Player)
 		if TargetPlayer == nil then return end
 		local TargetCharacter = TargetPlayer.Character
 		local TargetHumanoidRootPart = TargetCharacter:WaitForChild("HumanoidRootPart")
-		local goal = TargetHumanoidRootPart.Position
-		self.Mob.CFrame = CFrame.lookAt(self.Mob.Position, goal)
-		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
+		local PlayerPos = TargetHumanoidRootPart.Position
+		self.Mob.CFrame = CFrame.lookAt(PlayerPos, self.Mob.Position)
+		self.Mob.Velocity = (self.Mob.Position - PlayerPos).Unit * self.WalkSpeed * 3
 		self.Mob.CFrame += self.Mob.CFrame.LookVector
 
 		self:_UpdatePosition()
 	end
 end
 
---Function Name	: Chase
---Explain		: モブが、近くのプレイヤーを追いかける
+--Function Name	: Flee
+--Explain		: モブが、近くのプレイヤーから逃げる
 --Arguments| MovementController: (table)
 --Return Value	: (table)
-function Chase.new(MovementController : table) : table
+function Flee.new(MovementController : table) : table
 	local self = AMovement.new(MovementController)
-    setmetatable(self, Chase)
+    setmetatable(self, Flee)
 
 	if self.Humanoid then
 		self.UpdateFunc = self:_Model()
@@ -49,8 +51,8 @@ function Chase.new(MovementController : table) : table
 	return self
 end
 
-function Chase:Update(TargetPlayer : Player)
+function Flee:Update(TargetPlayer : Player)
 	self.UpdateFunc(TargetPlayer)
 end
 
-return Chase
+return Flee

@@ -13,10 +13,12 @@ local MovementController = {}
 
 -- モブの移動速度
 local WALKSPEED = 8
--- プレーヤーを探す範囲
-local SEARCH_RANGE = 50
+-- チェイスするプレイヤーをさがす範囲
+local CHASE_RANGE = 50
 -- プレイヤーに攻撃する範囲
 local ATTACK_RANGE = 2
+-- プレイヤーから逃げる範囲
+local FLEE_RANGE = 20
 
 function MovementController:_SetWalkSpeed()
 	if self.Humanoid then
@@ -54,8 +56,10 @@ function MovementController.new(Mob : Instance)
 	self.HumanoidRootPart = Mob:FindFirstChild("HumanoidRootPart")
 	self.WalkSpeed = WALKSPEED
 	self:_SetWalkSpeed()
-	self.SearchRange = SEARCH_RANGE
+	self.SearchRange = FLEE_RANGE
+	self.ChaseRange =  CHASE_RANGE
 	self.AttackRange = ATTACK_RANGE
+	self.FleeRange = FLEE_RANGE
 	self.WanderTimeRange = {min = 2, max = 5}
 	self.IdleTimeRange =  {min = 2, max = 5}
 	self.canAttack = true
@@ -71,6 +75,7 @@ function MovementController.new(Mob : Instance)
 	self.Idle = Idle.new(self)
 	self.Chase = Chase.new(self)
 	self.Attack = Attack.new(self)
+	self.Flee = Flee.new(self)
 
 	return self
 end
@@ -80,13 +85,16 @@ function MovementController:Start()
 		self.WalkTrack:Play()
 	end
 	while true do
+		-- local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
+		-- if TargetPlayer then
+		-- 	self.Chase:Update(TargetPlayer)
+		-- 	local AttackPlayer = sp.SearchPlayer(self.Position.Current, self.AttackRange)
+		-- 	if AttackPlayer then
+		-- 		self.Attack:Update(AttackPlayer)
+		-- 	end
 		local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
 		if TargetPlayer then
-			self.Chase:Update(TargetPlayer)
-			local AttackPlayer = sp.SearchPlayer(self.Position.Current, self.AttackRange)
-			if AttackPlayer then
-				self.Attack:Update(AttackPlayer)
-			end
+			self.Flee:Update(TargetPlayer)
 		else
 			self.Idle:Update()
 			self.Wander:Update()

@@ -1,5 +1,5 @@
 --Name		: Attack
---Explain	: モブが、近くのプレイヤーを追いかける AMovementの子クラス
+--Explain	: モブが近くのプレイヤーを攻撃する AMovementの子クラス
 local AMovement = require(script.Parent.AMovement)
 
 local Attack = setmetatable({}, {__index = AMovement})
@@ -17,7 +17,7 @@ function Attack:TakeDamage(AttackPlayer : Player)
 end
 
 --Function Name	: Attack
---Explain		: モブがランダムに歩く
+--Explain		: モブが近くのプレイヤーを攻撃する
 --Arguments| MovementController: (table)
 --Return Value	: (table)
 function Attack.new(MovementController : table) : table

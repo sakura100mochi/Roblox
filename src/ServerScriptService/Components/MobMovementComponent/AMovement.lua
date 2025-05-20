@@ -15,7 +15,9 @@ function AMovement.new(MovementController : table) : table
 	self.HumanoidRootPart = MovementController.HumanoidRootPart
 	self.WalkSpeed = MovementController.WalkSpeed
 	self.SearchRange = MovementController.SearchRange
+	self.ChaseRange = MovementController.ChaseRange
 	self.AttackRange = MovementController.AttackRange
+	self.FleeRange = MovementController.FleeRange
 	self.WanderTimeRange = MovementController.WanderTimeRange
 	self.IdleTimeRange = MovementController.IdleTimeRange
 	self.canAttack = MovementController.canAttack
