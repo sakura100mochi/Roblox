@@ -1,6 +1,9 @@
 --Name		: Chase
---Explain	: モブが、近くのプレイヤーを追いかける
-local Chase = {}
+--Explain	: モブが、近くのプレイヤーを追いかける AMovementの子クラス
+local AMovement = require(script.Parent.AMovement)
+
+local Chase = setmetatable({}, {__index = AMovement})
+Chase.__index = Chase
 
 function Chase:_Model()
 	return function (TargetPlayer : Player)
@@ -34,29 +37,16 @@ end
 --Arguments| MovementController: (table)
 --Return Value	: (table)
 function Chase.new(MovementController : table) : table
-	local self = setmetatable({}, {__index = Chase})
-	self.Mob = MovementController.Mob
-	self.ClassName = MovementController.ClassName
-	self.Humanoid = MovementController.Humanoid
-	self.HumanoidRootPart = MovementController.HumanoidRootPart
-	self.WalkSpeed = MovementController.WalkSpeed
-	self.WanderTimeRange = MovementController.WanderTimeRange
-	self.IdleTimeRange = MovementController.IdleTimeRange
-	self.Position = MovementController.Position
+	local self = AMovement.new(MovementController)
+    setmetatable(self, Chase)
 
 	if self.Humanoid then
-		self.WalkTrack = MovementController.WalkTrack
-		self.IdleTrack = MovementController.IdleTrack
 		self.UpdateFunc = self:_Model()
 	else
 		self.UpdateFunc = self:_Part()
 	end
 
 	return self
-end
-
-function Chase:Start()
-
 end
 
 function Chase:Update(TargetPlayer : Player)

@@ -1,6 +1,9 @@
 --Name		: Wander
---Explain	: モブがランダムに歩く
-local Wander = {}
+--Explain	: モブがランダムに歩く AMovementの子クラス
+local AMovement = require(script.Parent.AMovement)
+
+local Wander = setmetatable({}, {__index = AMovement})
+Wander.__index = Wander
 
 -- モブが動き回る範囲
 local WANDER_RANGE = 50
@@ -46,29 +49,16 @@ end
 --Arguments| MovementController: (table)
 --Return Value	: (table)
 function Wander.new(MovementController : table) : table
-	local self = setmetatable({}, {__index = Wander})
-	self.Mob = MovementController.Mob
-	self.ClassName = MovementController.ClassName
-	self.Humanoid = MovementController.Humanoid
-	self.HumanoidRootPart = MovementController.HumanoidRootPart
-	self.WalkSpeed = MovementController.WalkSpeed
-	self.WanderTimeRange = MovementController.WanderTimeRange
-	self.IdleTimeRange = MovementController.IdleTimeRange
-	self.Position = MovementController.Position
+	local self = AMovement.new(MovementController)
+	setmetatable(self, Wander)
 
 	if self.Humanoid then
-		self.WalkTrack = MovementController.WalkTrack
-		self.IdleTrack = MovementController.IdleTrack
 		self.UpdateFunc = self:_Model()
 	else
 		self.UpdateFunc = self:_Part()
 	end
 
 	return self
-end
-
-function Wander:Start()
-
 end
 
 function Wander:Update()
