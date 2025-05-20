@@ -27,9 +27,7 @@ function Wander:_Model()
 	return function ()
 		local goal = GetRandomPosition(self.Mob, self.HumanoidRootPart.Position)
 		self.Humanoid:MoveTo(goal)
-		self.Humanoid.MoveToFinished:Wait(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max))
-
-		self.Position.Current = self.HumanoidRootPart.Position
+		self:_WaitUntilPlayer(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max), true)
 	end
 end
 
@@ -40,7 +38,7 @@ function Wander:_Part()
 		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
 		self.Mob.CFrame += self.Mob.CFrame.LookVector
 
-		self.Position.Current = self.Mob.Position
+		self:_WaitUntilPlayer(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max), false)
 	end
 end
 

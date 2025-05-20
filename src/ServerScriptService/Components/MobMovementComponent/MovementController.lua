@@ -53,6 +53,7 @@ function MovementController.new(Mob : Instance)
 	self.HumanoidRootPart = Mob:FindFirstChild("HumanoidRootPart")
 	self.WalkSpeed = WALKSPEED
 	self:_SetWalkSpeed()
+	self.SearchRange = SEARCH_RANGE
 	self.WanderTimeRange = {min = 2, max = 5}
 	self.IdleTimeRange =  {min = 2, max = 5}
 
@@ -71,14 +72,16 @@ function MovementController.new(Mob : Instance)
 end
 
 function MovementController:Start()
-	self.WalkTrack:Play()
+	if self.WalkTrack then
+		self.WalkTrack:Play()
+	end
 	while true do
-		local TargetPlayer = sp.SearchPlayer(self.Position.Current, SEARCH_RANGE)
+		local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
 		if TargetPlayer then
 			self.Chase:Update(TargetPlayer)
 		else
-			self.Wander:Update()
 			self.Idle:Update()
+			self.Wander:Update()
 		end
 		task.wait()
 	end

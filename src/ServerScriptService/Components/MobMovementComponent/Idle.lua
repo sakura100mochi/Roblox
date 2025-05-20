@@ -9,7 +9,7 @@ function Idle:_Model()
 	return function ()
 		self.WalkTrack:Stop()
 		self.IdleTrack:Play()
-		task.wait(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max))
+		self:_WaitUntilPlayer(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max), false)
 		self.IdleTrack:Stop()
 		self.WalkTrack:Play()
 	end
@@ -17,7 +17,7 @@ end
 
 function Idle:_Part()
 	return function ()
-		task.wait(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max))
+		self:_WaitUntilPlayer(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max), false)
 	end
 end
 

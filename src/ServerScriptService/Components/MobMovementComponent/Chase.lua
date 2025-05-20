@@ -14,7 +14,7 @@ function Chase:_Model()
 
 		self.Humanoid:MoveTo(goal)
 
-		self.Position.Current = self.HumanoidRootPart.Position
+		self:_UpdatePosition()
 	end
 end
 
@@ -28,7 +28,7 @@ function Chase:_Part()
 		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
 		self.Mob.CFrame += self.Mob.CFrame.LookVector
 
-		self.Position.Current = self.Mob.Position
+		self:_UpdatePosition()
 	end
 end
 
