@@ -20,30 +20,13 @@ local function GetRandomPosition(mob : Model | Part, pos : Vector3) : Vector3
 	return groundPosition
 end
 
-local function SetAnimation(Mob : Model, Humanoid : Humanoid) : (AnimationTrack, AnimationTrack)
-	if Humanoid:FindFirstChild("Animator") == nil then
-		local animator = Instance.new("Animator")
-		animator.Parent = Humanoid
-	end
-
-	local Walk = Instance.new("Animation")
-	Walk.Parent = Mob
-	Walk.AnimationId = "rbxassetid://180426354"
-	local WalkTrack = Humanoid:WaitForChild("Animator"):LoadAnimation(Walk)
-	WalkTrack.Priority = Enum.AnimationPriority.Idle
-
-	return WalkTrack
-end
-
 function Wander:_Model()
 	return function ()
-		self.WalkTrack:Play()
-
 		local goal = GetRandomPosition(self.Mob, self.HumanoidRootPart.Position)
 		self.Humanoid:MoveTo(goal)
 		self.Humanoid.MoveToFinished:Wait(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max))
 
-		self.WalkTrack:Stop()
+		self.Position.Current = self.HumanoidRootPart.Position
 	end
 end
 
@@ -53,6 +36,8 @@ function Wander:_Part()
 		self.Mob.CFrame = CFrame.lookAt(self.Mob.Position, goal)
 		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
 		self.Mob.CFrame += self.Mob.CFrame.LookVector
+
+		self.Position.Current = self.Mob.Position
 	end
 end
 
@@ -69,12 +54,14 @@ function Wander.new(MovementController : table) : table
 	self.WalkSpeed = MovementController.WalkSpeed
 	self.WanderTimeRange = MovementController.WanderTimeRange
 	self.IdleTimeRange = MovementController.IdleTimeRange
+	self.Position = MovementController.Position
 
 	if self.Humanoid then
-		self.WalkTrack = SetAnimation(self.Mob, self.Humanoid)
-		self.Update = self:_Model()
+		self.WalkTrack = MovementController.WalkTrack
+		self.IdleTrack = MovementController.IdleTrack
+		self.UpdateFunc = self:_Model()
 	else
-		self.Update = self:_Part()
+		self.UpdateFunc = self:_Part()
 	end
 
 	return self
@@ -85,7 +72,7 @@ function Wander:Start()
 end
 
 function Wander:Update()
-	self.Update()
+	self.UpdateFunc()
 end
 
 return Wander

@@ -2,26 +2,13 @@
 --Explain	: モブが止まっている
 local Idle = {}
 
-local function SetAnimation(Mob : Model, Humanoid : Humanoid) : AnimationTrack
-	if Humanoid:FindFirstChild("Animator") == nil then
-		local animator = Instance.new("Animator")
-		animator.Parent = Humanoid
-	end
-
-	local Idle = Instance.new("Animation")
-	Idle.Parent = Mob
-	Idle.AnimationId = "rbxassetid://180435792"
-	local IdleTrack = Humanoid:WaitForChild("Animator"):LoadAnimation(Idle)
-	IdleTrack.Priority = Enum.AnimationPriority.Idle
-
-	return IdleTrack
-end
-
 function Idle:_Model()
 	return function ()
+		self.WalkTrack:Stop()
 		self.IdleTrack:Play()
 		task.wait(math.random(self.IdleTimeRange.min, self.IdleTimeRange.max))
 		self.IdleTrack:Stop()
+		self.WalkTrack:Play()
 	end
 end
 
@@ -44,12 +31,14 @@ function Idle.new(MovementController : table) : table
 	self.WalkSpeed = MovementController.WalkSpeed
 	self.WanderTimeRange = MovementController.WanderTimeRange
 	self.IdleTimeRange = MovementController.IdleTimeRange
+	self.Position = MovementController.Position
 
 	if self.Humanoid then
-		self.IdleTrack = SetAnimation(self.Mob, self.Humanoid)
-		self.Update = self:_Model()
+		self.WalkTrack = MovementController.WalkTrack
+		self.IdleTrack = MovementController.IdleTrack
+		self.UpdateFunc = self:_Model()
 	else
-		self.Update = self:_Part()
+		self.UpdateFunc = self:_Part()
 	end
 
 	return self
@@ -60,7 +49,7 @@ function Idle:Start()
 end
 
 function Idle:Update()
-	self.Update()
+	self.UpdateFunc()
 end
 
 return Idle

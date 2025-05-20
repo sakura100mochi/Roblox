@@ -1,10 +1,12 @@
 -- include modules --
 local Wander = require(script.Parent.Wander)
-local Chase = require(script.Parent.Chase)
 local Idle = require(script.Parent.Idle)
+local Chase = require(script.Parent.Chase)
 -- local Flee = require(script.Parent.Flee)
 -- local Attack = require(script.Parent.Attack)
 -- local Patrol = require(script.Parent.Patrol)
+local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+local sp = lib.sp
 
 -- Name		: MovementController
 -- Explain	: モブの動きを制御するクラス
@@ -12,11 +14,35 @@ local MovementController = {}
 
 -- モブの移動速度
 local WALKSPEED = 8
+-- プレーヤーを探す範囲
+local SEARCH_RANGE = 50
 
 function MovementController:_SetWalkSpeed()
 	if self.Humanoid then
 		self.Humanoid.WalkSpeed = self.WalkSpeed
 	end
+end
+
+function MovementController:_SetAnimation()
+	if self.Humanoid == nil then return end
+	if self.Humanoid:FindFirstChild("Animator") == nil then
+		local animator = Instance.new("Animator")
+		animator.Parent = self.Humanoid
+	end
+
+	local Walk = Instance.new("Animation")
+	Walk.Parent = self.Mob
+	Walk.AnimationId = "rbxassetid://180426354"
+	local WalkTrack = self.Humanoid:WaitForChild("Animator"):LoadAnimation(Walk)
+	WalkTrack.Priority = Enum.AnimationPriority.Idle
+
+	local Idle = Instance.new("Animation")
+	Idle.Parent = self.Mob
+	Idle.AnimationId = "rbxassetid://180435792"
+	local IdleTrack = self.Humanoid:WaitForChild("Animator"):LoadAnimation(Idle)
+	IdleTrack.Priority = Enum.AnimationPriority.Idle
+
+	return WalkTrack, IdleTrack
 end
 
 function MovementController.new(Mob : Instance)
@@ -26,21 +52,35 @@ function MovementController.new(Mob : Instance)
 	self.Humanoid = Mob:FindFirstChild("Humanoid")
 	self.HumanoidRootPart = Mob:FindFirstChild("HumanoidRootPart")
 	self.WalkSpeed = WALKSPEED
+	self:_SetWalkSpeed()
 	self.WanderTimeRange = {min = 2, max = 5}
 	self.IdleTimeRange =  {min = 2, max = 5}
 
+	if self.HumanoidRootPart then
+		self.WalkTrack, self.IdleTrack = self:_SetAnimation()
+		self.Position = { Current = self.HumanoidRootPart.Position }
+	elseif self.ClassName == "Part" then
+		self.Position = { Current = Mob.Position }
+	end
+
 	self.Wander = Wander.new(self)
 	self.Idle = Idle.new(self)
-	-- self.Chase = Chase.new(self)
+	self.Chase = Chase.new(self)
 
 	return self
 end
 
 function MovementController:Start()
-	self:_SetWalkSpeed()
+	self.WalkTrack:Play()
 	while true do
-		self.Wander:Update()
-		self.Idle:Update()
+		local TargetPlayer = sp.SearchPlayer(self.Position.Current, SEARCH_RANGE)
+		if TargetPlayer then
+			self.Chase:Update(TargetPlayer)
+		else
+			self.Wander:Update()
+			self.Idle:Update()
+		end
+		task.wait()
 	end
 end
 
