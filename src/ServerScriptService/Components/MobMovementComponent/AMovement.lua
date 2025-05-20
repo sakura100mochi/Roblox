@@ -15,8 +15,10 @@ function AMovement.new(MovementController : table) : table
 	self.HumanoidRootPart = MovementController.HumanoidRootPart
 	self.WalkSpeed = MovementController.WalkSpeed
 	self.SearchRange = MovementController.SearchRange
+	self.AttackRange = MovementController.AttackRange
 	self.WanderTimeRange = MovementController.WanderTimeRange
 	self.IdleTimeRange = MovementController.IdleTimeRange
+	self.canAttack = MovementController.canAttack
 	self.Position = MovementController.Position
 
 	if self.Humanoid then

@@ -2,9 +2,8 @@
 local Wander = require(script.Parent.Wander)
 local Idle = require(script.Parent.Idle)
 local Chase = require(script.Parent.Chase)
--- local Flee = require(script.Parent.Flee)
--- local Attack = require(script.Parent.Attack)
--- local Patrol = require(script.Parent.Patrol)
+local Flee = require(script.Parent.Flee)
+local Attack = require(script.Parent.Attack)
 local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 local sp = lib.sp
 
@@ -16,6 +15,8 @@ local MovementController = {}
 local WALKSPEED = 8
 -- プレーヤーを探す範囲
 local SEARCH_RANGE = 50
+-- プレイヤーに攻撃する範囲
+local ATTACK_RANGE = 2
 
 function MovementController:_SetWalkSpeed()
 	if self.Humanoid then
@@ -54,8 +55,10 @@ function MovementController.new(Mob : Instance)
 	self.WalkSpeed = WALKSPEED
 	self:_SetWalkSpeed()
 	self.SearchRange = SEARCH_RANGE
+	self.AttackRange = ATTACK_RANGE
 	self.WanderTimeRange = {min = 2, max = 5}
 	self.IdleTimeRange =  {min = 2, max = 5}
+	self.canAttack = true
 
 	if self.HumanoidRootPart then
 		self.WalkTrack, self.IdleTrack = self:_SetAnimation()
@@ -67,6 +70,7 @@ function MovementController.new(Mob : Instance)
 	self.Wander = Wander.new(self)
 	self.Idle = Idle.new(self)
 	self.Chase = Chase.new(self)
+	self.Attack = Attack.new(self)
 
 	return self
 end
@@ -79,6 +83,10 @@ function MovementController:Start()
 		local TargetPlayer = sp.SearchPlayer(self.Position.Current, self.SearchRange)
 		if TargetPlayer then
 			self.Chase:Update(TargetPlayer)
+			local AttackPlayer = sp.SearchPlayer(self.Position.Current, self.AttackRange)
+			if AttackPlayer then
+				self.Attack:Update(AttackPlayer)
+			end
 		else
 			self.Idle:Update()
 			self.Wander:Update()
