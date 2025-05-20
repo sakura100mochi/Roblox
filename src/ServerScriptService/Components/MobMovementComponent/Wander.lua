@@ -35,10 +35,8 @@ function Wander:_Part()
 	return function ()
 		local goal = GetRandomPosition(self.Mob, self.Mob.Position)
 		self.Mob.CFrame = CFrame.lookAt(self.Mob.Position, goal)
-		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
-		self.Mob.CFrame += self.Mob.CFrame.LookVector
 
-		self:_WaitUntilPlayer(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max), false)
+		self:_WaitUntilPlayer(math.random(self.WanderTimeRange.min, self.WanderTimeRange.max), true)
 	end
 end
 

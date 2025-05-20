@@ -43,12 +43,12 @@ function AMovement:_UpdatePosition()
 	end
 end
 
-function AMovement:_WaitUntilPlayer(WaitTime : number, checkIsMoveFinish : boolean | nil)
+function AMovement:_WaitUntilPlayer(WaitTime : number, checkIsMoving : boolean | nil)
 	local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 	local sp = lib.sp
 	local IsWaiting = true
-	checkIsMoveFinish = checkIsMoveFinish or false
-	if checkIsMoveFinish == true and self.Humanoid and self.Humanoid.MoveToFinished then
+	checkIsMoving = checkIsMoving or false
+	if checkIsMoving == true and self.Humanoid and self.Humanoid.MoveToFinished then
 		self.Humanoid.MoveToFinished:Connect(function()
 			IsWaiting = false
 		end)
@@ -60,11 +60,13 @@ function AMovement:_WaitUntilPlayer(WaitTime : number, checkIsMoveFinish : boole
 		if TargetPlayer then
 			break
 		end
-		if checkIsMoveFinish == true and IsWaiting == false then
+		if checkIsMoving == true and IsWaiting == false then
 			break
+		elseif checkIsMoving == true and self.ClassName == "Part" then
+			self.Mob.CFrame = self.Mob.CFrame + self.Mob.CFrame.LookVector
 		end
-		timer = timer + 0.5
-		task.wait(0.5)
+		timer = timer + 0.1
+		task.wait(0.1)
 	end
 end
 

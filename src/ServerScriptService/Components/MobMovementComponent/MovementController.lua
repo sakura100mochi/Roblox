@@ -16,7 +16,7 @@ local WALKSPEED = 8
 -- チェイスするプレイヤーをさがす範囲
 local CHASE_RANGE = 50
 -- プレイヤーに攻撃する範囲
-local ATTACK_RANGE = 2
+local ATTACK_RANGE = 3
 -- プレイヤーから逃げる範囲
 local FLEE_RANGE = 20
 

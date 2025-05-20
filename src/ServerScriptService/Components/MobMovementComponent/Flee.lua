@@ -26,11 +26,13 @@ function Flee:_Part()
 		local TargetCharacter = TargetPlayer.Character
 		local TargetHumanoidRootPart = TargetCharacter:WaitForChild("HumanoidRootPart")
 		local PlayerPos = TargetHumanoidRootPart.Position
-		self.Mob.CFrame = CFrame.lookAt(PlayerPos, self.Mob.Position)
-		self.Mob.Velocity = (self.Mob.Position - PlayerPos).Unit * self.WalkSpeed * 3
-		self.Mob.CFrame += self.Mob.CFrame.LookVector
+		local FleeDir = (self.Position.Current - PlayerPos).Unit
+		local goal = self.Position.Current + FleeDir * self.FleeRange
+		self.Mob.CFrame = CFrame.lookAt(self.Mob.Position, goal)
+		self.Mob.CFrame = self.Mob.CFrame + self.Mob.CFrame.LookVector
 
 		self:_UpdatePosition()
+		task.wait(0.1)
 	end
 end
 

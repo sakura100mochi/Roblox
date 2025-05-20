@@ -25,10 +25,10 @@ function Chase:_Part()
 		local TargetHumanoidRootPart = TargetCharacter:WaitForChild("HumanoidRootPart")
 		local goal = TargetHumanoidRootPart.Position
 		self.Mob.CFrame = CFrame.lookAt(self.Mob.Position, goal)
-		self.Mob.Velocity = (goal - self.Mob.Position).Unit * self.WalkSpeed * 3
-		self.Mob.CFrame += self.Mob.CFrame.LookVector
+		self.Mob.CFrame = self.Mob.CFrame + self.Mob.CFrame.LookVector
 
 		self:_UpdatePosition()
+		task.wait(0.1)
 	end
 end
 
