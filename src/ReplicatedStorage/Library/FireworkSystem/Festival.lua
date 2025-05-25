@@ -2,20 +2,25 @@
 --Explain	: 花火大会用にプログラムされた花火
 local Festival = {}
 
-local LAUNCHER_NUM = 24
-local LAUNCHER_HALF = 12
-
 local function makeFolder() : Folder
 	local folder = Instance.new("Folder")
 	folder.Parent = workspace
-	folder.Name = "Akagawa_31st_2024"
+	folder.Name = "Festival"
 
 	return folder
 end
 
-local function makeLauncher(folder : Folder, MainLauncher : any, Direction : string) : table
+local function makeBGM(SoundID : string) : Sound
+	local bgm = Instance.new("Sound")
+	bgm.Parent = game:GetService("SoundService")
+	bgm.SoundId = SoundID
+
+	return bgm
+end
+
+local function makeLauncher(folder : Folder, MainLauncher : any, LauncherHalf : number, Direction : string) : table
 	local Launchers = {}
-	for i = -LAUNCHER_HALF, LAUNCHER_HALF, 1 do
+	for i = -LauncherHalf, LauncherHalf, 1 do
 		local launcher = Instance.new("Part")
 		launcher.Parent = folder
 		launcher.Name = "Launcher"
@@ -32,81 +37,198 @@ local function makeLauncher(folder : Folder, MainLauncher : any, Direction : str
 	return Launchers
 end
 
-local function newFireworks(Launchers : table) : table
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
-	local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
-	local fireworks = {}
-	for i = 1, LAUNCHER_NUM, 1 do
-		fireworks["Gerb_Mg_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Mg})
-		fireworks["Gerb_Sr_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Sr})
-		fireworks["Gerb_Cu_" .. i] = firework.Gerb.new({Parent = Launchers[i], Start_CFrame = Launchers[i].CFrame, Color1 = AFirework.Colors.Cu})
+local function CountDown(self : table)
+	task.spawn(function()
+		local i = 0
+		while self.isPlaying do
+			print(i)
+			i = i + 1
+			task.wait(1)
+		end
+	end)
+end
+
+-- Launchers 1 2 3 4 5 6 | 7 | 8 9 10 11 12 13
+
+Festival.Colors_of_Our_Lives = {}
+Festival.Colors_of_Our_Lives.__index = Festival.Colors_of_Our_Lives
+
+Festival.Colors_of_Our_Lives.RainbowColors = {
+	Color3.fromRGB(255, 0, 0),
+	Color3.fromRGB(255, 104, 39),
+	Color3.fromRGB(255, 212, 55),
+	Color3.fromRGB(191, 255, 62),
+	Color3.fromRGB(75, 255, 58),
+	Color3.fromRGB(72, 255, 173),
+	Color3.fromRGB(66, 211, 255),
+	Color3.fromRGB(5, 155, 255),
+	Color3.fromRGB(32, 43, 255),
+	Color3.fromRGB(130, 62, 255),
+	Color3.fromRGB(207, 62, 255),
+	Color3.fromRGB(255, 51, 248),
+	Color3.fromRGB(255, 78, 161),
+}
+
+function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
+	local self = setmetatable({}, Festival.Colors_of_Our_Lives)
+
+	self.FireworkSystem = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	self.AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
+	self.folder = makeFolder()
+	self.Launcher_Num = 13
+	self.Launcher_Half = self.Launcher_Num // 2
+	self.bgm = makeBGM("rbxassetid://119169641481723")
+	self.beat = 2.2
+	self.Launchers = makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z')
+	self.isPlaying = false
+	
+	self.fireworks = {}
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Gerb_" .. key .. i] = self.FireworkSystem.Gerb.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Interval = 0.05
+			})
+		end
+		for j, color in ipairs(Festival.Colors_of_Our_Lives.RainbowColors) do
+			self.fireworks["Gerb_Rainbow_" .. j .. "_" .. i] = self.FireworkSystem.Gerb.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Interval = 0.05
+			})
+		end
 	end
-	fireworks["Toranoo_fan_7"] = firework.Toranoo.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeSpeed = 40, Direction = 'z'})
-	fireworks["Toranoo_fan_18"] = firework.Toranoo.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeSpeed = 40, Direction = 'z'})
-	fireworks["Gerb_Al_7"] = firework.Gerb.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, Color1 = AFirework.Colors.Al})
-	fireworks["Gerb_Al_18"] = firework.Gerb.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, Color1 = AFirework.Colors.Al})
+	for i = 1, self.Launcher_Num, 1 do
+		self.fireworks["Toranoo_fan" .. i] = self.FireworkSystem.Toranoo.new({
+			Parent = self.Launchers[i],
+			Direction = 'z'
+		})
+	end
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Botan_" .. key .. i] = self.FireworkSystem.Botan.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for j, color in ipairs(Festival.Colors_of_Our_Lives.RainbowColors) do
+			self.fireworks["Botan_Rainbow_" .. j .. "_" .. i] = self.FireworkSystem.Botan.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Kamuro_" .. key .. i] = self.FireworkSystem.Kamuro.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				ExplodeTime = 3,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	self.fireworks["Kiku_Double_7"] = self.FireworkSystem.Kiku.new({
+		Parent = self.Launchers[7],
+		NoboriTime = self.beat + 0.5,
+		ExplodeTime = 1.5,
+		ExplodeSpeed = 60,
+		Flare_num = 200,
+		Color2 = self.AFirework.Colors.Sr,
+		Color3 = self.AFirework.Colors.C,
+		Color4 = self.AFirework.Colors.C,
+		Color5 = Festival.Colors_of_Our_Lives.RainbowColors[9],
+	})
 
-	fireworks["Kiku_Normal_1"] = firework.Kiku.new({Parent = Launchers[1], Start_CFrame = Launchers[1].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
-	fireworks["Kiku_Normal_7"] = firework.Kiku.new({Parent = Launchers[7], Start_CFrame = Launchers[7].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
-	fireworks["Kiku_Normal_18"] = firework.Kiku.new({Parent = Launchers[18], Start_CFrame = Launchers[18].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
-	fireworks["Kiku_Normal_24"] = firework.Kiku.new({Parent = Launchers[24], Start_CFrame = Launchers[24].CFrame, ExplodeTime = 1.5, NoboriTime = math.random(25, 35) / 10, Flare_num = 100})
-
-	fireworks["Kiku_double_12"] = firework.Kiku.new({Parent = Launchers[12], Start_CFrame = Launchers[12].CFrame, 
-	Color2 = AFirework.Colors.Sr, Color3 = AFirework.Colors.C, Color4 = AFirework.Colors.C, Color5 = Color3.new(0.180392, 0.290196, 1), 
-	Flare_num = 300, NoboriTime = 4})
-	fireworks.isSetUp = true
-
-	return fireworks
+	self.isSetUp = true
+	return self
 end
 
--- Launchers 1 2 3 4 5 6 | 7 8 9 10 11 12 ||| 13 14 15 16 17 18 | 19 20 21 22 23 24
-
-Festival.Akagawa_31st_2024_Opening = {}
-
-function Festival.Akagawa_31st_2024_Opening.setup(MainLauncher : Part) : table
-	local folder = makeFolder()
-	local Launchers = makeLauncher(folder, MainLauncher, 'z')
-	local fireworks = newFireworks(Launchers)
-
-	return fireworks
-end
-
-function Festival.Akagawa_31st_2024_Opening.launch(fireworks : table)
-	if fireworks == nil or fireworks.isSetUp == false then
+function Festival.Colors_of_Our_Lives:launch()
+	if self == nil or self.isSetUp == false then
 		warn("You need to \'setup\' first.")
 		return
 	end
-
-	fireworks.isSetUp = false
-
-	for i = 1, LAUNCHER_HALF, 1 do
-		task.spawn(function()fireworks["Gerb_Mg_" .. LAUNCHER_HALF + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Mg_" .. LAUNCHER_HALF + 1 - i]:launch()end)
-		task.wait(1 / LAUNCHER_HALF)
+	
+	self.isSetUp = false
+	self.isPlaying = true
+	task.spawn(function()self.fireworks["Botan_C1"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Sr3"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_C7"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Sr11"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_C13"]:launch()end)
+	task.wait(self.beat)
+	self.bgm:Play()
+	CountDown(self)
+	for i = 1, self.Launcher_Num, 1 do
+		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
 	end
-	for i = 1, LAUNCHER_HALF, 1 do
-		task.spawn(function()fireworks["Gerb_Sr_" .. LAUNCHER_HALF + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Sr_" .. LAUNCHER_HALF + 1 - i]:launch()end)
-		task.wait(1 / LAUNCHER_HALF)
+	task.wait(self.beat - 0.2)
+	for i = 1, self.Launcher_Num, 1 do
+		task.spawn(function()self.fireworks["Gerb_Rainbow_" .. i .. "_" .. i]:launch()end)
+		task.wait(0.1)
 	end
-	for i = 1, LAUNCHER_HALF, 1 do
-		task.spawn(function()fireworks["Gerb_Cu_" .. LAUNCHER_HALF + i]:launch()end)
-		task.spawn(function()fireworks["Gerb_Cu_" .. LAUNCHER_HALF + 1 - i]:launch()end)
-		task.wait(1 / LAUNCHER_HALF)
+	task.wait(self.beat - 1.3)
+	for i = self.Launcher_Num, 1, -1 do
+		task.spawn(function()self.fireworks["Gerb_Rainbow_" .. self.Launcher_Num - i + 1 .. "_" .. i]:launch()end)
+		task.wait(0.1)
 	end
+	task.spawn(function()self.fireworks["Botan_Al1"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Al3"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Al7"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Al11"]:launch()end)
+	task.spawn(function()self.fireworks["Botan_Al13"]:launch()end)
+	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 1 do
+		task.spawn(function()self.fireworks["Gerb_Al" .. i]:launch()end)
+	end
+	task.spawn(function()self.fireworks["Toranoo_fan3"]:fan(7)end)
+	task.spawn(function()self.fireworks["Toranoo_fan11"]:fan(7)end)
+	task.spawn(function()self.fireworks["Kiku_Double_7"]:launchDouble()end)
+	task.wait(self.beat)
+	task.spawn(function()self.fireworks["Kamuro_C1"]:launch()end)
+	task.spawn(function()self.fireworks["Kamuro_C9"]:launch()end)
+	task.wait(self.beat)
+	for i = 1, 6, 1 do
+		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
+		task.wait(0.1)
+	end
+	task.spawn(function()self.fireworks["Kamuro_K5"]:launch()end)
+	task.spawn(function()self.fireworks["Kamuro_K13"]:launch()end)
+	task.wait(self.beat)
+	for i = 8, 13, 1 do
+		task.spawn(function()self.fireworks["Gerb_K" .. i]:launch()end)
+		task.wait(0.1)
+	end
+	task.spawn(function()self.fireworks["Kamuro_Cu1"]:launch()end)
+	task.spawn(function()self.fireworks["Kamuro_Cu9"]:launch()end)
+	task.wait(self.beat)
+	for i = 1, 6, 1 do
+		task.spawn(function()self.fireworks["Gerb_Cu" .. i]:launch()end)
+		task.wait(0.1)
+	end
+	task.spawn(function()self.fireworks["Kamuro_Rb5"]:launch()end)
+	task.spawn(function()self.fireworks["Kamuro_Rb13"]:launch()end)
+	task.wait(self.beat)
+	for i = 8, 13, 1 do
+		task.spawn(function()self.fireworks["Gerb_Rb" .. i]:launch()end)
+		task.wait(0.1)
+	end
+	task.spawn(function()self.fireworks["Kamuro_Ba1"]:launch()end)
+	task.spawn(function()self.fireworks["Kamuro_Ba9"]:launch()end)
+	task.wait(self.beat)
+	for i = 1, 6, 1 do
+		task.spawn(function()self.fireworks["Gerb_Ba" .. i]:launch()end)
+		task.wait(0.1)
+	end
+end
 
-	task.spawn(function()fireworks["Kiku_Normal_1"]:launch()end)
-	task.spawn(function()fireworks["Kiku_Normal_7"]:launch()end)
-	task.spawn(function()fireworks["Kiku_Normal_18"]:launch()end)
-	task.spawn(function()fireworks["Kiku_Normal_24"]:launch()end)
-
-	task.spawn(function()fireworks["Toranoo_fan_7"]:fan()end)
-	task.spawn(function()fireworks["Toranoo_fan_18"]:fan()end)
-
-	task.spawn(function()fireworks["Gerb_Al_7"]:fan()end)
-	task.spawn(function()fireworks["Gerb_Al_18"]:fan()end)
-
-	task.spawn(function()fireworks["Kiku_double_12"]:launchDouble()end)
+function Festival.Colors_of_Our_Lives:stop()
+	self.bgm:Stop()
+	self.isPlaying = false
 end
 
 return Festival

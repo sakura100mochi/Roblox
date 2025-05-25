@@ -53,7 +53,7 @@ end
 local function makeBodyVelocity(BodyVelocityParent)
 	local new = Instance.new("BodyVelocity")
 	new.Parent = BodyVelocityParent
-	new.Velocity = Vector3.new(math.random(0, 20), math.random(50, 60), math.random(0, 20))
+	new.Velocity = Vector3.new(math.random(0, 5), math.random(50, 60), math.random(0, 5))
 
 	return new
 end

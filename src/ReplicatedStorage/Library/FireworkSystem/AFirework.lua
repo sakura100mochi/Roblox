@@ -43,7 +43,7 @@ function AFirework.new(Origin : table, Table : table) : table
 	local self = setmetatable({}, AFirework)
 	self.Type = Table.Type or Origin.Type or "AFirework"
 	self.Parent = Table.Parent or Origin.Parent or workspace
-	self.Start_CFrame = Table.Start_CFrame or Origin.Start_CFrame or CFrame.new(Vector3.new(0, 0, 0))
+	self.Start_CFrame = Table.Start_CFrame or Origin.Start_CFrame or (self.Parent:IsA("BasePart") and self.Parent.CFrame) or CFrame.new(Vector3.new(0, 0, 0))
 	self.Color1 = Table.Color1 or Origin.Color1 or AFirework.Colors.C
 	self.Color2 = Table.Color2 or Origin.Color2 or nil
 	self.Color3 = Table.Color3 or Origin.Color3 or nil

@@ -139,9 +139,11 @@ end
 --Method Name	: fan
 --Explain		: 虎の尾タイプの花火を扇型に打ち上げる
 --Return Value	: none
-function Toranoo:fan()
+function Toranoo:fan(NUM : number)
 	local firework = require(game:GetService("ReplicatedStorage").Shared.Library).firework
-	local NUM = 13
+	if NUM == nil then
+		NUM = 13
+	end
 
 	for i = 0, NUM, 1 do
 		local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)

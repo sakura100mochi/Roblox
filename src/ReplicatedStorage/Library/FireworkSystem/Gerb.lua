@@ -11,6 +11,7 @@ local GerbPrototype = {
 	Color1 = AFirework.Colors.C,
 	ExplodeSpeed = 60,
 	ExplodeTime = 0.7,
+	Interval = 0.01
 }
 
 local function makeGerbParticle(GerbParent, Color)
@@ -88,6 +89,8 @@ function Gerb.new(Table, Origin)
 	end
 	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Gerb)
+	self.Interval = Table.Interval or Origin.Interval
+	self.Flare_num = 1 / self.Interval * 3
 
 	Table = Table or {}
 
@@ -95,7 +98,7 @@ function Gerb.new(Table, Origin)
 	self.GerbParticles = {}
 
 	local GerbParticle = makeGerbParticle(self.Storage, self.Color1)
-	for i = 0, 300, 1 do
+	for i = 0, self.Flare_num, 1 do
 		table.insert(self.FlareParts, makeFlarePart(self.Storage))
 		table.insert(self.GerbParticles, GerbParticle:Clone())
 	end
@@ -119,12 +122,12 @@ function Gerb:launch()
 	game:GetService("Debris"):AddItem(Fountain, self.ExplodeTime + 1)
 
 	local num = 0
-	for i = 0, self.ExplodeTime, 0.01 do
+	for i = 0, self.ExplodeTime, self.Interval do
 		for j = 1, 3, 1 do
-			makeFlare(self, self.GerbParticles, num % 300 + 1)
+			makeFlare(self, self.GerbParticles, num % self.Flare_num + 1)
 			num = num + 1
 		end
-		task.wait(0.01)
+		task.wait(self.Interval)
 	end
 	for i = 1, #self.GerbParticles, 1 do
 		self.GerbParticles[i].Enabled = false
