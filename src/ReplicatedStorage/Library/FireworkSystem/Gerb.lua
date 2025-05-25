@@ -10,7 +10,7 @@ local GerbPrototype = {
 	Type = "Gerb",
 	Color1 = AFirework.Colors.C,
 	ExplodeSpeed = 60,
-	ExplodeTime = 5,
+	ExplodeTime = 0.7,
 }
 
 local function makeGerbParticle(GerbParent, Color)
@@ -21,9 +21,9 @@ local function makeGerbParticle(GerbParent, Color)
 	newGerb.LightInfluence = 1
 	newGerb.Orientation = Enum.ParticleOrientation.FacingCamera
 	newGerb.Size = NumberSequence.new{
-		NumberSequenceKeypoint.new(0, 0.5),
-		NumberSequenceKeypoint.new(0.9, 2),
-		NumberSequenceKeypoint.new(1, 1)
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.5, 2),
+		NumberSequenceKeypoint.new(1, 2)
 	}
 	newGerb.Squash = NumberSequence.new{
 		NumberSequenceKeypoint.new(0, 0.5),
@@ -31,7 +31,7 @@ local function makeGerbParticle(GerbParent, Color)
 		NumberSequenceKeypoint.new(1, 0)
 	}
 	newGerb.Texture = "rbxassetid://298984512"
-	newGerb.Lifetime = NumberRange.new(0.1, 0.2)
+	newGerb.Lifetime = NumberRange.new(0.1, 0.5)
 	newGerb.Rate = 100
 	newGerb.Drag = 10
 	newGerb.Enabled = true
@@ -49,7 +49,7 @@ local function makeFlarePart(particleParent : any) : Part
 
 	-- 浮力の追加
 	local newBodyForce = Instance.new("BodyForce")
-	newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * (math.random(30, 90) / 100), 0)
+	newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * (math.random(50, 90) / 100), 0)
 	newBodyForce.Parent = newPart
 
 	return newPart
@@ -68,12 +68,10 @@ local function makeFlare(self : table, GerbParticles : table, index : number)
 
 	local newParticle = GerbParticles[index]
 	newParticle.Parent = newPart
-	newParticle.Enabled = false
-	task.delay(0.15, function()
-		newParticle.Enabled = true
-		task.wait(0.55)
+	newParticle.Enabled = true
+	task.delay(0.7, function()
 		newParticle.Enabled = false
-		task.wait(1.3)
+		task.wait(0.3)
 		newPart.Parent = nil
 		newPart.Velocity = Vector3.new(0, 0, 0)
 		newPart.CFrame = self.Parent.CFrame
@@ -97,9 +95,13 @@ function Gerb.new(Table, Origin)
 	self.GerbParticles = {}
 
 	local GerbParticle = makeGerbParticle(self.Storage, self.Color1)
-	for i = 0, 600, 1 do
+	for i = 0, 300, 1 do
 		table.insert(self.FlareParts, makeFlarePart(self.Storage))
 		table.insert(self.GerbParticles, GerbParticle:Clone())
+	end
+
+	if not self.Parent:IsA("BasePart") and not self.Parent:IsA("Attachment") then
+		error("ERROR: Parent must be have a CFrame property [FireworkSystem/Gerb.new]")
 	end
 
 	return self
@@ -119,10 +121,13 @@ function Gerb:launch()
 	local num = 0
 	for i = 0, self.ExplodeTime, 0.01 do
 		for j = 1, 3, 1 do
-			makeFlare(self, self.GerbParticles, num % 600 + 1)
+			makeFlare(self, self.GerbParticles, num % 300 + 1)
 			num = num + 1
 		end
 		task.wait(0.01)
+	end
+	for i = 1, #self.GerbParticles, 1 do
+		self.GerbParticles[i].Enabled = false
 	end
 end
 
@@ -133,10 +138,6 @@ function Gerb:launchRandom()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	local Table = {
 		Color1 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-		Color2 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table + #Colors_Table)]],
-		Color3 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-		Color4 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]],
-		Color5 = AFirework.Colors[Colors_Table[math.random(1, #Colors_Table)]]
 	}
 	local newGerb = Gerb.new(Table, self)
 	newGerb:launch()
@@ -147,7 +148,7 @@ end
 --Return Value	: none
 function Gerb:AutoSystem()
 	while true do
-		task.spawn(function()self:launchRandom()end)
+		self:launchRandom()
 		task.wait(3)
 	end
 end
@@ -155,30 +156,30 @@ end
 --Method Name	: fan
 --Explain		: ジャーブタイプの花火を扇型に打ち上げる
 --Return Value	: none
-function Gerb:fan()
-	local NUM = 13
+-- function Gerb:fan()
+-- 	local NUM = 13
 
-	if not self.Parent:IsA("BasePart") and not self.Parent:IsA("Attachment") then
-		error("ERROR: Parent must be BasePart or Attachment [FireworkSystem/Gerb/fan]")
-	end
+-- 	if not self.Parent:IsA("BasePart") and not self.Parent:IsA("Attachment") then
+-- 		error("ERROR: Parent must be BasePart or Attachment [FireworkSystem/Gerb/fan]")
+-- 	end
 
-	for i = 0, NUM, 1 do
-		task.spawn(function()
-			local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
-			local angle = t * 60
-			local attachment = Instance.new("Attachment")
-			attachment.Parent = self.Parent
-			attachment.Rotation = Vector3.new(0, 0, angle)
-			game:GetService("Debris"):AddItem(attachment, self.ExplodeTime + 3)
+-- 	for i = 0, NUM, 1 do
+-- 		task.spawn(function()
+-- 			local t = (i - ((NUM - 1) / 2)) / ((NUM - 1) / 2)
+-- 			local angle = t * 60
+-- 			local attachment = Instance.new("Attachment")
+-- 			attachment.Parent = self.Parent
+-- 			attachment.Rotation = Vector3.new(0, 0, angle)
+-- 			game:GetService("Debris"):AddItem(attachment, self.ExplodeTime + 3)
 
-			local Table = {
-				Parent = attachment
-			}
-			local newGerb = Gerb.new(Table, self)
-			newGerb:launch()
-		end)
-	end
-end
+-- 			local Table = {
+-- 				Parent = attachment
+-- 			}
+-- 			local newGerb = Gerb.new(Table, self)
+-- 			newGerb:launch()
+-- 		end)
+-- 	end
+-- end
 
 
 return Gerb

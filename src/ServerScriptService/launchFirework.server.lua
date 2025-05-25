@@ -15,7 +15,7 @@ Players.PlayerAdded:Connect(function(player)
 			firework.All.AutoSystem_type2(workspace.Launcher)
 		elseif Message == "gerb" then
 			local gerb = firework.Gerb.new({Parent = workspace.Launcher})
-			gerb:launch()
+			gerb:AutoSystem()
 		elseif Message == "sound" then
 			firework.Sound.ListenAllSound()
 		end
