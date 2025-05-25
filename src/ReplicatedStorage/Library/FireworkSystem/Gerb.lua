@@ -6,11 +6,14 @@ local Gerb = setmetatable({}, {__index = AFirework})
 Gerb.__index = Gerb
 
 local GerbPrototype = {
+	Parent = workspace:FindFirstChild("SpawnLocation"),
 	Type = "Gerb",
-	Color1 = AFirework.Colors.C
+	Color1 = AFirework.Colors.C,
+	ExplodeSpeed = 60,
+	ExplodeTime = 5,
 }
 
-local function makeGerbParticle(GerbParent, Color, Speed, SpreadAngle)
+local function makeGerbParticle(GerbParent, Color)
 	local newGerb = Instance.new("ParticleEmitter")
 	newGerb.Parent = GerbParent
 	newGerb.Color = ColorSequence.new(Color)
@@ -27,17 +30,54 @@ local function makeGerbParticle(GerbParent, Color, Speed, SpreadAngle)
 		NumberSequenceKeypoint.new(0.2, 0),
 		NumberSequenceKeypoint.new(1, 0)
 	}
-	newGerb.Texture = "rbxassetid://272050333"
-	newGerb.Lifetime = NumberRange.new(0.3, 1)
-	newGerb.Rate = 0
-	newGerb.Speed = Speed
-	newGerb.SpreadAngle = SpreadAngle
+	newGerb.Texture = "rbxassetid://298984512"
+	newGerb.Lifetime = NumberRange.new(0.1, 0.2)
+	newGerb.Rate = 100
 	newGerb.Drag = 10
 	newGerb.Enabled = true
 	newGerb.Brightness = 10
 
-	game:GetService("Debris"):AddItem(newGerb, 2)
 	return newGerb
+end
+
+local function makeFlarePart(particleParent : any) : Part
+	local newPart = Instance.new("Part")
+	newPart.Parent = particleParent
+	newPart.Transparency = 1
+	newPart.Size = Vector3.new(0.1, 0.1, 0.1)
+	newPart.CanCollide = false
+
+	-- 浮力の追加
+	local newBodyForce = Instance.new("BodyForce")
+	newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * (math.random(30, 90) / 100), 0)
+	newBodyForce.Parent = newPart
+
+	return newPart
+end
+
+local function makeFlare(self : table, GerbParticles : table, index : number)
+	local newPart = self.FlareParts[index]
+	newPart.CFrame = self.Parent.CFrame
+	local theta = math.random() * 2 * math.pi
+	local phi = math.random() * math.rad(10)
+	local x = math.sin(phi) * math.cos(theta)
+	local y = math.cos(phi)
+	local z = math.sin(phi) * math.sin(theta)
+	newPart.Velocity = Vector3.new(x, y, z) * self.ExplodeSpeed
+	newPart.Parent = self.Parent
+
+	local newParticle = GerbParticles[index]
+	newParticle.Parent = newPart
+	newParticle.Enabled = false
+	task.delay(0.15, function()
+		newParticle.Enabled = true
+		task.wait(0.55)
+		newParticle.Enabled = false
+		task.wait(1.3)
+		newPart.Parent = nil
+		newPart.Velocity = Vector3.new(0, 0, 0)
+		newPart.CFrame = self.Parent.CFrame
+	end)
 end
 
 --Function Name	: new
@@ -51,6 +91,17 @@ function Gerb.new(Table, Origin)
 	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Gerb)
 
+	Table = Table or {}
+
+	self.FlareParts = {}
+	self.GerbParticles = {}
+
+	local GerbParticle = makeGerbParticle(self.Storage, self.Color1)
+	for i = 0, 600, 1 do
+		table.insert(self.FlareParts, makeFlarePart(self.Storage))
+		table.insert(self.GerbParticles, GerbParticle:Clone())
+	end
+
 	return self
 end
 
@@ -62,27 +113,17 @@ function Gerb:launch()
 
 	firework.Sound.PlaySound("SmallExplode")
 
-	if self.Color2 == nil or self.Color3 == nil or self.Color4 == nil or self.Color5 == nil then
-		self.Color2 = self.Color1
-		self.Color3 = self.Color1
-		self.Color4 = self.Color1
-		self.Color5 = self.Color1
-	end
+	local Fountain = firework.Sound.PlaySound("Fountain")
+	game:GetService("Debris"):AddItem(Fountain, self.ExplodeTime + 1)
 
-	local particle1 = makeGerbParticle(self.Parent, self.Color1, NumberRange.new(5, 60), Vector2.new(5, 5))
-	particle1:Emit(30)
-	task.wait(0.01)
-	local particle2 = makeGerbParticle(self.Parent, self.Color2, NumberRange.new(40, 110), Vector2.new(5, 5))
-	particle2:Emit(40)
-	task.wait(0.01)
-	local particle3 = makeGerbParticle(self.Parent, self.Color3, NumberRange.new(90, 160), Vector2.new(7, 7))
-	particle3:Emit(40)
-	task.wait(0.01)
-	local particle4 = makeGerbParticle(self.Parent, self.Color4, NumberRange.new(140, 210), Vector2.new(7, 7))
-	particle4:Emit(40)
-	task.wait(0.01)
-	local particle5 = makeGerbParticle(self.Parent, self.Color5, NumberRange.new(190, 250), Vector2.new(6, 6))
-	particle5:Emit(40)
+	local num = 0
+	for i = 0, self.ExplodeTime, 0.01 do
+		for j = 1, 3, 1 do
+			makeFlare(self, self.GerbParticles, num % 600 + 1)
+			num = num + 1
+		end
+		task.wait(0.01)
+	end
 end
 
 --Method Name	: launchRandom

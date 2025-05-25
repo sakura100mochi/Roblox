@@ -13,6 +13,11 @@ Players.PlayerAdded:Connect(function(player)
 			firework.All.AutoSystem_type1(workspace.Launcher)
 		elseif Message == "all2" then
 			firework.All.AutoSystem_type2(workspace.Launcher)
+		elseif Message == "gerb" then
+			local gerb = firework.Gerb.new({Parent = workspace.Launcher})
+			gerb:launch()
+		elseif Message == "sound" then
+			firework.Sound.ListenAllSound()
 		end
 	end)
 end)
