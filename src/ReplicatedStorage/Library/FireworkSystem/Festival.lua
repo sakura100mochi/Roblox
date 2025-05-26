@@ -127,6 +127,19 @@ function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
 				Parent = self.Launchers[i],
 				Color1 = color,
 				ExplodeTime = 3,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Kiku_" .. key .. i] = self.FireworkSystem.Kiku.new({
+				Parent = self.Launchers[i],
+				Color2 = color,
+				ExplodeTime = 1.5,
+				ExplodeSpeed = 60,
+				Flare_num = 50,
 				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 			})
 		end
@@ -191,6 +204,8 @@ function Festival.Colors_of_Our_Lives:launch()
 	task.wait(self.beat)
 	task.spawn(function()self.fireworks["Kamuro_C1"]:launch()end)
 	task.spawn(function()self.fireworks["Kamuro_C9"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_C1"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_C9"]:launch()end)
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
 		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
@@ -198,6 +213,8 @@ function Festival.Colors_of_Our_Lives:launch()
 	end
 	task.spawn(function()self.fireworks["Kamuro_K5"]:launch()end)
 	task.spawn(function()self.fireworks["Kamuro_K13"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_K5"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_K13"]:launch()end)
 	task.wait(self.beat)
 	for i = 8, 13, 1 do
 		task.spawn(function()self.fireworks["Gerb_K" .. i]:launch()end)
@@ -205,6 +222,8 @@ function Festival.Colors_of_Our_Lives:launch()
 	end
 	task.spawn(function()self.fireworks["Kamuro_Cu1"]:launch()end)
 	task.spawn(function()self.fireworks["Kamuro_Cu9"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Cu1"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Cu9"]:launch()end)
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
 		task.spawn(function()self.fireworks["Gerb_Cu" .. i]:launch()end)
@@ -212,6 +231,8 @@ function Festival.Colors_of_Our_Lives:launch()
 	end
 	task.spawn(function()self.fireworks["Kamuro_Rb5"]:launch()end)
 	task.spawn(function()self.fireworks["Kamuro_Rb13"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Rb5"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Rb13"]:launch()end)
 	task.wait(self.beat)
 	for i = 8, 13, 1 do
 		task.spawn(function()self.fireworks["Gerb_Rb" .. i]:launch()end)
@@ -219,6 +240,8 @@ function Festival.Colors_of_Our_Lives:launch()
 	end
 	task.spawn(function()self.fireworks["Kamuro_Ba1"]:launch()end)
 	task.spawn(function()self.fireworks["Kamuro_Ba9"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Ba1"]:launch()end)
+	-- task.spawn(function()self.fireworks["Kiku_Ba9"]:launch()end)
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
 		task.spawn(function()self.fireworks["Gerb_Ba" .. i]:launch()end)

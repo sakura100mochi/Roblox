@@ -15,6 +15,9 @@ Players.PlayerAdded:Connect(function(player)
 			firework.All.AutoSystem_type1(workspace.Launcher)
 		elseif Message == "all2" then
 			firework.All.AutoSystem_type2(workspace.Launcher)
+		elseif Message == "kamuro" then
+			local kamuro = firework.Kamuro.new({Parent = workspace.Launcher})
+			kamuro:launch()
 		elseif Message == "gerb" then
 			local gerb = firework.Gerb.new({Parent = workspace.Launcher})
 			gerb:AutoSystem()

@@ -8,10 +8,11 @@ Kamuro.__index = Kamuro
 local KamuroPrototype = {
 	Type = "Kamuro",
 	ExplodeTime = 4,
-	ExplodeSpeed = 20
+	ExplodeSpeed = 20,
+	Flare_num = 70
 }
 
-local function makeFlarePart(particleParent, Table)
+local function makeFlarePart(particleParent : any) : Part
 	local newPart = Instance.new("Part")
 	newPart.Parent = particleParent
 	newPart.Name = "Kamuro"
@@ -19,10 +20,9 @@ local function makeFlarePart(particleParent, Table)
 	newPart.TopSurface = "Smooth"
 	newPart.BottomSurface = "Smooth"
 	newPart.formFactor = "Custom"
-	newPart.Size = Vector3.new(0.4, 0.4, 0.4)
+	newPart.Size = Vector3.new(0.1, 0.1, 0.1)
 	newPart.CanCollide = false
-	newPart.CFrame = particleParent.CFrame * CFrame.Angles(math.pi, 0, 0)
-	newPart.Velocity = (particleParent.CFrame * CFrame.Angles(math.random(-360, 360), math.random(-360, 360), math.random(-360, 360))).lookVector * Table.ExplodeSpeed
+
 	-- 浮力の追加
 	local newBodyForce = Instance.new("BodyForce")
 	newBodyForce.force = Vector3.new(0, newPart:GetMass() * 196.2 * 0.95, 0)
@@ -31,41 +31,54 @@ local function makeFlarePart(particleParent, Table)
 	return newPart
 end
 
-local function makeFlareparticles(particleParent, Table)
+local function makeFlareparticles(particleParent : any, Color1 : Color3, Color2 : Color3, ExplodeTime : number) : table
 	local particles = {}
 
-	for i = 1, 4, 1 do
-		local newSparkle = Instance.new("Sparkles")
-		newSparkle.SparkleColor = Table.Color1
-		newSparkle.Parent = particleParent
-		task.delay(Table.ExplodeTime - (Table.ExplodeTime / 4), function()
-			newSparkle.Enabled = false
-		end)
-		table.insert(particles, newSparkle)
-	end
+	local newSparkle = Instance.new("Sparkles")
+	newSparkle.SparkleColor = Color1
+	newSparkle.Parent = particleParent
+	table.insert(particles, newSparkle)
 
 	local newFire = Instance.new("Fire")
-	newFire.Color = Table.Color1
-	if Table.Color2 ~= nil then
-		newFire.SecondaryColor = Table.Color2
+	newFire.Color = Color1
+	if Color2 ~= nil then
+		newFire.SecondaryColor = Color2
 	else
-		newFire.SecondaryColor = Table.Color1
+		newFire.SecondaryColor = Color1
 	end
 	newFire.Heat = 25
 	newFire.Parent = particleParent
-	task.delay(Table.ExplodeTime - (Table.ExplodeTime / 4), function()
-		newFire.Enabled = false
-	end)
 	table.insert(particles, newFire)
 
 	return particles
 end
 
-local function makeFlare(particleParent, Table)
-	for i= 1, 70, 1 do
-		local newPart = makeFlarePart(particleParent, Table)
-		makeFlareparticles(newPart, Table)
+local function makeFlare(self : table, FlareParent : Part)
+	for i = 1, self.Flare_num, 1 do
+		local newPart = self.FlareParts[i]
+		newPart.Parent = FlareParent
+		newPart.CFrame = FlareParent.CFrame
+		local theta = math.random() * 2 * math.pi
+		local phi = math.acos(2 * math.random() - 1)
+		local x = math.sin(phi) * math.cos(theta)
+		local y = math.sin(phi) * math.sin(theta)
+		local z = math.cos(phi)
+		newPart.Velocity = Vector3.new(x, y, z) * self.ExplodeSpeed
+
+		local newParticle = self.Particles[i]
+		for _, child in pairs(newParticle) do
+			child.Parent = newPart
+		end
 	end
+
+	task.delay(self.ExplodeTime - (self.ExplodeTime / 4), function()
+		for i = 1, self.Flare_num, 1 do
+			local newParticle = self.Particles[i]
+			for _, child in pairs(newParticle) do
+				child.Enabled = false
+			end
+		end
+	end)
 end
 
 --Function Name	: new
@@ -78,6 +91,21 @@ function Kamuro.new(Table, Origin)
 	end
 	local self = AFirework.new(Origin, Table)
 	setmetatable(self, Kamuro)
+
+	self.Flare_num = Table.Flare_num or Origin.Flare_num
+	self.FlareParts = {}
+	self.Particles = {}
+
+	local FlarePart = makeFlarePart(self.Storage)
+	local Particle = makeFlareparticles(self.Storage, self.Color1, self.Color2, self.ExplodeTime)
+	for i = 1, self.Flare_num, 1 do
+		table.insert(self.FlareParts, FlarePart:Clone())
+		local tmp = {}
+		for _, child in pairs(Particle) do
+			table.insert(tmp, child:Clone())
+		end
+		table.insert(self.Particles, tmp)
+	end
 
 	return self
 end
@@ -93,7 +121,7 @@ function Kamuro:launch()
 
 	firework.Sound.PlaySound("Explode")
 
-	makeFlare(Nobori, self)
+	makeFlare(self, Nobori)
 
 	task.wait(self.ExplodeTime)
 

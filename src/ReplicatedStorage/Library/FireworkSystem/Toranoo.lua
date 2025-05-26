@@ -17,14 +17,12 @@ local ToranooPrototype = {
 local function makeFlareparticles(particleParent, Color, ExplodeTime)
 	local particles = {}
 
-	for i = 1, 10, 1 do
-		local newSparkles = Instance.new("Sparkles")
-		newSparkles.SparkleColor = Color
-		newSparkles.Parent = particleParent
-		table.insert(particles, newSparkles)
-	end
+	local newSparkles = Instance.new("Sparkles")
+	newSparkles.SparkleColor = Color
+	newSparkles.Parent = particleParent
+	table.insert(particles, newSparkles)
 
-	for i = 1, 20, 1 do
+	for i = 1, 3, 1 do
 		local newFire = Instance.new("Fire")
 		newFire.Color = Color
 		newFire.SecondaryColor = Color
@@ -32,7 +30,7 @@ local function makeFlareparticles(particleParent, Color, ExplodeTime)
 		newFire.Size = 3
 		newFire.Parent = particleParent
 		table.insert(particles, newFire)
-		task.wait(0.001)
+		task.wait(0.005)
 	end
 
 	task.delay(ExplodeTime, function()
