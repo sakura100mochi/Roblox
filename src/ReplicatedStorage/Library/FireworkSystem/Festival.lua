@@ -14,6 +14,7 @@ local function makeBGM(SoundID : string) : Sound
 	local bgm = Instance.new("Sound")
 	bgm.Parent = game:GetService("SoundService")
 	bgm.SoundId = SoundID
+	bgm.Volume = 2
 
 	return bgm
 end
