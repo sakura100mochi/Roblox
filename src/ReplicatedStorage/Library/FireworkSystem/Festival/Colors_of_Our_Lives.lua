@@ -1,60 +1,11 @@
---Name		: Festival
+--Name		: Colors_of_Our_Lives
 --Explain	: 花火大会用にプログラムされた花火
-local Festival = {}
-
-local function makeFolder() : Folder
-	local folder = Instance.new("Folder")
-	folder.Parent = workspace
-	folder.Name = "Festival"
-
-	return folder
-end
-
-local function makeBGM(SoundID : string) : Sound
-	local bgm = Instance.new("Sound")
-	bgm.Parent = game:GetService("SoundService")
-	bgm.SoundId = SoundID
-	bgm.Volume = 2
-
-	return bgm
-end
-
-local function makeLauncher(folder : Folder, MainLauncher : any, LauncherHalf : number, Direction : string) : table
-	local Launchers = {}
-	for i = -LauncherHalf, LauncherHalf, 1 do
-		local launcher = Instance.new("Part")
-		launcher.Parent = folder
-		launcher.Name = "Launcher"
-		if Direction == 'x' then
-			launcher.CFrame = CFrame.new(Vector3.new(i * 15, 0, 0)) * MainLauncher.CFrame
-		else
-			launcher.CFrame = CFrame.new(Vector3.new(0, 0, i * 15)) * MainLauncher.CFrame
-		end
-		launcher.Transparency = 0
-		launcher.Anchored = true
-		table.insert(Launchers, launcher)
-	end
-
-	return Launchers
-end
-
-local function CountDown(self : table)
-	task.spawn(function()
-		local i = 0
-		while self.isPlaying do
-			print(i)
-			i = i + 1
-			task.wait(1)
-		end
-	end)
-end
-
 -- Launchers 1 2 3 4 5 6 | 7 | 8 9 10 11 12 13
 
-Festival.Colors_of_Our_Lives = {}
-Festival.Colors_of_Our_Lives.__index = Festival.Colors_of_Our_Lives
+Colors_of_Our_Lives = {}
+Colors_of_Our_Lives.__index = Colors_of_Our_Lives
 
-Festival.Colors_of_Our_Lives.RainbowColors = {
+Colors_of_Our_Lives.RainbowColors = {
 	Color3.fromRGB(255, 0, 0),
 	Color3.fromRGB(255, 104, 39),
 	Color3.fromRGB(255, 212, 55),
@@ -70,19 +21,20 @@ Festival.Colors_of_Our_Lives.RainbowColors = {
 	Color3.fromRGB(255, 78, 161),
 }
 
-function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
-	local self = setmetatable({}, Festival.Colors_of_Our_Lives)
+function Colors_of_Our_Lives.new(MainLauncher : Part) : table
+	local self = setmetatable({}, Colors_of_Our_Lives)
 
 	self.FireworkSystem = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 	self.AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.AFirework)
-	self.folder = makeFolder()
+	self.Festival = require(script.Parent)
+	self.folder = self.Festival.makeFolder("Colors_of_Our_Lives")
 	self.Launcher_Num = 13
 	self.Launcher_Half = self.Launcher_Num // 2
-	self.bgm = makeBGM("rbxassetid://119169641481723")
+	self.bgm = self.Festival.makeBGM("rbxassetid://119169641481723")
 	self.beat = 2.2
-	self.Launchers = makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z')
+	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z')
 	self.isPlaying = false
-	
+
 	self.fireworks = {}
 	for i = 1, self.Launcher_Num, 1 do
 		for key, color in pairs(self.AFirework.Colors) do
@@ -92,7 +44,7 @@ function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
 				Interval = 0.05
 			})
 		end
-		for j, color in ipairs(Festival.Colors_of_Our_Lives.RainbowColors) do
+		for j, color in ipairs(Colors_of_Our_Lives.RainbowColors) do
 			self.fireworks["Gerb_Rainbow_" .. j .. "_" .. i] = self.FireworkSystem.Gerb.new({
 				Parent = self.Launchers[i],
 				Color1 = color,
@@ -114,7 +66,7 @@ function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
 				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 			})
 		end
-		for j, color in ipairs(Festival.Colors_of_Our_Lives.RainbowColors) do
+		for j, color in ipairs(Colors_of_Our_Lives.RainbowColors) do
 			self.fireworks["Botan_Rainbow_" .. j .. "_" .. i] = self.FireworkSystem.Botan.new({
 				Parent = self.Launchers[i],
 				Color1 = color,
@@ -154,19 +106,19 @@ function Festival.Colors_of_Our_Lives.new(MainLauncher : Part) : table
 		Color2 = self.AFirework.Colors.Sr,
 		Color3 = self.AFirework.Colors.C,
 		Color4 = self.AFirework.Colors.C,
-		Color5 = Festival.Colors_of_Our_Lives.RainbowColors[9],
+		Color5 = Colors_of_Our_Lives.RainbowColors[9],
 	})
 
 	self.isSetUp = true
 	return self
 end
 
-function Festival.Colors_of_Our_Lives:launch()
+function Colors_of_Our_Lives:launch()
 	if self == nil or self.isSetUp == false then
 		warn("You need to \'setup\' first.")
 		return
 	end
-	
+
 	self.isSetUp = false
 	self.isPlaying = true
 	task.spawn(function()self.fireworks["Botan_C1"]:launch()end)
@@ -176,7 +128,7 @@ function Festival.Colors_of_Our_Lives:launch()
 	task.spawn(function()self.fireworks["Botan_C13"]:launch()end)
 	task.wait(self.beat)
 	self.bgm:Play()
-	CountDown(self)
+	self.Firework.CountDown(self)
 	for i = 1, self.Launcher_Num, 1 do
 		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
 	end
@@ -250,9 +202,9 @@ function Festival.Colors_of_Our_Lives:launch()
 	end
 end
 
-function Festival.Colors_of_Our_Lives:stop()
+function Colors_of_Our_Lives:stop()
 	self.bgm:Stop()
 	self.isPlaying = false
 end
 
-return Festival
+return Colors_of_Our_Lives

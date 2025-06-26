@@ -1,12 +1,12 @@
 local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
 local firework = lib.firework
 local Players = game:GetService("Players")
-local fireworks = firework.Festival.Colors_of_Our_Lives.new(workspace.Launcher)
+local fireworks = firework.Festival.Fire_Cracker.new(workspace.Launcher)
 
 Players.PlayerAdded:Connect(function(player)
 	player.Chatted:Connect(function(Message)
 		if Message == "setup" then
-			fireworks = firework.Festival.Colors_of_Our_Lives.new(workspace.Launcher)
+			fireworks = firework.Festival.Fire_Cracker.new(workspace.Launcher)
 		elseif Message == "launch" then
 			fireworks:launch()
 		elseif Message == "stop" then
