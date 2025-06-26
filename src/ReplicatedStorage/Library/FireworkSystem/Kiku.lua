@@ -5,6 +5,11 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local Kiku = setmetatable({}, {__index = AFirework})
 Kiku.__index = Kiku
 
+-- Type				: type
+-- NoboriTime		: Noboriの時間（秒）　花火が大きいから眺めが推奨
+-- ExplodeTime		: 花火が開いている時間（秒）　大きいほど長くなる
+-- ExplodeSpeed		: 花火が開く速度　大きいほど早く開く。菊は早めがおすすめ
+-- Flare_num		: 火花の数。多いほど綺麗だが、重くなる。複数打ち上げる際は100が推奨
 local KikuPrototype = {
 	Type = "Kiku",
 	NoboriTime = math.random(30, 50) / 10,
@@ -87,18 +92,18 @@ local function makeFlare(self : table, particleParent : any, ExplodeTime : numbe
 		newFire.Parent = newPart
 	end
 
-	task.delay(ExplodeTime - (ExplodeTime / 2), function()
-		for i = start_index, end_index, 1 do
-			self.FireParticles[i].Enabled = false
+	task.wait(ExplodeTime / 2)
+
+	for i = start_index, end_index, 1 do
+		self.FireParticles[i].Enabled = false
+	end
+	for i = 1, self.Flare_num, 1 do
+		if KikuParticles ~= nil and KikuParticles[i] ~= nil then
+			local particle = KikuParticles[i]
+			particle.Parent = self.FlareParts[i]
+			particle:Emit(1)
 		end
-		for i = 1, self.Flare_num, 1 do
-			if KikuParticles ~= nil and KikuParticles[i] ~= nil then
-				local particle = KikuParticles[i]
-				particle.Parent = self.FlareParts[i]
-				particle:Emit(1)
-			end
-		end
-	end)
+	end
 end
 
 --Function Name	: new
@@ -119,9 +124,9 @@ function Kiku.new(Table : table, Origin : table) : table
 	self.FireParticles = {}
 	self.KikuParticles1 = {}
 	self.KikuParticles2 = {}
-	local FlarePart = makeFlarePart(self.Storage)
-	local FireParticle = makeFireParticle(self.Storage)
-	local KikuParticle1 = nil
+	self.FlarePart = makeFlarePart(self.Storage)
+	self.FireParticle = makeFireParticle(self.Storage)
+	self.KikuParticle1 = nil
 	if self.Color2 ~= nil then
 		local KikuColor = ColorSequence.new(self.Color2)
 		if self.Color3 ~= nil then
@@ -131,9 +136,9 @@ function Kiku.new(Table : table, Origin : table) : table
 				ColorSequenceKeypoint.new(1, self.Color3)
 			}
 		end
-		KikuParticle1 = makeKikuParticle(self.Storage, KikuColor, self.ExplodeTime)
+		self.KikuParticle1 = makeKikuParticle(self.Storage, KikuColor, self.ExplodeTime)
 	end
-	local KikuParticle2 = nil
+	self.KikuParticle2 = nil
 	if self.Color4 ~= nil then
 		local KikuColor = ColorSequence.new(self.Color4)
 		if self.Color5 ~= nil then
@@ -143,14 +148,7 @@ function Kiku.new(Table : table, Origin : table) : table
 				ColorSequenceKeypoint.new(1, self.Color5)
 			}
 		end
-		KikuParticle2 = makeKikuParticle(self.Storage, KikuColor, self.ExplodeTime)
-	end
-
-	for i = 1, self.Flare_num, 1 do
-		table.insert(self.FlareParts, FlarePart:Clone())
-		table.insert(self.FireParticles, FireParticle:Clone())
-		table.insert(self.KikuParticles1, (KikuParticle1 and KikuParticle1:Clone()) or nil)
-		table.insert(self.KikuParticles2, (KikuParticle2 and KikuParticle2:Clone()) or nil)
+		self.KikuParticle2 = makeKikuParticle(self.Storage, KikuColor, self.ExplodeTime)
 	end
 
 	return self
@@ -160,16 +158,48 @@ end
 --Explain		: 菊タイプの花火を打ち上げる
 --Return Value	: none
 function Kiku:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function ()
+		for i = 1, self.Flare_num, 1 do
+			table.insert(self.FlareParts, self.FlarePart:Clone())
+			table.insert(self.FireParticles, self.FireParticle:Clone())
+			table.insert(self.KikuParticles1, (self.KikuParticle1 and self.KikuParticle1:Clone()) or nil)
+			table.insert(self.KikuParticles2, (self.KikuParticle2 and self.KikuParticle2:Clone()) or nil)
+		end
 
-	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	firework.Sound.PlaySound("Explode")
+		local Nobori = firework.Nobori.makeNobori(self);
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
 
-	makeFlare(self, Nobori, self.ExplodeTime, self.KikuParticles1, 1, self.Flare_num)
+		firework.Sound.PlaySound("Explode")
 
-	firework.Sound.PlaySound("After")
+		makeFlare(self, Nobori, self.ExplodeTime, self.KikuParticles1, 1, self.Flare_num)
+
+		firework.Sound.PlaySound("After")
+
+		task.wait(self.ExplodeTime / 2)
+		for i = 1, #self.FlareParts, 1 do
+			self.FlareParts[i]:Destroy()
+		end
+		for i = 1, #self.FireParticles, 1 do
+			self.FireParticles[i]:Destroy()
+		end
+		for i = 1, #self.KikuParticles1, 1 do
+			if self.KikuParticles1[i] then
+				self.KikuParticles1[i]:Destroy()
+			end
+		end
+		for i = 1, #self.KikuParticles2, 1 do
+			if self.KikuParticles2[i] then
+				self.KikuParticles2[i]:Destroy()
+			end
+		end
+
+		self.FlareParts = {}
+		self.FireParticles = {}
+		self.KikuParticles1 = {}
+		self.KikuParticles2 = {}
+	end)
 end
 
 --Method Name	: launchRandom
@@ -201,17 +231,48 @@ end
 --Explain		: 菊タイプの花火を同時に2個打ち上げる
 --Return Value	: none
 function Kiku:launchDouble()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function ()
+		for i = 1, self.Flare_num, 1 do
+			table.insert(self.FlareParts, self.FlarePart:Clone())
+			table.insert(self.FireParticles, self.FireParticle:Clone())
+			table.insert(self.KikuParticles1, (self.KikuParticle1 and self.KikuParticle1:Clone()) or nil)
+			table.insert(self.KikuParticles2, (self.KikuParticle2 and self.KikuParticle2:Clone()) or nil)
+		end
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
+		local Nobori = firework.Nobori.makeNobori(self);
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 5)
 
-	firework.Sound.PlaySound("Explode")
+		firework.Sound.PlaySound("Explode")
 
-	makeFlare(self, Nobori, self.ExplodeTime, self.KikuParticles1, 1, self.Flare_num / 2)
-	makeFlare(self, Nobori, self.ExplodeTime / 2, self.KikuParticles2, self.Flare_num / 2, self.Flare_num)
+		makeFlare(self, Nobori, self.ExplodeTime, self.KikuParticles1, 1, self.Flare_num / 2)
+		makeFlare(self, Nobori, self.ExplodeTime / 2, self.KikuParticles2, self.Flare_num / 2, self.Flare_num)
 
-	firework.Sound.PlaySound("After")
+		firework.Sound.PlaySound("After")
+
+		task.wait(self.ExplodeTime / 2)
+		for i = 1, #self.FlareParts, 1 do
+			self.FlareParts[i]:Destroy()
+		end
+		for i = 1, #self.FireParticles, 1 do
+			self.FireParticles[i]:Destroy()
+		end
+		for i = 1, #self.KikuParticles1, 1 do
+			if self.KikuParticles1[i] then
+				self.KikuParticles1[i]:Destroy()
+			end
+		end
+		for i = 1, #self.KikuParticles2, 1 do
+			if self.KikuParticles2[i] then
+				self.KikuParticles2[i]:Destroy()
+			end
+		end
+
+		self.FlareParts = {}
+		self.FireParticles = {}
+		self.KikuParticles1 = {}
+		self.KikuParticles2 = {}
+	end)
 end
 
 return Kiku

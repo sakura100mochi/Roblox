@@ -5,6 +5,12 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local Gerb = setmetatable({}, {__index = AFirework})
 Gerb.__index = Gerb
 
+-- Parent		: 発射する場所
+-- Type			: type
+-- Color1		: 花火の色
+-- ExplodeSpeed	: 打ち上げ速度（火花が上に上がる速度）　大きいほど速くなる
+-- ExplodeTime	: 打ち上げている時間（秒）
+-- Interval		: 火花を打ち上げる間隔（秒）　小さいほど火花が多く綺麗だが、その分重くなる。複数打ち上げるなら0.05推奨
 local GerbPrototype = {
 	Parent = workspace:FindFirstChild("SpawnLocation"),
 	Type = "Gerb",
@@ -114,24 +120,26 @@ end
 --Explain		: ジャーブタイプの花火を打ち上げる
 --Return Value	: none
 function Gerb:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function()
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	firework.Sound.PlaySound("SmallExplode")
+		firework.Sound.PlaySound("SmallExplode")
 
-	local Fountain = firework.Sound.PlaySound("Fountain")
-	game:GetService("Debris"):AddItem(Fountain, self.ExplodeTime + 1)
+		local Fountain = firework.Sound.PlaySound("Fountain")
+		game:GetService("Debris"):AddItem(Fountain, self.ExplodeTime + 1)
 
-	local num = 0
-	for i = 0, self.ExplodeTime, self.Interval do
-		for j = 1, 3, 1 do
-			makeFlare(self, self.GerbParticles, num % self.Flare_num + 1)
-			num = num + 1
+		local num = 0
+		for i = 0, self.ExplodeTime, self.Interval do
+			for j = 1, 3, 1 do
+				makeFlare(self, self.GerbParticles, num % self.Flare_num + 1)
+				num = num + 1
+			end
+			task.wait(self.Interval)
 		end
-		task.wait(self.Interval)
-	end
-	for i = 1, #self.GerbParticles, 1 do
-		self.GerbParticles[i].Enabled = false
-	end
+		for i = 1, #self.GerbParticles, 1 do
+			self.GerbParticles[i].Enabled = false
+		end
+	end)
 end
 
 --Method Name	: launchRandom

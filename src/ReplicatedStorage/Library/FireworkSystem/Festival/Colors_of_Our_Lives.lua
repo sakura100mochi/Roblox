@@ -32,7 +32,7 @@ function Colors_of_Our_Lives.new(MainLauncher : Part) : table
 	self.Launcher_Half = self.Launcher_Num // 2
 	self.bgm = self.Festival.makeBGM("rbxassetid://119169641481723")
 	self.beat = 2.2
-	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z')
+	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z', 15)
 	self.isPlaying = false
 
 	self.fireworks = {}
@@ -121,83 +121,83 @@ function Colors_of_Our_Lives:launch()
 
 	self.isSetUp = false
 	self.isPlaying = true
-	task.spawn(function()self.fireworks["Botan_C1"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Sr3"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_C7"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Sr11"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_C13"]:launch()end)
+	self.fireworks["Botan_C1"]:launch()
+	self.fireworks["Botan_Sr3"]:launch()
+	self.fireworks["Botan_C7"]:launch()
+	self.fireworks["Botan_Sr11"]:launch()
+	self.fireworks["Botan_C13"]:launch()
 	task.wait(self.beat)
 	self.bgm:Play()
-	self.Firework.CountDown(self)
+	self.Festival.CountDown(self)
 	for i = 1, self.Launcher_Num, 1 do
-		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
+		self.fireworks["Gerb_C" .. i]:launch()
 	end
 	task.wait(self.beat - 0.2)
 	for i = 1, self.Launcher_Num, 1 do
-		task.spawn(function()self.fireworks["Gerb_Rainbow_" .. i .. "_" .. i]:launch()end)
+		self.fireworks["Gerb_Rainbow_" .. i .. "_" .. i]:launch()
 		task.wait(0.1)
 	end
 	task.wait(self.beat - 1.3)
 	for i = self.Launcher_Num, 1, -1 do
-		task.spawn(function()self.fireworks["Gerb_Rainbow_" .. self.Launcher_Num - i + 1 .. "_" .. i]:launch()end)
+		self.fireworks["Gerb_Rainbow_" .. self.Launcher_Num - i + 1 .. "_" .. i]:launch()
 		task.wait(0.1)
 	end
-	task.spawn(function()self.fireworks["Botan_Al1"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Al3"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Al7"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Al11"]:launch()end)
-	task.spawn(function()self.fireworks["Botan_Al13"]:launch()end)
+	self.fireworks["Botan_Al1"]:launch()
+	self.fireworks["Botan_Al3"]:launch()
+	self.fireworks["Botan_Al7"]:launch()
+	self.fireworks["Botan_Al11"]:launch()
+	self.fireworks["Botan_Al13"]:launch()
 	task.wait(self.beat)
 	for i = 1, self.Launcher_Num, 1 do
-		task.spawn(function()self.fireworks["Gerb_Al" .. i]:launch()end)
+		self.fireworks["Gerb_Al" .. i]:launch()
 	end
-	task.spawn(function()self.fireworks["Toranoo_fan3"]:fan(7)end)
-	task.spawn(function()self.fireworks["Toranoo_fan11"]:fan(7)end)
-	task.spawn(function()self.fireworks["Kiku_Double_7"]:launchDouble()end)
+	self.fireworks["Toranoo_fan3"]:fan(7)
+	self.fireworks["Toranoo_fan11"]:fan(7)
+	self.fireworks["Kiku_Double_7"]:launchDouble()
 	task.wait(self.beat)
-	task.spawn(function()self.fireworks["Kamuro_C1"]:launch()end)
-	task.spawn(function()self.fireworks["Kamuro_C9"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_C1"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_C9"]:launch()end)
+	self.fireworks["Kamuro_C1"]:launch()
+	self.fireworks["Kamuro_C9"]:launch()
+	-- self.fireworks["Kiku_C1"]:launch()
+	-- self.fireworks["Kiku_C9"]:launch()
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
-		task.spawn(function()self.fireworks["Gerb_C" .. i]:launch()end)
+		self.fireworks["Gerb_C" .. i]:launch()
 		task.wait(0.1)
 	end
-	task.spawn(function()self.fireworks["Kamuro_K5"]:launch()end)
-	task.spawn(function()self.fireworks["Kamuro_K13"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_K5"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_K13"]:launch()end)
+	self.fireworks["Kamuro_K5"]:launch()
+	self.fireworks["Kamuro_K13"]:launch()
+	-- self.fireworks["Kiku_K5"]:launch()
+	-- self.fireworks["Kiku_K13"]:launch()
 	task.wait(self.beat)
 	for i = 8, 13, 1 do
-		task.spawn(function()self.fireworks["Gerb_K" .. i]:launch()end)
+		self.fireworks["Gerb_K" .. i]:launch()
 		task.wait(0.1)
 	end
-	task.spawn(function()self.fireworks["Kamuro_Cu1"]:launch()end)
-	task.spawn(function()self.fireworks["Kamuro_Cu9"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Cu1"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Cu9"]:launch()end)
+	self.fireworks["Kamuro_Cu1"]:launch()
+	self.fireworks["Kamuro_Cu9"]:launch()
+	-- self.fireworks["Kiku_Cu1"]:launch()
+	-- self.fireworks["Kiku_Cu9"]:launch()
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
-		task.spawn(function()self.fireworks["Gerb_Cu" .. i]:launch()end)
+		self.fireworks["Gerb_Cu" .. i]:launch()
 		task.wait(0.1)
 	end
-	task.spawn(function()self.fireworks["Kamuro_Rb5"]:launch()end)
-	task.spawn(function()self.fireworks["Kamuro_Rb13"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Rb5"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Rb13"]:launch()end)
+	self.fireworks["Kamuro_Rb5"]:launch()
+	self.fireworks["Kamuro_Rb13"]:launch()
+	-- self.fireworks["Kiku_Rb5"]:launch()
+	-- self.fireworks["Kiku_Rb13"]:launch()
 	task.wait(self.beat)
 	for i = 8, 13, 1 do
-		task.spawn(function()self.fireworks["Gerb_Rb" .. i]:launch()end)
+		self.fireworks["Gerb_Rb" .. i]:launch()
 		task.wait(0.1)
 	end
-	task.spawn(function()self.fireworks["Kamuro_Ba1"]:launch()end)
-	task.spawn(function()self.fireworks["Kamuro_Ba9"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Ba1"]:launch()end)
-	-- task.spawn(function()self.fireworks["Kiku_Ba9"]:launch()end)
+	self.fireworks["Kamuro_Ba1"]:launch()
+	self.fireworks["Kamuro_Ba9"]:launch()
+	-- self.fireworks["Kiku_Ba1"]:launch()
+	-- self.fireworks["Kiku_Ba9"]:launch()
 	task.wait(self.beat)
 	for i = 1, 6, 1 do
-		task.spawn(function()self.fireworks["Gerb_Ba" .. i]:launch()end)
+		self.fireworks["Gerb_Ba" .. i]:launch()
 		task.wait(0.1)
 	end
 end

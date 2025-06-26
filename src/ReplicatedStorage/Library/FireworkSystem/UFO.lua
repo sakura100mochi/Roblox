@@ -5,6 +5,11 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local UFO = setmetatable({}, {__index = AFirework})
 UFO.__index = UFO
 
+-- Type			: type
+-- Color1		: リングの色（Color3）
+-- Color2		: 花火の色（Color3）
+-- ExplodeTime	: 花火が開いている時間（秒）
+-- ExplodeSpeed	: 花火が開く速度（スタートとエンドの値を持つNumberRange）　大きいほど早く開く
 local UFOPrototype = {
 	Type = "UFO",
 	Color2 = AFirework.Colors.C,
@@ -65,23 +70,25 @@ end
 --Explain		: 型物　土星・UFOタイプの花火を打ち上げる
 --Return Value	: none
 function UFO:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function ()
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
+		local Nobori = firework.Nobori.makeNobori(self);
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
-	firework.Sound.PlaySound("Explode")
+		firework.Sound.PlaySound("Explode")
 
-	for i = 1, 3, 1 do
-		local particle = makeRingParticle(Nobori, ColorSequence.new(self.Color1), NumberRange.new(self.ExplodeTime), NumberRange.new(self.ExplodeSpeed.Min + 20, self.ExplodeSpeed.Max + 20))
-		particle:Emit(math.random(30, 50))
-	end
-	for i = 1, 5, 1 do
-		local particle = makeBotanParticle(Nobori, ColorSequence.new(self.Color2), NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
-		particle:Emit(math.random(70,100))
-	end
+		for i = 1, 3, 1 do
+			local particle = makeRingParticle(Nobori, ColorSequence.new(self.Color1), NumberRange.new(self.ExplodeTime), NumberRange.new(self.ExplodeSpeed.Min + 20, self.ExplodeSpeed.Max + 20))
+			particle:Emit(math.random(30, 50))
+		end
+		for i = 1, 5, 1 do
+			local particle = makeBotanParticle(Nobori, ColorSequence.new(self.Color2), NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
+			particle:Emit(math.random(70,100))
+		end
 
-	firework.Sound.PlaySound("After")
+		firework.Sound.PlaySound("After")
+	end)
 end
 
 --Method Name	: launchRandom
@@ -106,7 +113,7 @@ end
 function UFO:AutoSystem()
 	while true do
 		for i = 1, math.random(1, 2), 1 do
-			task.spawn(function()self:launchRandom()end)
+			self:launchRandom()
 		end
 		task.wait(2)
 	end

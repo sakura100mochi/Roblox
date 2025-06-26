@@ -5,6 +5,10 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local Kamuro = setmetatable({}, {__index = AFirework})
 Kamuro.__index = Kamuro
 
+-- Type			: type
+-- ExplodeTime	: 花火が開いている時間（秒）　大きいほど長くなる
+-- ExplodeSpeed	: 花火が開く速度　大きいほど早く開く。冠はゆっくりがおすすめ
+-- Flare_num	: 火花の数
 local KamuroPrototype = {
 	Type = "Kamuro",
 	ExplodeTime = 4,
@@ -96,16 +100,8 @@ function Kamuro.new(Table, Origin)
 	self.FlareParts = {}
 	self.Particles = {}
 
-	local FlarePart = makeFlarePart(self.Storage)
-	local Particle = makeFlareparticles(self.Storage, self.Color1, self.Color2, self.ExplodeTime)
-	for i = 1, self.Flare_num, 1 do
-		table.insert(self.FlareParts, FlarePart:Clone())
-		local tmp = {}
-		for _, child in pairs(Particle) do
-			table.insert(tmp, child:Clone())
-		end
-		table.insert(self.Particles, tmp)
-	end
+	self.FlarePart = makeFlarePart(self.Storage)
+	self.Particle = makeFlareparticles(self.Storage, self.Color1, self.Color2, self.ExplodeTime)
 
 	return self
 end
@@ -114,18 +110,37 @@ end
 --Explain		:冠タイプの花火を打ち上げる　defaultは、錦冠
 --Return Value	: none
 function Kamuro:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function()
+		for i = 1, self.Flare_num, 1 do
+			table.insert(self.FlareParts, self.FlarePart:Clone())
+			local tmp = {}
+			for _, child in pairs(self.Particle) do
+				table.insert(tmp, child:Clone())
+			end
+			table.insert(self.Particles, tmp)
+		end
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	local Nobori = firework.Nobori.makeNobori(self)
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime)
+		local Nobori = firework.Nobori.makeNobori(self)
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime)
 
-	firework.Sound.PlaySound("Explode")
+		firework.Sound.PlaySound("Explode")
 
-	makeFlare(self, Nobori)
+		makeFlare(self, Nobori)
 
-	task.wait(self.ExplodeTime)
+		task.wait(self.ExplodeTime)
 
-	firework.Sound.PlaySound("Fizzle")
+		firework.Sound.PlaySound("Fizzle")
+
+		for i = 1, self.Flare_num, 1 do
+			self.FlareParts[i]:Destroy()
+			for _, child in pairs(self.Particle) do
+				child:Destroy()
+			end
+		end
+		self.FlareParts = {}
+		self.Particles = {}
+	end)
 end
 
 --Method Name	: launchRandom
@@ -148,7 +163,7 @@ end
 function Kamuro:AutoSystem()
 	while true do
 		for i = 1, math.random(2, 3), 1 do
-			task.spawn(function()self:launchRandom()end)
+			self:launchRandom()
 		end
 		task.wait(5)
 	end

@@ -1,7 +1,8 @@
 --Name		: Fire_Cracker
---Explain	: 花火大会用にプログラムされた花火
--- 4拍子
--- Launchers : 1 2 | 3 | 4 5
+--Explain	: ファイヤークラッカー(https://www.youtube.com/watch?v=DLJIu3B1jE0)
+-- meter	: 4拍子
+-- beat 	: 1.7
+-- Launchers	: 1 2 | 3 | 4 5
 local Fire_Cracker = {}
 
 Fire_Cracker = {}
@@ -24,11 +25,123 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 	self.Launcher_Num = 5
 	self.Launcher_Half = self.Launcher_Num // 2
 	self.bgm = self.Festival.makeBGM("rbxassetid://123623432077552")
-	self.beat = 2.2
-	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z')
+	self.beat = 1.7
+	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'x', 50)
 	self.isPlaying = false
 
 	self.fireworks = {}
+	-- Gerb
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Gerb_" .. key .. i] = self.FireworkSystem.Gerb.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Interval = 0.05
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Gerb_" .. index .. "_" .. i] = self.FireworkSystem.Gerb.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Interval = 0.05
+			})
+		end
+	end
+	-- Botan
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Botan_" .. key .. i] = self.FireworkSystem.Botan.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Botan_" .. index .. "_" .. i] = self.FireworkSystem.Botan.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	-- Kamuro
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Kamuro_" .. key .. i] = self.FireworkSystem.Kamuro.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				ExplodeTime = 3,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Kamuro_" .. index .. "_" .. i] = self.FireworkSystem.Kamuro.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				ExplodeTime = 3,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	-- Kiku
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Kiku_" .. key .. i] = self.FireworkSystem.Kiku.new({
+				Parent = self.Launchers[i],
+				Color2 = color,
+				ExplodeTime = 1.5,
+				ExplodeSpeed = 60,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Kiku_" .. index .. "_" .. i] = self.FireworkSystem.Kiku.new({
+				Parent = self.Launchers[i],
+				Color2 = color,
+				ExplodeTime = 1.5,
+				ExplodeSpeed = 60,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	-- Ring
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Ring_" .. key .. i] = self.FireworkSystem.Ring.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Ring_" .. index .. "_" .. i] = self.FireworkSystem.Ring.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
+	-- UFO
+	for i = 1, self.Launcher_Num, 1 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["UFO_" .. key .. i] = self.FireworkSystem.UFO.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["UFO_" .. index .. "_" .. i] = self.FireworkSystem.UFO.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
+		end
+	end
 
 	self.isSetUp = true
 	return self
@@ -44,6 +157,21 @@ function Fire_Cracker:launch()
 	self.isPlaying = true
 	self.bgm:Play()
 	self.Festival.CountDown(self)
+
+	while true do
+		task.wait(self.beat)
+		self.fireworks["Gerb_C1"]:launch()
+		task.wait(self.beat)
+		self.fireworks["Botan_C1"]:launch()
+		task.wait(self.beat)
+		self.fireworks["Kamuro_C1"]:launch()
+		task.wait(self.beat)
+		self.fireworks["Kiku_C1"]:launch()
+		task.wait(self.beat)
+		self.fireworks["Ring_C1"]:launch()
+		task.wait(self.beat)
+		self.fireworks["UFO_C1"]:launch()
+	end
 
 	-- self:stop()
 end

@@ -5,6 +5,9 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local Ring = setmetatable({}, {__index = AFirework})
 Ring.__index = Ring
 
+-- Type			: type
+-- ExplodeTime	: 花火が開いている時間（秒）
+-- ExplodeSpeed	: 花火が開く速度（スタートとエンドの値を持つNumberRange）　大きいほど早く開く
 local RingPrototype = {
 	Type = "Ring",
 	ExplodeTime = 3,
@@ -47,28 +50,30 @@ end
 --Explain		:リングタイプの花火を打ち上げる
 --Return Value	: none
 function Ring:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function ()
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
+		local Nobori = firework.Nobori.makeNobori(self);
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
-	firework.Sound.PlaySound("Explode")
+		firework.Sound.PlaySound("Explode")
 
-	local RingColor = ColorSequence.new(self.Color1)
-	if self.Color2 ~= nil then
-		RingColor = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, self.Color1),
-			ColorSequenceKeypoint.new(0.4, self.Color2),
-			ColorSequenceKeypoint.new(1, self.Color2)
-		}
-	end
+		local RingColor = ColorSequence.new(self.Color1)
+		if self.Color2 ~= nil then
+			RingColor = ColorSequence.new{
+				ColorSequenceKeypoint.new(0, self.Color1),
+				ColorSequenceKeypoint.new(0.4, self.Color2),
+				ColorSequenceKeypoint.new(1, self.Color2)
+			}
+		end
 
-	for i = 1, 3, 1 do
-		local particle = makeRingParticle(Nobori, RingColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
-		particle:Emit(math.random(30, 50))
-	end
+		for i = 1, 3, 1 do
+			local particle = makeRingParticle(Nobori, RingColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
+			particle:Emit(math.random(30, 50))
+		end
 
-	firework.Sound.PlaySound("After")
+		firework.Sound.PlaySound("After")
+	end)
 end
 
 --Method Name	: launchRandom
@@ -94,7 +99,7 @@ function Ring:AutoSystem()
 	local Colors_Table = {"Li", "Na", "K", "Rb", "Cs", "Ca", "Sr", "Ba", "Cu", "C", "Al", "Mg"}
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			task.spawn(function()self:launchRandom()end)
+			self:launchRandom()
 		end
 		task.wait(2)
 	end

@@ -23,16 +23,16 @@ function Festival.makeBGM(SoundID : string) : Sound
 	return bgm
 end
 
-function Festival.makeLauncher(folder : Folder, MainLauncher : any, LauncherHalf : number, Direction : string) : table
+function Festival.makeLauncher(folder : Folder, MainLauncher : any, LauncherHalf : number, Direction : string, distance : number) : table
 	local Launchers = {}
 	for i = -LauncherHalf, LauncherHalf, 1 do
 		local launcher = Instance.new("Part")
 		launcher.Parent = folder
 		launcher.Name = "Launcher"
 		if Direction == 'x' then
-			launcher.CFrame = CFrame.new(Vector3.new(i * 15, 0, 0)) * MainLauncher.CFrame
+			launcher.CFrame = CFrame.new(Vector3.new(i * distance, 0, 0)) * MainLauncher.CFrame
 		else
-			launcher.CFrame = CFrame.new(Vector3.new(0, 0, i * 15)) * MainLauncher.CFrame
+			launcher.CFrame = CFrame.new(Vector3.new(0, 0, i * distance)) * MainLauncher.CFrame
 		end
 		launcher.Transparency = 0
 		launcher.Anchored = true

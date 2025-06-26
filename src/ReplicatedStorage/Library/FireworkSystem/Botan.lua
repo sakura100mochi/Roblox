@@ -5,6 +5,9 @@ local AFirework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem.A
 local Botan = setmetatable({}, {__index = AFirework})
 Botan.__index = Botan
 
+-- Type			: type
+-- ExplodeTime	: 花火が開いている時間（秒）
+-- ExplodeSpeed	: 花火が開く速度（スタートとエンドの値を持つNumberRange）　大きいほど早く開く
 local BotanPrototype = {
 	Type = "Botan",
 	ExplodeTime = 3,
@@ -46,28 +49,30 @@ end
 --Explain		:牡丹タイプの花火を打ち上げる
 --Return Value	: none
 function Botan:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function ()
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	local Nobori = firework.Nobori.makeNobori(self);
-	game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
+		local Nobori = firework.Nobori.makeNobori(self);
+		game:GetService("Debris"):AddItem(Nobori, self.ExplodeTime + 1)
 
-	firework.Sound.PlaySound("Explode")
+		firework.Sound.PlaySound("Explode")
 
-	local BotanColor = ColorSequence.new(self.Color1)
-	if self.Color2 ~= nil then
-		BotanColor = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, self.Color1),
-			ColorSequenceKeypoint.new(0.4, self.Color2),
-			ColorSequenceKeypoint.new(1, self.Color2)
-		}
-	end
+		local BotanColor = ColorSequence.new(self.Color1)
+		if self.Color2 ~= nil then
+			BotanColor = ColorSequence.new{
+				ColorSequenceKeypoint.new(0, self.Color1),
+				ColorSequenceKeypoint.new(0.4, self.Color2),
+				ColorSequenceKeypoint.new(1, self.Color2)
+			}
+		end
 
-	for i = 1, 5, 1 do
-		local particle = makeBotanParticle(Nobori, BotanColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
-		particle:Emit(math.random(70,100))
-	end
+		for i = 1, 5, 1 do
+			local particle = makeBotanParticle(Nobori, BotanColor, NumberRange.new(self.ExplodeTime), self.ExplodeSpeed)
+			particle:Emit(math.random(70,100))
+		end
 
-	firework.Sound.PlaySound("After")
+		firework.Sound.PlaySound("After")
+	end)
 end
 
 --Method Name	: launchRandom
@@ -92,7 +97,7 @@ end
 function Botan:AutoSystem()
 	while true do
 		for i = 1, math.random(3, 5), 1 do
-			task.spawn(function()self:launchRandom()end)
+			self:launchRandom()
 		end
 		task.wait(2)
 	end
