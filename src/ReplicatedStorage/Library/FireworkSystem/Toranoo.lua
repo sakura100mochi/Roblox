@@ -95,17 +95,19 @@ end
 --Explain		: 虎の尾タイプの花火を打ち上げる
 --Return Value	: none
 function Toranoo:launch()
-	local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
+	task.spawn(function()
+		local firework = require(game.ReplicatedStorage.Shared.Library.FireworkSystem)
 
-	firework.Sound.PlaySound("SmallExplode")
+		firework.Sound.PlaySound("SmallExplode")
 
-	local Part = makeNeonPart(self)
-	game:GetService("Debris"):AddItem(Part, self.ExplodeTime + 1)
-	makeFlareparticles(Part, self.Color1, self.ExplodeTime)
+		local Part = makeNeonPart(self)
+		game:GetService("Debris"):AddItem(Part, self.ExplodeTime + 1)
+		makeFlareparticles(Part, self.Color1, self.ExplodeTime)
 
-	task.wait(self.ExplodeTime - 0.8)
+		task.wait(self.ExplodeTime - 0.8)
 
-	firework.Sound.PlaySound("Fizzle")
+		firework.Sound.PlaySound("Fizzle")
+	end)
 end
 
 --Method Name	: launchRandom
@@ -159,7 +161,7 @@ function Toranoo:fan(NUM : number)
 			Table.Velocity = Vector3.new(0, math.cos(angle), math.sin(angle))
 		end
 		local newToranoo = Toranoo.new(Table, self)
-		task.spawn(function()newToranoo:launch()end)
+		newToranoo:launch()
 	end
 end
 

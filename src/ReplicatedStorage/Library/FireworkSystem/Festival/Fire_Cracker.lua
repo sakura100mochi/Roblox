@@ -97,7 +97,22 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 				Flare_num = 50,
 				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 			})
+			self.fireworks["Kamuro_" .. index .. "_" .. i .. "_small"] = self.FireworkSystem.Kamuro.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				ExplodeTime = 1.5,
+				Flare_num = 50,
+				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+			})
 		end
+		self.fireworks["Kamuro_C_Gold_" .. i] = self.FireworkSystem.Kamuro.new({
+			Parent = self.Launchers[i],
+			Color1 = self.AFirework.Colors.C,
+			Color2 = Color3.fromRGB(215, 200, 111),
+			ExplodeTime = 3,
+			Flare_num = 50,
+			NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+		})
 	end
 	-- Kiku
 	for i = 1, self.Launcher_Num, 1 do
@@ -121,6 +136,14 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 				NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 			})
 		end
+	end
+	for i = 1, self.Launcher_Num, 1 do
+		self.fireworks["Kiku_C_" .. i .. "_Big"] = self.FireworkSystem.Kiku.new({
+			Parent = self.Launchers[i],
+			ExplodeTime = 1.5,
+			ExplodeSpeed = 80,
+			NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+		})
 	end
 	-- Kiku change color
 	for i = 1, self.Launcher_Num, 1 do
@@ -201,6 +224,17 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 		Color4 = Fire_Cracker.Colors[3],
 		Color5 = Fire_Cracker.Colors[4],
 	})
+	self.fireworks["Kiku_Double_Al_Mg_7"] = self.FireworkSystem.Kiku.new({
+		Parent = self.Launchers[7],
+		NoboriTime = self.beat + 0.5,
+		ExplodeTime = 1.5,
+		ExplodeSpeed = 60,
+		Flare_num = 200,
+		Color2 = self.AFirework.Colors.Al,
+		Color3 = self.AFirework.Colors.C,
+		Color4 = self.AFirework.Colors.C,
+		Color5 = self.AFirework.Colors.Mg,
+	})
 	-- Ring
 	for i = 1, self.Launcher_Num, 1 do
 		for key, color in pairs(self.AFirework.Colors) do
@@ -243,6 +277,14 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 		ExplodeTime = 4,
 		NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 	})
+	self.fireworks["UFO_4_1_7"] = self.FireworkSystem.UFO.new({
+		Parent = self.Launchers[7],
+		Color1 = Fire_Cracker.Colors[1],
+		Color2 = Fire_Cracker.Colors[4],
+		ExplodeSpeed = NumberRange.new(430, 450),
+		ExplodeTime = 4,
+		NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
+	})
 	-- Toranoo
 	self.fireworks["Toranoo_fan_4"] = self.FireworkSystem.Toranoo.new({
 		Parent = self.Launchers[4],
@@ -252,6 +294,32 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 		Parent = self.Launchers[10],
 		Direction = 'x'
 	})
+	for i = 1, self.Launcher_Num, 3 do
+		for key, color in pairs(self.AFirework.Colors) do
+			self.fireworks["Toranoo_Right_" .. key .. "_" .. i] = self.FireworkSystem.Toranoo.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Velocity = Vector3.new(-0.5000,	0.8660, 0) * 2,
+			})
+			self.fireworks["Toranoo_Left_" .. key .. "_" .. i] = self.FireworkSystem.Toranoo.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Velocity = Vector3.new(0.5000, 0.8660, 0) * 2,
+			})
+		end
+		for index, color in ipairs(Fire_Cracker.Colors) do
+			self.fireworks["Toranoo_Right_" .. index .. "_" .. i] = self.FireworkSystem.Toranoo.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Velocity = Vector3.new(-0.5000,	0.8660, 0) * 2,
+			})
+			self.fireworks["Toranoo_Left_" .. index .. "_" .. i] = self.FireworkSystem.Toranoo.new({
+				Parent = self.Launchers[i],
+				Color1 = color,
+				Velocity = Vector3.new(0.5000, 0.8660, 0) * 2,
+			})
+		end
+	end
 
 	self.isSetUp = true
 	return self
@@ -275,7 +343,7 @@ function Fire_Cracker:launch()
 	self.fireworks["Kiku_3_10"]:launch()
 	self.fireworks["Kiku_4_13"]:launch()
 	task.wait(self.beat * 2)
-	self.fireworks["Botan_3_1"]:launch()
+	self.fireworks["Botan_1_1"]:launch()
 	self.fireworks["Botan_4_4"]:launch()
 	self.fireworks["Botan_2_7"]:launch()
 	self.fireworks["Botan_1_10"]:launch()
@@ -376,12 +444,13 @@ function Fire_Cracker:launch()
 	self.fireworks["Botan_1_7_long"]:launch()
 	task.wait(self.beat * 0.5)
 	self.fireworks["Botan_1_7_big"]:launch()
-	self.fireworks["Kamuro_2_1"]:launch()
-	self.fireworks["Kamuro_2_13"]:launch()
+	self.fireworks["Kamuro_2_1_small"]:launch()
+	self.fireworks["Kamuro_2_13_small"]:launch()
 
 	task.wait(self.beat * 2)
 
 	-- 3 2 1
+	task.wait(0.9)
 	task.wait(self.beat)
 	self.fireworks["Kiku_Double_1_4_7"]:launchDouble()
 	self.fireworks["Kiku_C_1"]:launch()
@@ -443,38 +512,77 @@ function Fire_Cracker:launch()
 	self.fireworks["Gerb_4_10"]:launch()
 	self.fireworks["Gerb_1_13"]:launch()
 
-	task.wait(self.beat * 2)
-	for i = 1, self.Launcher_Num, 3 do
-		self.fireworks["Botan_" .. math.random(1, 4) .. "_" .. i]:launch()
-	end
-	task.wait(self.beat * 2)
-	for i = 1, self.Launcher_Num, 3 do
-		self.fireworks["Botan_" .. math.random(1, 4) .. "_" .. i]:launch()
-	end
-	task.wait(self.beat * 2)
-	for i = 1, self.Launcher_Num, 3 do
-		self.fireworks["Botan_" .. math.random(1, 4) .. "_" .. i]:launch()
-	end
-
-	task.wait(self.beat * 2)
-	for i = 1, self.Launcher_Num, 3 do
-		self.fireworks["Botan_" .. math.random(1, 4) .. "_" .. i]:launch()
-	end
-
+	self.fireworks["Kiku_Double_Al_Mg_7"]:launchDouble()
 	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 3 do
+		self.fireworks["Toranoo_Right_Al_" .. i]:launch()
+	end
+	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 3 do
+		self.fireworks["Toranoo_Left_Al_" .. i]:launch()
+	end
+	self.fireworks["UFO_4_1_7"]:launch()
+	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 3 do
+		self.fireworks["Toranoo_Right_Al_" .. i]:launch()
+	end
+	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 3 do
+		self.fireworks["Toranoo_Left_Al_" .. i]:launch()
+	end
 
-	task.wait(self.beat * 0.5)
+	self.fireworks["Kiku_C_7_Big"]:launch()
+	task.wait(self.beat)
+	for i = 1, self.Launcher_Num, 1 do
+		if i % 2 == 0 then
+			self.fireworks["Gerb_Al_" .. i]:launch()
+		else
+			self.fireworks["Gerb_C_" .. i]:launch()
+		end
+		task.wait(0.1)
+	end
+	task.wait(self.beat - 1.3)
+	for i = self.Launcher_Num, 1, -1 do
+		if i % 2 == 0 then
+			self.fireworks["Gerb_Al_" .. i]:launch()
+		else
+			self.fireworks["Gerb_C_" .. i]:launch()
+		end
+		task.wait(0.1)
+	end
+
+	self.fireworks["Kamuro_C_Gold_1"]:launch()
+	self.fireworks["Kamuro_C_Gold_7"]:launch()
+	self.fireworks["Kamuro_C_Gold_13"]:launch()
+	task.wait(self.beat - 1.3)
+	for i = 1, self.Launcher_Num, 1 do
+		if i % 2 == 0 then
+			self.fireworks["Gerb_Al_" .. i]:launch()
+		else
+			self.fireworks["Gerb_C_" .. i]:launch()
+		end
+		task.wait(0.1)
+	end
+	task.wait(self.beat - 1.3)
+	for i = self.Launcher_Num, 1, -1 do
+		if i % 2 == 0 then
+			self.fireworks["Gerb_Al_" .. i]:launch()
+		else
+			self.fireworks["Gerb_C_" .. i]:launch()
+		end
+		task.wait(0.1)
+	end
+	task.wait(self.beat - 1.3)
+
 	self.fireworks["Botan_1_4_long"]:launch()
 	self.fireworks["Botan_1_10_long"]:launch()
 	task.wait(self.beat * 0.5)
 	self.fireworks["Botan_1_4_big"]:launch()
 	self.fireworks["Botan_1_10_big"]:launch()
-	self.fireworks["Kamuro_3_1"]:launch()
-	self.fireworks["Kamuro_2_7"]:launch()
-	self.fireworks["Kamuro_3_13"]:launch()
+	self.fireworks["Kamuro_3_1_small"]:launch()
+	self.fireworks["Kamuro_2_7_small"]:launch()
+	self.fireworks["Kamuro_3_13_small"]:launch()
 	task.wait(self.beat)
-
-	task.wait(1)
 
 	self:stop()
 end
