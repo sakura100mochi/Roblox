@@ -65,6 +65,16 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 		end
 	end
 	for i = 1, self.Launcher_Num, 1 do
+		self.fireworks["Botan_C_" .. i .. "_long"] = self.FireworkSystem.Botan.new({
+			Parent = self.Launchers[i],
+			Color1 = self.AFirework.Colors.C,
+			NoboriTime = self.beat + self.beat * 0.5,
+		})
+		self.fireworks["Botan_C_" .. i .. "_longlong"] = self.FireworkSystem.Botan.new({
+			Parent = self.Launchers[i],
+			Color1 = self.AFirework.Colors.C,
+			NoboriTime = self.beat + self.beat,
+		})
 		self.fireworks["Botan_1_" .. i .. "_long"] = self.FireworkSystem.Botan.new({
 			Parent = self.Launchers[i],
 			Color1 = Fire_Cracker.Colors[1],
@@ -142,6 +152,13 @@ function Fire_Cracker.new(MainLauncher : Part) : table
 			Parent = self.Launchers[i],
 			ExplodeTime = 1.5,
 			ExplodeSpeed = 80,
+			NoboriTime = self.beat + self.beat * 0.5,
+		})
+		self.fireworks["Kiku_" .. i] = self.FireworkSystem.Kiku.new({
+			Parent = self.Launchers[i],
+			ExplodeTime = 1.5,
+			ExplodeSpeed = 60,
+			Flare_num = 50,
 			NoboriTime = math.random((self.beat - 0.5) * 100, (self.beat + 0.5) * 100) / 100
 		})
 	end
@@ -522,17 +539,45 @@ function Fire_Cracker:launch()
 		self.fireworks["Toranoo_Left_Al_" .. i]:launch()
 	end
 	self.fireworks["UFO_4_1_7"]:launch()
-	task.wait(self.beat)
+	task.wait(self.beat * 0.5)
+	self.fireworks["Botan_3_1"]:launch()
+	self.fireworks["Botan_3_13"]:launch()
+	task.wait(self.beat * 0.1)
+	self.fireworks["Botan_2_4"]:launch()
+	task.wait(self.beat * 0.1)
+	self.fireworks["Botan_1_10"]:launch()
+	task.wait(self.beat * 0.1)
+	self.fireworks["Botan_1_1"]:launch()
+	task.wait(self.beat * 0.1)
+	self.fireworks["Botan_2_10"]:launch()
+	task.wait(self.beat * 0.1)
 	for i = 1, self.Launcher_Num, 3 do
 		self.fireworks["Toranoo_Right_Al_" .. i]:launch()
 	end
-	task.wait(self.beat)
+	task.wait(self.beat * 0.5)
+	self.fireworks["Kiku_C_7_Big"]:launch()
+	task.wait(self.beat * 0.5)
 	for i = 1, self.Launcher_Num, 3 do
 		self.fireworks["Toranoo_Left_Al_" .. i]:launch()
 	end
 
-	self.fireworks["Kiku_C_7_Big"]:launch()
-	task.wait(self.beat)
+	self.fireworks["Kiku_1"]:launch()
+	self.fireworks["Botan_C_4"]:launch()
+	self.fireworks["Botan_C_10"]:launch()
+	self.fireworks["Kiku_13"]:launch()
+	self.fireworks["Botan_C_7_longlong"]:launch()
+	task.wait(self.beat * 0.5)
+	self.fireworks["Botan_C_2_long"]:launch()
+	self.fireworks["Botan_C_5_long"]:launch()
+	self.fireworks["Botan_C_9_long"]:launch()
+	self.fireworks["Botan_C_12_long"]:launch()
+	task.wait(self.beat * 0.5)
+	self.fireworks["Botan_C_1"]:launch()
+	self.fireworks["Botan_C_4"]:launch()
+	self.fireworks["Botan_C_6"]:launch()
+	self.fireworks["Botan_C_8"]:launch()
+	self.fireworks["Botan_C_10"]:launch()
+	self.fireworks["Botan_C_13"]:launch()
 	for i = 1, self.Launcher_Num, 1 do
 		if i % 2 == 0 then
 			self.fireworks["Gerb_Al_" .. i]:launch()
@@ -542,19 +587,37 @@ function Fire_Cracker:launch()
 		task.wait(0.1)
 	end
 	task.wait(self.beat - 1.3)
+	self.fireworks["Kamuro_C_Gold_1"]:launch()
+	self.fireworks["Botan_C_4"]:launch()
+	self.fireworks["Kiku_7"]:launch()
+	self.fireworks["Botan_C_10"]:launch()
+	self.fireworks["Kamuro_C_Gold_13"]:launch()
+	self.fireworks["Botan_C_7_longlong"]:launch()
 	for i = self.Launcher_Num, 1, -1 do
 		if i % 2 == 0 then
 			self.fireworks["Gerb_Al_" .. i]:launch()
 		else
 			self.fireworks["Gerb_C_" .. i]:launch()
 		end
+		if i * 0.1 == self.beat * 0.5 then
+			self.fireworks["Botan_C_2_long"]:launch()
+			self.fireworks["Botan_C_5_long"]:launch()
+			self.fireworks["Botan_C_9_long"]:launch()
+			self.fireworks["Botan_C_12_long"]:launch()
+		end
 		task.wait(0.1)
 	end
 
-	self.fireworks["Kamuro_C_Gold_1"]:launch()
-	self.fireworks["Kamuro_C_Gold_7"]:launch()
-	self.fireworks["Kamuro_C_Gold_13"]:launch()
-	task.wait(self.beat - 1.3)
+	self.fireworks["Botan_C_1"]:launch()
+	self.fireworks["Botan_C_4"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_6"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_8"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_10"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_13"]:launch()
 	for i = 1, self.Launcher_Num, 1 do
 		if i % 2 == 0 then
 			self.fireworks["Gerb_Al_" .. i]:launch()
@@ -563,7 +626,16 @@ function Fire_Cracker:launch()
 		end
 		task.wait(0.1)
 	end
-	task.wait(self.beat - 1.3)
+	self.fireworks["Botan_C_1"]:launch()
+	self.fireworks["Botan_C_4"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_6"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_8"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_10"]:launch()
+	task.wait(0.1)
+	self.fireworks["Botan_C_13"]:launch()
 	for i = self.Launcher_Num, 1, -1 do
 		if i % 2 == 0 then
 			self.fireworks["Gerb_Al_" .. i]:launch()
