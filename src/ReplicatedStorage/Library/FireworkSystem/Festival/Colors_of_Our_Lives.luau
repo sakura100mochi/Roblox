@@ -34,6 +34,8 @@ function Colors_of_Our_Lives.new(MainLauncher : Part) : table
 	self.beat = 2.2
 	self.Launchers = self.Festival.makeLauncher(self.folder, MainLauncher, self.Launcher_Half, 'z', 15)
 	self.isPlaying = false
+	self.launchThread = nil
+	self.clock = 19
 
 	self.fireworks = {}
 	for i = 1, self.Launcher_Num, 1 do
@@ -118,8 +120,14 @@ function Colors_of_Our_Lives:launch()
 		warn("You need to \'setup\' first.")
 		return
 	end
+	if self.isPlaying == true then
+		warn("Festival is already playing.")
+		return
+	end
 
-	self.isSetUp = false
+	self.launchThread = coroutine.create(function()
+
+	game.Lighting.ClockTime = self.clock
 	self.isPlaying = true
 	self.fireworks["Botan_C1"]:launch()
 	self.fireworks["Botan_Sr3"]:launch()
@@ -200,11 +208,19 @@ function Colors_of_Our_Lives:launch()
 		self.fireworks["Gerb_Ba" .. i]:launch()
 		task.wait(0.1)
 	end
+
+	self:stop()
+	end)
+	coroutine.resume(self.launchThread)
 end
 
 function Colors_of_Our_Lives:stop()
 	self.bgm:Stop()
 	self.isPlaying = false
+	if self.launchThread and coroutine.status(self.launchThread) == "suspended" then
+		coroutine.close(self.launchThread)
+		self.launchThread = nil
+	end
 end
 
 return Colors_of_Our_Lives
