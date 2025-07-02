@@ -20,7 +20,7 @@ end
 
 function FadePart:Start()
 	print("FadePart started")
-	self.Instance.touched:Connect(function(hitPart) self:onTouched(hitPart) end)
+	self.Instance.Touched:Connect(function(hitPart) self:onTouched(hitPart) end)
 end
 
 function FadePart:Stop()
@@ -32,7 +32,7 @@ function FadePart:onTouched(hitPart)
 	if not hitPart then return end
 	local character = hitPart.Parent
 	if not character then return end
-	local Humanoid = character:FindFirstChildOfClass("Humanoid")
+	local Humanoid = character:FindFirstChild("Humanoid")
 	if not Humanoid then return end
 
 	while true do
