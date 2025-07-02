@@ -15,6 +15,8 @@ local RopeSwingPart = Component.new({
 function RopeSwingPart:Construct()
 	print("RopeSwingPart constructed")
 	self.Height = self.Instance:GetAttribute("Height") or 10
+	self.Color = self.Instance:GetAttribute("Color") or Color3.new(0.133333, 0.219607, 0.313725)
+	self.Size = self.Instance:GetAttribute("Size") or Vector3.new(0.5, 0.5, 0.5)
 end
 
 function RopeSwingPart:Start()
@@ -24,8 +26,8 @@ function RopeSwingPart:Start()
 
 	self.Part = Instance.new("Part")
 	self.Part.Name = "RopeSwingPart"
-	self.Part.Size = Vector3.new(0.5, 0.5, 0.5)
-	self.Part.Color = Color3.new(0.133333, 0.219607, 0.313725)
+	self.Part.Size = self.Size
+	self.Part.Color = self.Color
 	self.Part.CFrame = self.Instance.CFrame + Vector3.new(0, self.Height, 0)
 	self.Part.Transparency = 0
 	self.Part.Anchored = true
