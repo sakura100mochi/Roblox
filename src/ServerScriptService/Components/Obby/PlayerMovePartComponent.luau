@@ -3,6 +3,7 @@
 -- Attribute：
 -- 		Speed（number）	：プレイヤーが動く速度。デフォルトは10。　値が大きいほど速く動く。0以下は不可。
 -- 		Color（Color3）	：テクスチャの色。デフォルトは白色。
+-- 		TextureSize（number）：テクスチャのサイズ。デフォルトは1。値が大きいほど大きくなる。
 
 -- Game Services --
 local TweenService = game:GetService("TweenService")
@@ -17,11 +18,16 @@ local PlayerMovePart = Component.new({
 	Extensions = {},
 })
 
+-- Const Variables --
+local TEXTURE_USIZE = 4
+local TEXTURE_VSIZE = 2
+
 -- default function --
 function PlayerMovePart:Construct()
 	print("PlayerMovePart constructed")
 	self.Speed = self.Instance:GetAttribute("Speed") or 10
 	self.Color = self.Instance:GetAttribute("Color") or Color3.new(1, 1, 1)
+	self.TextureSize = self.Instance:GetAttribute("TextureSize") or 1
 end
 
 function PlayerMovePart:Start()
@@ -57,14 +63,14 @@ function PlayerMovePart:makeTexture()
 	self.Texture.Texture = "http://www.roblox.com/asset/?id=2675648145"
 	self.Texture.Face = Enum.NormalId.Top
 	self.Texture.Color3 = self.Color
-	self.Texture.StudsPerTileU = 4
-	self.Texture.StudsPerTileV = 2
-	self.Texture.OffsetStudsU = -(self.Instance.Size.X - 4) / 2
+	self.Texture.StudsPerTileU = TEXTURE_USIZE * self.TextureSize
+	self.Texture.StudsPerTileV = TEXTURE_VSIZE * self.TextureSize
+	self.Texture.OffsetStudsU = -(self.Instance.Size.X - TEXTURE_USIZE * self.TextureSize) / TEXTURE_VSIZE * self.TextureSize
 
 	self.Tween = TweenService:Create(
 		self.Texture,
-		TweenInfo.new(2 / self.Speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, false),
-		{OffsetStudsV = -2}
+		TweenInfo.new(TEXTURE_VSIZE * self.TextureSize / self.Speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, false),
+		{OffsetStudsV = -TEXTURE_VSIZE * self.TextureSize}
 	)
 	self.Tween:Play()
 end
