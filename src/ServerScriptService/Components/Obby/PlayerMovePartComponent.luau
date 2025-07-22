@@ -1,5 +1,8 @@
 -- explaining the code:
 -- 乗ったプレイヤーが動くパーツ
+-- Attribute：
+-- 		Speed（number）	：プレイヤーが動く速度。デフォルトは10。　値が大きいほど速く動く。0以下は不可。
+-- 		Color（Color3）	：テクスチャの色。デフォルトは白色。
 
 -- Game Services --
 local TweenService = game:GetService("TweenService")

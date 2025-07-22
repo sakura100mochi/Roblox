@@ -1,5 +1,9 @@
 -- explaining the code:
 -- 動く床
+-- Attribute：
+-- 		Speed（number）		：パーツの動く速度。デフォルトは2。値が大きいほど速く動く。
+-- 		Direction(vector3)	：パーツの動く方向。デフォルトはVector3.new(0, 0, 1)。
+-- 		Distance(number)	：パーツの動く距離。デフォルトは 10 Studs。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)

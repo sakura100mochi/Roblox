@@ -1,5 +1,8 @@
 -- explaining the code:
 -- 触れたらダメージを受けるパーツ
+-- Attribute：
+-- 		Damege（number）	：一度に受けるダメージ量。デフォルトは10。
+-- 		CoolTime（number）	：ダメージを受けるクールタイム。デフォルトは1秒。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)

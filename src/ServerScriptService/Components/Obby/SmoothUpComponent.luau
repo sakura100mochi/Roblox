@@ -1,5 +1,7 @@
 -- explaining the code:
 -- 触れたら上がれるブロック
+-- Attribute：
+-- 		SpeedY（number）：上昇速度。デフォルトは50。　値が大きいほど速く上がる。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)

@@ -1,5 +1,9 @@
 -- explaining the code:
 -- ロープにぶら下がってぶらぶらするパーツ
+-- Attribute：
+-- 		Height（number）	：支柱のパーツの高さ。デフォルトは10。
+-- 		Color（Color3）		：支柱のパーツの色。デフォルトは黒っぽい紺色。
+-- 		Size（Vector3）		：支柱のパーツのサイズ。デフォルトはVector3.new(0.5, 0.5, 0.5)。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)

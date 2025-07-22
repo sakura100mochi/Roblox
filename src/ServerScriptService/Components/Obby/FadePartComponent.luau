@@ -1,5 +1,8 @@
 -- explaining the code:
 -- 触れたらパーツが徐々になくなる
+-- Attribute：
+--		Speed（number）		：フェードアウトする速度。デフォルトは0.1。　値が小さいほど速くフェードアウトする。
+--		ResetTime（number）	：フェードアウトが完了した後、パーツを元に戻すまでの時間。デフォルトは1秒。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)

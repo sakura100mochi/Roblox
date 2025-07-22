@@ -1,5 +1,8 @@
 -- explaining the code:
 -- 回る床
+-- Attribute：
+-- 		Speed（number）	：回転速度。デフォルトは1。 マイナスにすると逆回転。値を大きくすると速く回る。
+-- 		Axis(vector3)	：回転軸。デフォルトはVector3.new(0, 1, 0)。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)
