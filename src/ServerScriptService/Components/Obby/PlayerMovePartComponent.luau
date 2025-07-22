@@ -65,7 +65,7 @@ function PlayerMovePart:makeTexture()
 	self.Texture.Color3 = self.Color
 	self.Texture.StudsPerTileU = TEXTURE_USIZE * self.TextureSize
 	self.Texture.StudsPerTileV = TEXTURE_VSIZE * self.TextureSize
-	self.Texture.OffsetStudsU = -(self.Instance.Size.X - TEXTURE_USIZE * self.TextureSize) / TEXTURE_VSIZE * self.TextureSize
+	self.Texture.OffsetStudsU = -(self.Instance.Size.X - TEXTURE_USIZE * self.TextureSize) / 2
 
 	self.Tween = TweenService:Create(
 		self.Texture,
