@@ -1,5 +1,10 @@
--- knit --
-local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
+-- game services --
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- packages --
+local Knit = require(ReplicatedStorage.Packages.Knit)
+-- settings --
+local Settings = ReplicatedStorage.Shared.Settings
+local GameSettings = require(Settings.GameSettings)
 
 -- Creating Service --
 local TestService = Knit.CreateService({
@@ -8,11 +13,11 @@ local TestService = Knit.CreateService({
 })
 
 function TestService:KnitInit()
-	print("TestService initialized")
+	-- print("TestService initialized")
 end
 
 function TestService:KnitStart()
-	print("TestService started")
+	-- print("TestService started")
 end
 
 return TestService
