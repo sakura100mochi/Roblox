@@ -1,24 +1,22 @@
+--Name		: Command
+--Explain	: コマンド
+local command = {}
+
 -- game services --
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
--- packages --
-local Knit = require(ReplicatedStorage.Packages.Knit)
 -- settings --
 local Settings = ReplicatedStorage.Shared.Settings
 local GameSettings = require(Settings.GameSettings)
 local OP = require(Settings.OP)
 
--- Creating Service --
-local CommandService = Knit.CreateService({
-	Name = "CommandService",
-	Client = {},
-})
+--Function Name	: SetUp
+--Explain		: chatでコマンドを受け付けるようにする
+--Return Value	: none
+function command:SetUp()
+	local lib = require(ReplicatedStorage.Shared.Library)
+	self.weather = lib.weather
 
-function CommandService:KnitInit()
-	self.WeatherService = Knit.GetService("WeatherService")
-end
-
-function CommandService:KnitStart()
 	Players.PlayerAdded:Connect(function(player)
 		player.Chatted:Connect(function(Message)
 			if string.find(Message, "/gamerule") and OP:checkOPLevel(player.Name, player.UserId, 3) then
@@ -33,7 +31,7 @@ function CommandService:KnitStart()
 end
 
 -- private functions --
-function CommandService:_ChangeGameRule(Message)
+function command:_ChangeGameRule(Message)
 	if not Message or #Message < 3 then return end
 	if GameSettings[Message[2]] == nil then return end
 	if GameSettings:checkType(GameSettings[Message[2]].type, Message[3]) == false then return end
@@ -42,13 +40,22 @@ function CommandService:_ChangeGameRule(Message)
 	print("Game rule changed: " .. Message[2] .. " = " .. tostring(GameSettings[Message[2]].value))
 end
 
-function CommandService:_changeWeather(Message)
+function command:_changeWeather(Message)
 	if not Message or #Message < 2 then return end
 	if string.lower(Message[2]) == string.lower("Sunny") then
-		self.WeatherService:Sunny()
+		self.weather:Sunny()
 	elseif string.lower(Message[2]) == string.lower("Snow") then
-		self.WeatherService:Snow()
+		self.weather:Snow()
 	end
 end
 
-return CommandService
+return command
+
+--*****このScriptをServerScriptServiceに入れてください。*****--
+
+-- local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+-- local command = lib.command
+
+-- command:SetUp()
+
+--********************************************************--

@@ -1,22 +1,16 @@
+--Name		: Daylight
+--Explain	: 昼夜のサイクル
+local daylight = {}
+
 -- game services --
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
--- packages --
-local Knit = require(ReplicatedStorage.Packages.Knit)
 -- settings --
 local Settings = ReplicatedStorage.Shared.Settings
 local GameSettings = require(Settings.GameSettings)
 
--- Creating Service --
-local DaylightService = Knit.CreateService({
-	Name = "DaylightService",
-	Client = {},
-})
-
-function DaylightService:KnitInit()
+function daylight:Start()
 	self.L = game:GetService("Lighting")
-end
 
-function DaylightService:KnitStart()
 	while true do
 		task.wait(1)
 		if GameSettings["doDaylightCycle"].value == true then
@@ -41,4 +35,13 @@ function DaylightService:KnitStart()
 	end
 end
 
-return DaylightService
+return daylight
+
+--*****このScriptをServerScriptServiceに入れてください。*****--
+
+-- local lib = require(game:GetService("ReplicatedStorage").Shared.Library)
+-- local daylight = lib.daylight
+
+-- daylight:Start()
+
+--********************************************************--
