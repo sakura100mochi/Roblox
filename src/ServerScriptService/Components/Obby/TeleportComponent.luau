@@ -7,6 +7,7 @@
 -- Attribute：
 -- 		isTouchVersion（boolean）：Trueなら触れた時、falseならProximityPrompt。デフォルトはTrue。
 -- 		HoldDuration（number）	：ProximityPromptのHoldDuration。デフォルトは0。
+--		ActionText (string): ProximityPromptのActionText。デフォルトは"Teleport"。
 
 -- Component --
 local Component = require(game:GetService("ReplicatedStorage").Packages.Component)
@@ -19,8 +20,7 @@ local Teleport = Component.new({
 })
 
 function Teleport:Construct()
-	print("Teleport constructed")
-	self.TargetPart = self.Instance:FindFirstChild("Part")
+	self.TargetPart = self.Instance:FindFirstChild("TeleportTargetPart")
 	if not self.TargetPart then
 		self.TargetPart = workspace:FindFirstChild("SpawnLocation")
 	end
@@ -29,10 +29,10 @@ function Teleport:Construct()
 		self.isTouchVersion = true
 	end
 	self.HoldDuration = self.Instance:GetAttribute("HoldDuration") or 0
+	self.ActionText = self.Instance:GetAttribute("ActionText") or "Teleport"
 end
 
 function Teleport:Start()
-	print("Teleport started")
 	if self.isTouchVersion == true and self.TargetPart then
 		self.Instance.Touched:Connect(function(hitPart)
 			local character = hitPart.Parent
@@ -48,13 +48,12 @@ function Teleport:Start()
 end
 
 function Teleport:Stop()
-	print("Teleport stopped")
 end
 
 -- original function --
 function Teleport:makeProximityPrompt()
 	self.ProximityPrompt = Instance.new("ProximityPrompt")
-	self.ProximityPrompt.ActionText = "Teleport"
+	self.ProximityPrompt.ActionText = self.ActionText
 	self.ProximityPrompt.Parent = self.Instance
 	self.ProximityPrompt.HoldDuration = self.HoldDuration
 end
