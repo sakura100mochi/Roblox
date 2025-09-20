@@ -17,51 +17,68 @@ local MovePart = Component.new({
 
 -- default function --
 function MovePart:Construct()
-	print("MovePart constructed")
 	self.Speed = self.Instance:GetAttribute("Speed") or 2
 	self.Direction = self.Instance:GetAttribute("Direction") or Vector3.new(0, 0, 1)
 	self.Distance = self.Instance:GetAttribute("Distance") or 10
+	self.WaitTime = self.Instance:GetAttribute("WaitTime") or 0
 end
 
 function MovePart:Start()
-	print("MovePart started")
-	self.Instance.Anchored = false
-	self.Instance.CanCollide = true
-
-	self.Attachment0 = Instance.new("Attachment")
-	self.Attachment0.Name = "Attachment0"
-	self.Attachment0.Parent = self.Instance
-	self.Attachment0.Axis = self.Direction
-
-	self.Part = Instance.new("Part")
-	self.Part.Name = "Part"
-	self.Part.Size = Vector3.new(1, 1, 1)
-	self.Part.CFrame = self.Instance.CFrame + self.Direction * self.Distance
-	self.Part.Transparency = 1
-	self.Part.Anchored = true
-	self.Part.CanCollide = false
-	self.Part.Parent = self.Instance
-
-	self.Attachment1 = Instance.new("Attachment")
-	self.Attachment1.Name = "Attachment1"
-	self.Attachment1.Parent = self.Part
-	self.Attachment1.Axis = self.Direction
-
-	self.PrismaticConstraint = Instance.new("PrismaticConstraint")
-	self.PrismaticConstraint.Name = "PrismaticConstraint"
-	self.PrismaticConstraint.Attachment0 = self.Attachment0
-	self.PrismaticConstraint.Attachment1 = self.Attachment1
-	self.PrismaticConstraint.Parent = self.Part
-	self.PrismaticConstraint.ActuatorType = Enum.ActuatorType.Servo
-	self.PrismaticConstraint.ServoMaxForce = math.huge
-	self.PrismaticConstraint.Speed = self.Speed
-
 	while true do
-		self.PrismaticConstraint.TargetPosition = 0
-		task.wait(self.Distance / self.Speed)
-		self.PrismaticConstraint.TargetPosition = self.Distance
-		task.wait(self.Distance / self.Speed)
+		self:_move(self.Instance, self.Speed, self.Distance, self.Direction)
+		task.wait(self.WaitTime)
+		self:_move(self.Instance, self.Speed, -self.Distance, self.Direction)
+		task.wait(self.WaitTime)
 	end
+end
+
+function MovePart:_move(movePart: Part, speed: number, destination: number, direction: Vector3)
+	movePart.Anchored = false
+	movePart.CanCollide = true
+
+	local Attachment0 = Instance.new("Attachment")
+	Attachment0.Name = "Attachment0"
+	Attachment0.Parent = movePart
+	Attachment0.Axis = direction
+
+	local Part = Instance.new("Part")
+	Part.Name = "Part"
+	Part.Size = Vector3.new(1, 1, 1)
+	Part.Transparency = 1
+	Part.Anchored = true
+	Part.CanCollide = false
+	Part.Parent = movePart
+	Part.CFrame = movePart.CFrame + direction * destination
+
+	local Attachment1 = Instance.new("Attachment")
+	Attachment1.Name = "Attachment1"
+	Attachment1.Parent = Part
+	Attachment1.Axis = direction
+
+	local PrismaticConstraint = Instance.new("PrismaticConstraint")
+	PrismaticConstraint.Name = "PrismaticConstraint"
+	PrismaticConstraint.Attachment0 = Attachment0
+	PrismaticConstraint.Attachment1 = Attachment1
+	PrismaticConstraint.Parent = Part
+	PrismaticConstraint.ActuatorType = Enum.ActuatorType.Servo
+	PrismaticConstraint.ServoMaxForce = math.huge
+	PrismaticConstraint.Speed = speed
+	PrismaticConstraint.TargetPosition = 0
+
+	local distance = math.abs(destination)
+	local time = 0
+	repeat
+		task.wait(1)
+		time = time + 1
+		if distance / speed + 3 <= time then
+			break
+		end
+	until PrismaticConstraint.CurrentPosition <= 1 and PrismaticConstraint.CurrentPosition >= -1
+
+	PrismaticConstraint:Destroy()
+	Attachment1:Destroy()
+	Part:Destroy()
+	Attachment0:Destroy()
 end
 
 function MovePart:Stop()
