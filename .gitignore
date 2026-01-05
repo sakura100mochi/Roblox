@@ -9,3 +9,5 @@
 .gitignore
 
 Packages
+
+.vscode/settings.json
