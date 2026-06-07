@@ -1,4 +1,4 @@
-This is my Roblox Library.
+### This is my Roblox Library.
 
 - Boids algorithm for flocking movement
 - Fireworks system
@@ -14,4 +14,6 @@ This is my Roblox Library.
 - Other useful functions
 
 ### fireworks demo video
-[video](./assets/firework.gif)
+<p align="center">
+  <img src="./assets/firework.gif" width="70%">
+</p>
