@@ -3,6 +3,7 @@ local Library = {}
 Library.calc = require(script.Calculation)
 Library.camera = require(script.Camera)
 Library.class = require(script.Class)
+Library.createStructure = require(script.CreateStructure)
 Library.sound = require(script.Change_PlayerSound)
 Library.combat = require(script.CombatSystem)
 Library.command = require(script.Command)
