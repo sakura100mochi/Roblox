@@ -23,8 +23,8 @@ function MovingPlatform:Construct()
 	self.platform = getPlatform(self.Instance)
 	self.checkpoints = getCheckpoints(self.Instance)
 
-	self.speed = self.Instance:GetAttribute(self.SPEED_ATTRIBUTE) or self.DEFAULT_SPEED
-	self.angularSpeed = self.Instance:GetAttribute(self.ANGULAR_SPEED_ATTRIBUTE) or self.DEFAULT_ANGULAR_SPEED
+	local speed = self.Instance:GetAttribute(self.SPEED_ATTRIBUTE) or self.DEFAULT_SPEED
+	local angularSpeed = self.Instance:GetAttribute(self.ANGULAR_SPEED_ATTRIBUTE) or self.DEFAULT_ANGULAR_SPEED
 
 	local attachment = Instance.new("Attachment")
 	attachment.Name = "MovingPlatformAttachment"
@@ -35,7 +35,7 @@ function MovingPlatform:Construct()
 	self.alignPosition.Mode = Enum.PositionAlignmentMode.OneAttachment
 	self.alignPosition.Attachment0 = attachment
 	self.alignPosition.MaxForce = math.huge
-	self.alignPosition.MaxVelocity = self.speed
+	self.alignPosition.MaxVelocity = speed
 	self.alignPosition.Responsiveness = self.RESPONSIVENESS
 	self.alignPosition.Parent = self.platform
 
@@ -44,7 +44,7 @@ function MovingPlatform:Construct()
 	self.alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
 	self.alignOrientation.Attachment0 = attachment
 	self.alignOrientation.MaxTorque = math.huge
-	self.alignOrientation.MaxAngularVelocity = self.angularSpeed
+	self.alignOrientation.MaxAngularVelocity = angularSpeed
 	self.alignOrientation.Responsiveness = self.RESPONSIVENESS
 	self.alignOrientation.Parent = self.platform
 
