@@ -3,8 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- Packages --
 local Component = require(ReplicatedStorage.Packages.Component)
 -- Modules --
-local lib = require(ReplicatedStorage.Shared.Library)
-local instanceManager = lib.instanceManager
 local getPlatform = require(script.getPlatform)
 local getCheckpoints = require(script.getCheckpoints)
 
