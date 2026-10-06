@@ -7,3 +7,4 @@ realm = "shared"
 [dependencies]
 Component = "sleitnick/component@2.4.8"
 Knit = "sleitnick/knit@1.7.0"
+topbarplus = "1foreverhd/topbarplus@3.4.0"

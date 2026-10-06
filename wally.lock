@@ -3,6 +3,11 @@
 registry = "test"
 
 [[package]]
+name = "1foreverhd/topbarplus"
+version = "3.4.0"
+dependencies = []
+
+[[package]]
 name = "evaera/promise"
 version = "4.0.0"
 dependencies = []
@@ -10,7 +15,7 @@ dependencies = []
 [[package]]
 name = "hiraiyuina/roblox"
 version = "0.1.0"
-dependencies = [["Component", "sleitnick/component@2.4.8"], ["Knit", "sleitnick/knit@1.7.0"]]
+dependencies = [["Component", "sleitnick/component@2.4.8"], ["Knit", "sleitnick/knit@1.7.0"], ["topbarplus", "1foreverhd/topbarplus@3.4.0"]]
 
 [[package]]
 name = "sleitnick/comm"
