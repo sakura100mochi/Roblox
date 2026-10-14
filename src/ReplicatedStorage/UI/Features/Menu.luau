@@ -6,6 +6,7 @@ local e = React.createElement
 -- UI --
 local UI_Utils = require(script.Parent.Parent.UI_Utils)
 local Instances = require(script.Parent.Parent.Instances)
+local RainbowAnimation = require(script.Parent.RainbowAnimation)
 
 export type MenuProps = {
 	Button1_Activated: Function?,
@@ -42,6 +43,10 @@ return function(props: MenuProps?): createElementFn
 		e(Instances.UIStroke, {
 			Color = Color3.new(255, 255, 255),
 			Thickness = 3,
+		}, {
+			e(RainbowAnimation, {
+				Speed = 180,
+			}),
 		}),
 		e(Instances.TextLabel, {
 			Text = "This is menu.",

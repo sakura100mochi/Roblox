@@ -5,6 +5,7 @@ Instances.Frame = require(script.Frame)
 Instances.TextLabel = require(script.TextLabel)
 Instances.TextButton = require(script.TextButton)
 Instances.UICorner = require(script.UICorner)
+Instances.UIGradient = require(script.UIGradient)
 Instances.UIStroke = require(script.UIStroke)
 
 return Instances
