@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- Packages --
 local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
--- functions --
-local resolvedProps = require(script.Parent.Parent.ResolveProps)
+-- UI --
+local UI_Utils = require(script.Parent.Parent.UI_Utils)
 
 export type UIStrokeProps = {
 	-- https://create.roblox.com/docs/ja-jp/reference/engine/enums/ApplyStrokeMode
@@ -39,8 +39,8 @@ local defaultProps = {
 	children = nil,
 }
 
-return function(props: UIStrokeProps?)
-	local resolved = resolvedProps(props, defaultProps)
+return function(props: UIStrokeProps?): createElementFn
+	local resolved = UI_Utils.ResolveProps(props, defaultProps)
 
 	return e("UIStroke", {
 		ApplyStrokeMode = resolved.ApplyStrokeMode,

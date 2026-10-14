@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- Packages --
 local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
--- functions --
-local resolvedProps = require(script.Parent.Parent.ResolveProps)
+-- UI --
+local UI_Utils = require(script.Parent.Parent.UI_Utils)
 
 export type FrameProps = {
 	AnchorPoint: Vector2?,
@@ -32,8 +32,8 @@ local defaultProps = {
 	children = nil,
 }
 
-return function(props: FrameProps?)
-	local resolved = resolvedProps(props, defaultProps)
+return function(props: FrameProps?): createElementFn
+	local resolved = UI_Utils.ResolveProps(props, defaultProps)
 
 	return e("Frame", {
 		AnchorPoint = resolved.AnchorPoint,

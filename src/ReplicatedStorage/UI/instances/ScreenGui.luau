@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- Packages --
 local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
--- functions --
-local resolvedProps = require(script.Parent.Parent.ResolveProps)
+-- UI --
+local UI_Utils = require(script.Parent.Parent.UI_Utils)
 
 export type ScreenGuiProps = {
 	-- https://create.roblox.com/docs/en-us/reference/engine/enums/SafeAreaCompatibility
@@ -34,8 +34,8 @@ local defaultProps = {
 	children = nil,
 }
 
-return function(props: ScreenGuiProps?)
-	local resolved = resolvedProps(props, defaultProps)
+return function(props: ScreenGuiProps?): createElementFn
+	local resolved = UI_Utils.ResolveProps(props, defaultProps)
 
 	return e("ScreenGui", {
 		SafeAreaCompatibility = resolved.SafeAreaCompatibility,

@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- Packages --
 local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
--- functions --
-local resolvedProps = require(script.Parent.Parent.ResolveProps)
+-- UI --
+local UI_Utils = require(script.Parent.Parent.UI_Utils)
 
 export type TextLabelProps = {
 	AnchorPoint: Vector2?,
@@ -12,6 +12,7 @@ export type TextLabelProps = {
 	BackgroundTransparency: number?,
 	Name: string?,
 	Position: UDim2?,
+	Rotation: number?,
 	Size: UDim2?,
 	Visible: boolean?,
 	ZIndex: number?,
@@ -35,6 +36,7 @@ local defaultProps = {
 	BackgroundTransparency = 1,
 	Name = "TextLabel",
 	Position = UDim2.new(0, 0, 0, 0),
+	Rotation = 0,
 	Size = UDim2.fromScale(1, 1),
 	Visible = true,
 	ZIndex = 1,
@@ -52,8 +54,8 @@ local defaultProps = {
 	children = nil,
 }
 
-return function(props: TextLabelProps?)
-	local resolved = resolvedProps(props, defaultProps)
+return function(props: TextLabelProps?): createElementFn
+	local resolved = UI_Utils.ResolveProps(props, defaultProps)
 
 	return e("TextLabel", {
 		AnchorPoint = resolved.AnchorPoint,
@@ -61,6 +63,7 @@ return function(props: TextLabelProps?)
 		BackgroundTransparency = resolved.BackgroundTransparency,
 		Name = resolved.Name,
 		Position = resolved.Position,
+		Rotation = resolved.Rotation,
 		Size = resolved.Size,
 		Visible = resolved.Visible,
 		ZIndex = resolved.ZIndex,
