@@ -31,84 +31,106 @@ return function(props: MenuProps?): createElementFn
 	end
 
 	return e(Instances.Frame, {
-		BackgroundColor3 = Color3.fromRGB(221, 93, 208),
-		BackgroundTransparency = 0,
-		Size = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.3, 0.4),
 		Position = UDim2.fromScale(0.5, 0.5),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 	}, {
-		e(Instances.UICorner, {
-			CornerRadius = UDim.new(0, 10),
-		}),
-		e(Instances.UIStroke, {
-			Color = Color3.new(255, 255, 255),
-			Thickness = 3,
+		e(Instances.Frame, {
+			BackgroundColor3 = Color3.fromRGB(31, 158, 33),
+			BackgroundTransparency = 0,
+			Size = UDim2.fromScale(0.8, 1),
+			Position = UDim2.fromScale(0.5, 0.5),
+			AnchorPoint = Vector2.new(0.5, 0.5),
 		}, {
-			e(RainbowAnimation, {
-				Speed = 180,
+			e(Instances.UICorner, {
+				CornerRadius = UDim.new(0, 10),
 			}),
-		}),
-		e(Instances.TextLabel, {
-			Text = "This is menu.",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			Size = UDim2.fromScale(0.5, 0.75),
-			Position = UDim2.fromScale(0.5, 0),
-			AnchorPoint = Vector2.new(0.5, 0),
+			e(Instances.UIStroke, {
+				Color = Color3.new(255, 255, 255),
+				Thickness = 3,
+			}, {
+				e(RainbowAnimation, {
+					Speed = 180,
+				}),
+			}),
+			e(Instances.TextLabel, {
+				Text = "Hello!",
+				TextColor3 = Color3.fromRGB(255, 255, 255),
+				FontFace = Font.fromEnum(Enum.Font.SourceSansBold),
+				Size = UDim2.fromScale(0.5, 0.75),
+				Position = UDim2.fromScale(0.5, 0),
+				AnchorPoint = Vector2.new(0.5, 0),
+			}),
+			CloseButton = e(Instances.TextButton, {
+				Size = UDim2.fromScale(0.3, 1),
+				Position = UDim2.fromScale(0.9, 0.1),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Text = "×",
+				TextColor3 = Color3.fromRGB(255, 0, 0),
+				FontFace = Font.fromEnum(Enum.Font.SourceSansBold),
+				BackgroundTransparency = 1,
+				OnActivated = function()
+						setShown(false)
+					end,
+			}, {
+				e("UIAspectRatioConstraint"),
+				e(Instances.UICorner, {
+					CornerRadius = UDim.new(1, 0),
+				}),
+				e(Instances.UIStroke, {
+					ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+					Thickness = 2,
+					Color = Color3.fromRGB(160, 2, 2),
+				})
+			}),
 		}),
 		Button1 = e(Instances.TextButton, {
 			Size = UDim2.fromScale(0.4, 0.2),
-			Position = UDim2.fromScale(0.25, 0.75),
-			AnchorPoint = Vector2.new(0.5, 0),
-			Text = "Yes",
-			BackgroundColor3 = Color3.fromRGB(105, 214, 83),
+			Position = UDim2.fromScale(0.25, 0.85),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Text = "Accept",
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			FontFace = Font.fromEnum(Enum.Font.SourceSansBold),
+			BackgroundColor3 = Color3.fromRGB(125, 255, 99),
 			OnActivated = resolved.Button1_Activated,
 		}, {
-			e(Instances.UICorner, {
-				CornerRadius = UDim.new(0, 10),
-			}),
-			e(Instances.UIStroke, {
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				Thickness = 1.5,
-				Color = Color3.fromRGB(255, 255, 255),
-			})
-		}),
-		Button2 = e(Instances.TextButton, {
-			Size = UDim2.fromScale(0.4, 0.2),
-			Position = UDim2.fromScale(0.75, 0.75),
-			AnchorPoint = Vector2.new(0.5, 0),
-			Text = "No",
-			BackgroundColor3 = Color3.fromRGB(245, 107, 107),
-			OnActivated = resolved.Button2_Activated,
-		}, {
-			e(Instances.UICorner, {
-				CornerRadius = UDim.new(0, 10),
-			}),
-			e(Instances.UIStroke, {
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				Thickness = 1.5,
-				Color = Color3.fromRGB(255, 255, 255),
-			})
-		}),
-		CloseButton = e(Instances.TextButton, {
-			Size = UDim2.fromScale(0.1, 1),
-			Position = UDim2.fromScale(1, 0),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Text = "×",
-			TextColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundColor3 = Color3.fromRGB(255, 0, 0),
-			OnActivated = function()
-					setShown(false)
-				end,
-		}, {
-			e("UIAspectRatioConstraint"),
 			e(Instances.UICorner, {
 				CornerRadius = UDim.new(1, 0),
 			}),
 			e(Instances.UIStroke, {
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 				Thickness = 2,
-				Color = Color3.fromRGB(255, 255, 255),
-			})
-		})
+				Color = Color3.fromRGB(51, 111, 39),
+			}),
+			e(Instances.UIStroke, {
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+				Thickness = 2,
+				Color = Color3.fromRGB(0, 0, 0),
+			}),
+		}),
+		Button2 = e(Instances.TextButton, {
+			Size = UDim2.fromScale(0.4, 0.2),
+			Position = UDim2.fromScale(0.75, 0.85),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Text = "Decline",
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			FontFace = Font.fromEnum(Enum.Font.SourceSansBold),
+			BackgroundColor3 = Color3.fromRGB(255, 50, 50),
+			OnActivated = resolved.Button2_Activated,
+		}, {
+			e(Instances.UICorner, {
+				CornerRadius = UDim.new(1, 0),
+			}),
+			e(Instances.UIStroke, {
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+				Thickness = 2,
+				Color = Color3.fromRGB(162, 25, 25),
+			}),
+			e(Instances.UIStroke, {
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+				Thickness = 2,
+				Color = Color3.fromRGB(0, 0, 0),
+			}),
+		}),
 	}, props and props.children)
 end
